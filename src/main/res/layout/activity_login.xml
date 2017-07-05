@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/login_bg"
+    android:layout_height="match_parent"
+  tools:context="com.webquiver.lelu.LoginActivity">
+
+    <RelativeLayout
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Sign In"
+            android:textColor="#fff"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:id="@+id/backPic"
+            android:layout_gravity="start"
+            android:src="@drawable/back_btn"
+            android:layout_width="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_height="20dp"
+             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+          android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="#fff"
+            android:gravity="center"
+
+            android:layout_toEndOf="@+id/backPic" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="5dp"
+       >
+    </View>
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:src="@drawable/logo"
+        />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="5dp"
+        >
+    </View>
+    <LinearLayout
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical"
+        android:background="@drawable/login_shape_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="180dp">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            >
+        </View>
+
+        <TextView
+            android:layout_width="match_parent"
+           android:background="@drawable/textview_shape_rounded"
+             android:layout_height="40dp" />
+        <TextView
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:background="@drawable/textview_shape_rounded"
+            android:layout_height="40dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="50dp"
+        >
+    </View>
+
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Forgot Your Password ?"
+        android:textColor="#fff"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+    <View
+        android:layout_width="1dp"
+        android:layout_height="70dp"
+        >
+    </View>
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Don't Have an Account"
+        android:textColor="#fff"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+
+        android:layout_width="match_parent"
+        android:text="Register Now"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+       android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textColor="#fff"
+        android:textAlignment="center"
+        android:background="@drawable/regnow_shape"
+        android:layout_height="wrap_content" />
+
+
+
+
+</LinearLayout>
