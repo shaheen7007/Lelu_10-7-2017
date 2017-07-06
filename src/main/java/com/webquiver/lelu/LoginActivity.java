@@ -29,10 +29,10 @@ public class LoginActivity extends AppCompatActivity {
 
                 usernameET.setFocusable(true);
                 usernameET.setCursorVisible(true);
-                //(usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.test, 0, 0, 0);
-               // (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+              //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
+              //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
-                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
+               passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
                 return false;
 
             }
