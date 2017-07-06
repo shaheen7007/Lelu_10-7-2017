@@ -1,16 +1,13 @@
 package com.webquiver.lelu;
 
-import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import static android.R.attr.left;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,8 +29,10 @@ public class LoginActivity extends AppCompatActivity {
 
                 usernameET.setFocusable(true);
                 usernameET.setCursorVisible(true);
-                (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.test, 0, 0, 0);
-                (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                //(usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.test, 0, 0, 0);
+               // (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.tt));
+                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
                 return false;
 
             }
@@ -44,8 +43,8 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 passwordET.setFocusable(true);
                  passwordET.setCursorVisible(true);
-                (usernameET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                (passwordET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.test, 0, 0, 0);
+                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.tt));
+                usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
                 return false;
 
 
@@ -57,8 +56,8 @@ public class LoginActivity extends AppCompatActivity {
         usernameET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 passwordET.setCursorVisible(true);
-                (usernameET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                (passwordET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.test, 0, 0, 0);
+                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.tt));
+                usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
                 return false;
 
 
@@ -69,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 passwordET.setCursorVisible(false);
-                (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
                 return false;
 
 
