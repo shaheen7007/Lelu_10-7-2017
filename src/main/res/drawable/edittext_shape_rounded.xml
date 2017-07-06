@@ -11,9 +11,8 @@
         android:color="#80f4dfdf" />
 
     <!-- add some padding for text inside -->
-    <padding
 
-         />
+
 
     <!-- we define corner radius, note that radius can be different for each corner -->
     <corners android:radius="5dp"
