@@ -15,7 +15,6 @@
 
 
     <!-- we define corner radius, note that radius can be different for each corner -->
-    <corners android:radius="7dp"
 
         />
 
