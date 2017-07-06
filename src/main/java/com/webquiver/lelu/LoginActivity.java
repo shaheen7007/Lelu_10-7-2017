@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
                 usernameET.setCursorVisible(true);
                 //(usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.test, 0, 0, 0);
                // (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.tt));
+                usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
                 passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
                 return false;
 
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 passwordET.setFocusable(true);
                  passwordET.setCursorVisible(true);
-                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.tt));
+                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
                 usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
                 return false;
 
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 passwordET.setCursorVisible(true);
-                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.tt));
+                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
                 usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
                 return false;
 
