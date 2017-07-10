@@ -1,20 +1,17 @@
 package com.webquiver.lelu;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -24,16 +21,44 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
 import com.webquiver.lelu.classes.GridViewAdapter;
+import com.webquiver.lelu.classes.SlidingImage_Adapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity {
+
+    //
+    private static ViewPager mPager;
+    private static int currentPage = 0;
+    private static int NUM_PAGES = 0;
+    private static final Integer[] IMAGES= {R.drawable.banner2,R.drawable.bannertest,R.drawable.tick_login,R.drawable.notification};
+    private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
 
@@ -63,6 +88,16 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
          ImageView search = (ImageView) findViewById(R.id.search);
+
+
+
+        //
+        init();
+
+
+
+
+
 
         collapsingToolbarLayout=(CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
         categorylayout=(LinearLayout)findViewById(R.id.categorylyt_id);
@@ -218,6 +253,68 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+//
+private void init() {
+    for(int i=0;i<IMAGES.length;i++)
+        ImagesArray.add(IMAGES[i]);
+
+    mPager = (ViewPager) findViewById(R.id.banners);
+
+
+    mPager.setAdapter(new SlidingImage_Adapter(HomeActivity.this,ImagesArray));
+
+
+    CirclePageIndicator indicator = (CirclePageIndicator)
+            findViewById(R.id.indicator);
+
+    indicator.setViewPager(mPager);
+
+    final float density = getResources().getDisplayMetrics().density;
+
+//Set circle indicator radius
+    indicator.setRadius(5 * density);
+
+    NUM_PAGES =IMAGES.length;
+
+    // Auto start of viewpager
+    final Handler handler = new Handler();
+    final Runnable Update = new Runnable() {
+        public void run() {
+            if (currentPage == NUM_PAGES) {
+                currentPage = 0;
+            }
+            mPager.setCurrentItem(currentPage++, true);
+        }
+    };
+    Timer swipeTimer = new Timer();
+    swipeTimer.schedule(new TimerTask() {
+        @Override
+        public void run() {
+            handler.post(Update);
+        }
+    }, 3000, 3000);
+
+    // Pager listener over indicator
+    indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(int position) {
+            currentPage = position;
+
+        }
+
+        @Override
+        public void onPageScrolled(int pos, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int pos) {
+
+        }
+    });
+
+}
 
 
 
@@ -225,4 +322,4 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-    }
+}
