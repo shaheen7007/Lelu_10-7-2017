@@ -22,9 +22,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
 import com.webquiver.lelu.classes.GridViewAdapter;
-import com.webquiver.lelu.classes.SlidingImage_Adapter;
+import com.webquiver.lelu.classes.Banner_Adapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,17 +37,16 @@ import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity {
 
-    //
-    private static ViewPager mPager;
+
+
+
+
+//
+private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
-    private static final Integer[] IMAGES= {R.drawable.banner2,R.drawable.bannertest,R.drawable.tick_login,R.drawable.notification};
+    private static final Integer[] IMAGES= {R.drawable.bannertest,R.drawable.banner2,R.drawable.banner5};
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
-
-
-
-
-
 
 
 
@@ -90,10 +90,8 @@ public class HomeActivity extends AppCompatActivity {
          ImageView search = (ImageView) findViewById(R.id.search);
 
 
-
-        //
+//
         init();
-
 
 
 
@@ -258,10 +256,10 @@ private void init() {
     for(int i=0;i<IMAGES.length;i++)
         ImagesArray.add(IMAGES[i]);
 
-    mPager = (ViewPager) findViewById(R.id.banners);
+    mPager = (ViewPager) findViewById(R.id.pager);
 
 
-    mPager.setAdapter(new SlidingImage_Adapter(HomeActivity.this,ImagesArray));
+    mPager.setAdapter(new Banner_Adapter(HomeActivity.this,ImagesArray));
 
 
     CirclePageIndicator indicator = (CirclePageIndicator)

@@ -24,7 +24,7 @@
 
 
             android:layout_height="match_parent"
-            android:background="@drawable/bannertest"
+            android:background="#e7dfdf"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
@@ -74,13 +74,32 @@
 
 
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/banners"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_collapseMode="parallax"
-                android:fitsSystemWindows="true">
-            </android.support.v4.view.ViewPager>
+
+
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/pager"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentTop="true" />
+
+                <com.viewpagerindicator.CirclePageIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="bottom"
+                    android:padding="10dip"
+                    app:centered="true"
+                    app:fillColor="#ff0099"
+                    app:pageColor="#FF0000"
+                    app:snap="false" />
+            </RelativeLayout>
 
 
 
@@ -97,14 +116,6 @@
                 android:minHeight="57dp" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
-
-
-
-
-
-
-
-
 
 
 
