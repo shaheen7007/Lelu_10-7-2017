@@ -41,26 +41,13 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-//
+// banners
 private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
-    private static final Integer[] IMAGES= {R.drawable.bannertest,R.drawable.banner2,R.drawable.banner5};
-    private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
-
-
-
-
-
-
-
-
-
-
-
-
 
     public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
+    public static final String BANNER_URL = "https://api.myjson.com/bins/pbguj";
 
 
     public static final String TAG_IMAGE_URL = "image";
@@ -73,6 +60,7 @@ private static ViewPager mPager;
 
     private ArrayList<String> images;
     private ArrayList<String> names;
+    private ArrayList<String> banimages;
     private ArrayList<String> color;
 
 
@@ -89,16 +77,9 @@ private static ViewPager mPager;
         getSupportActionBar().setDisplayShowTitleEnabled(false);
          ImageView search = (ImageView) findViewById(R.id.search);
 
-
-//
-        init();
-
-
-
-
-
         collapsingToolbarLayout=(CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
         categorylayout=(LinearLayout)findViewById(R.id.categorylyt_id);
+/*
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,7 +92,7 @@ private static ViewPager mPager;
 
             }
         });
-
+*/
 
 //custom toolbar
         ActionBar ab = getSupportActionBar();
@@ -172,10 +153,14 @@ private static ViewPager mPager;
 
             images = new ArrayList<>();
             names = new ArrayList<>();
+            banimages = new ArrayList<>();
             color = new ArrayList<>();
 
 
             getData();
+
+
+
 
 
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -215,23 +200,45 @@ private static ViewPager mPager;
                     }
             );
 
+            //get banner json
+            JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest(BANNER_URL,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            //Dismissing the progressdialog on response
+                            //         loading.dismiss();
+
+                            //Displaying our grid
+                            showbanner(response);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }
+            );
+
+
             //Creating a request queue
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             //Adding our request to the queue
             requestQueue.add(jsonArrayRequest);
+            requestQueue.add(bannerjsonArrayRequest);
         }
 
 
         private void showGrid(JSONArray jsonArray){
-            //Looping through all the elements of json array
+
             for(int i = 0; i<jsonArray.length(); i++){
-                //Creating a json object of the current index
+
                 JSONObject obj = null;
                 try {
-                    //getting json object from current index
+
                     obj = jsonArray.getJSONObject(i);
 
-                    //getting image url and title from json object
+
                     images.add(obj.getString(TAG_IMAGE_URL));
                     names.add(obj.getString(TAG_NAME));
                     color.add(obj.getString(TAG_COLOR));
@@ -246,20 +253,31 @@ private static ViewPager mPager;
             gridView.setAdapter(gridViewAdapter);
         }
 
+    private void showbanner(JSONArray jsonArray){
+
+        for(int i = 0; i<jsonArray.length(); i++){
+
+            JSONObject obj = null;
+            try {
+
+                obj = jsonArray.getJSONObject(i);
 
 
+                banimages.add(obj.getString(TAG_IMAGE_URL));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        init();
+
+    }
 
 
-
-//
+    //banner
 private void init() {
-    for(int i=0;i<IMAGES.length;i++)
-        ImagesArray.add(IMAGES[i]);
 
     mPager = (ViewPager) findViewById(R.id.pager);
-
-
-    mPager.setAdapter(new Banner_Adapter(HomeActivity.this,ImagesArray));
+    mPager.setAdapter(new Banner_Adapter(HomeActivity.this,banimages));
 
 
     CirclePageIndicator indicator = (CirclePageIndicator)
@@ -270,9 +288,9 @@ private void init() {
     final float density = getResources().getDisplayMetrics().density;
 
 //Set circle indicator radius
-    indicator.setRadius(5 * density);
+    indicator.setRadius(3 * density);
 
-    NUM_PAGES =IMAGES.length;
+    NUM_PAGES =banimages.size();
 
     // Auto start of viewpager
     final Handler handler = new Handler();
@@ -290,7 +308,7 @@ private void init() {
         public void run() {
             handler.post(Update);
         }
-    }, 3000, 3000);
+    }, 5000, 5000);
 
     // Pager listener over indicator
     indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -313,11 +331,5 @@ private void init() {
     });
 
 }
-
-
-
-
-
-
 
 }

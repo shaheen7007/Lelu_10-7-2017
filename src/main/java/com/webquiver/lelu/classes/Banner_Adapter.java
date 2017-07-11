@@ -11,7 +11,9 @@ package com.webquiver.lelu.classes;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.ImageView;
+        import android.widget.LinearLayout;
 
+        import com.squareup.picasso.Picasso;
         import com.webquiver.lelu.R;
 
         import java.util.ArrayList;
@@ -20,50 +22,53 @@ package com.webquiver.lelu.classes;
 public class Banner_Adapter extends PagerAdapter {
 
 
-    private ArrayList<Integer> IMAGES;
-    private LayoutInflater inflater;
-    private Context context;
+    Context context;
+    LayoutInflater layoutInflater;
+    ArrayList<String> arrayList;
 
 
-    public Banner_Adapter(Context context, ArrayList<Integer> IMAGES) {
+    public Banner_Adapter(Context context, ArrayList<String> IMAGES) {
         this.context = context;
-        this.IMAGES=IMAGES;
-        inflater = LayoutInflater.from(context);
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.arrayList = IMAGES;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
+        container.removeView((LinearLayout) object);
     }
 
     @Override
     public int getCount() {
-        return IMAGES.size();
+        if(arrayList != null){
+            return arrayList.size();
+        }
+        return 0;
     }
 
     @Override
-    public Object instantiateItem(ViewGroup view, int position) {
-        View imageLayout = inflater.inflate(R.layout.banner_layout, view, false);
+    public Object instantiateItem(ViewGroup container, int position) {
+        View itemView = layoutInflater.inflate(R.layout.banner_layout, container, false);
 
-        assert imageLayout != null;
-        final ImageView imageView = (ImageView) imageLayout
-                .findViewById(R.id.image);
+        ImageView imageView = (ImageView) itemView.findViewById(R.id.image);
 
+        Picasso.with(context).load(arrayList.get(position))
+                .placeholder(R.drawable.notification)
+                .error(R.drawable.menu).into(imageView);
 
-        imageView.setImageResource(IMAGES.get(position));
+        container.addView(itemView);
 
-        view.addView(imageLayout, 0);
-
-        return imageLayout;
+        return itemView;
     }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view.equals(object);
+        return view == ((LinearLayout) object);
     }
 
     @Override
     public void restoreState(Parcelable state, ClassLoader loader) {
+
     }
 
     @Override

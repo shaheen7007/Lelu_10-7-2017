@@ -24,7 +24,7 @@
 
 
             android:layout_height="match_parent"
-            android:background="#e7dfdf"
+            android:background="#dcd9d9"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
@@ -38,6 +38,7 @@
                 android:layout_height="50dp"
                  android:layout_gravity="center_vertical|right"
                 app:layout_anchor="@id/app_bar"
+                android:layout_alignParentTop="true"
                 app:layout_anchorGravity="center_vertical|end"
                 app:srcCompat="@drawable/search" />
 
@@ -84,20 +85,18 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/pager"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_alignParentTop="true" />
+                    android:layout_height="fill_parent" />
 
                 <com.viewpagerindicator.CirclePageIndicator
                     android:id="@+id/indicator"
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="bottom"
-                    android:padding="10dip"
-                    app:centered="true"
-                    app:fillColor="#ff0099"
-                    app:pageColor="#FF0000"
+                    android:layout_alignParentTop="true"
+
+                    android:gravity="bottom|end"
+                    android:padding="160dip"
+                    app:fillColor="#ffffff"
+                    app:pageColor="#a19b9b"
                     app:snap="false" />
             </RelativeLayout>
 
