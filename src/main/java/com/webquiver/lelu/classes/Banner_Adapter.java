@@ -53,8 +53,7 @@ public class Banner_Adapter extends PagerAdapter {
         ImageView imageView = (ImageView) itemView.findViewById(R.id.image);
 
         Picasso.with(context).load(arrayList.get(position))
-                .placeholder(R.drawable.notification)
-                .error(R.drawable.menu).into(imageView);
+                .into(imageView);
 
         container.addView(itemView);
 

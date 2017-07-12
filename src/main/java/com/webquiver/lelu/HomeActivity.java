@@ -2,18 +2,25 @@ package com.webquiver.lelu;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -35,7 +42,16 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+
+
+
+
+    //category button
+
+    ImageView indoorimg;
+    TextView indoortxt;
 
 
 
@@ -66,6 +82,7 @@ private static ViewPager mPager;
 
     CollapsingToolbarLayout collapsingToolbarLayout;
     LinearLayout categorylayout;
+    DrawerLayout mDrawerLayout;
 
 
     @Override
@@ -79,8 +96,44 @@ private static ViewPager mPager;
 
         collapsingToolbarLayout=(CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
         categorylayout=(LinearLayout)findViewById(R.id.categorylyt_id);
+
+        //navigation drawer
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.dl_drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nv_navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
+
+
+//category onclick
+
+        indoorimg=(ImageView)findViewById(R.id.indoorIMG_iid);
+        indoortxt=(TextView)findViewById(R.id.indoorTXT_id);
+        indoortxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        indoorimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+
+
+
+
 /*
-        search.setOnClickListener(new View.OnClickListener() {
+  search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -100,6 +153,24 @@ private static ViewPager mPager;
         View customView = li.inflate(R.layout.custombar, null);
         ab.setCustomView(customView);
         ab.setDisplayShowCustomEnabled(true);
+
+        ImageView menu = (ImageView) customView.findViewById(R.id.menuitem);
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+
+
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+
+
+            }
+        });
+
+
+
+
 
 
         //show and hide category layout when wxpanded and collapsed
@@ -317,6 +388,7 @@ private void init() {
         public void onPageSelected(int position) {
             currentPage = position;
 
+
         }
 
         @Override
@@ -332,4 +404,30 @@ private void init() {
 
 }
 
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+
+            Toast.makeText(HomeActivity.this,"cam",Toast.LENGTH_SHORT).show();
+
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.dl_drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

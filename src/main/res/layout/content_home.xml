@@ -46,7 +46,7 @@
     android:textColor="#0331c4"
     android:layout_height="wrap_content" />
 
-        <com.webquiver.lelu.classes.ExpandableHeightGridView
+             <com.webquiver.lelu.classes.ExpandableHeightGridView
             android:id="@+id/grid"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
@@ -60,6 +60,7 @@
             android:numColumns="2"
             android:stretchMode="columnWidth"
             android:verticalSpacing="5dp" />
+
 
 
     </LinearLayout>
