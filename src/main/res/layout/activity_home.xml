@@ -179,6 +179,7 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/indoorIMG_iid"
+                android:onClick="onclickhandler"
                 android:layout_width="match_parent"
                 android:src="@drawable/indoor"
                 android:layout_height="40dp"
@@ -188,6 +189,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:text="INDOOR"
+                android:onClick="onclickhandler"
                 android:id="@+id/indoorTXT_id"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textAlignment="center"

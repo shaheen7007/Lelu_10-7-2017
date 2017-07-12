@@ -1,5 +1,9 @@
 package com.webquiver.lelu;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -33,6 +37,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
 import com.webquiver.lelu.classes.GridViewAdapter;
 import com.webquiver.lelu.classes.Banner_Adapter;
+import com.webquiver.lelu.fragments.HomeFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,20 +50,15 @@ import java.util.TimerTask;
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
-
-
-
-    //category button
-
-    ImageView indoorimg;
-    TextView indoortxt;
-
-
+//fragment
+    Fragment fr = null;
+    FragmentManager fm = null;
+    View selectedView = null;
 
 
 
 // banners
-private static ViewPager mPager;
+    private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
 
@@ -94,6 +94,18 @@ private static ViewPager mPager;
         getSupportActionBar().setDisplayShowTitleEnabled(false);
          ImageView search = (ImageView) findViewById(R.id.search);
 
+        banimages = new ArrayList<>();
+
+
+    //fr
+        fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.frag_container, HomeFragment.getInstance());
+        fragmentTransaction.commit();
+
+
+
+
         collapsingToolbarLayout=(CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
         categorylayout=(LinearLayout)findViewById(R.id.categorylyt_id);
 
@@ -101,37 +113,6 @@ private static ViewPager mPager;
         mDrawerLayout = (DrawerLayout)findViewById(R.id.dl_drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nv_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-
-
-
-
-//category onclick
-
-        indoorimg=(ImageView)findViewById(R.id.indoorIMG_iid);
-        indoortxt=(TextView)findViewById(R.id.indoorTXT_id);
-        indoortxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        indoorimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
-
-
-
-
-
 /*
   search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +199,7 @@ private static ViewPager mPager;
 
 
 //show items in grid view
-
+/*
         gridView = (ExpandableHeightGridView) findViewById(R.id.grid);
         gridView.setExpanded(true);
 
@@ -228,7 +209,6 @@ private static ViewPager mPager;
             color = new ArrayList<>();
 
 
-            getData();
 
 
 
@@ -244,32 +224,17 @@ private static ViewPager mPager;
                 }
             });
 
-
+*/
+        getData();
         }
+
+
 
         private void getData(){
             //Showing a progress dialog while our app fetches the data from url
          //   final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
 
             //Creating a json array request to get the json from our api
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(DATA_URL,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            //Dismissing the progressdialog on response
-                   //         loading.dismiss();
-
-                            //Displaying our grid
-                            showGrid(response);
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    }
-            );
 
             //get banner json
             JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest(BANNER_URL,
@@ -295,86 +260,61 @@ private static ViewPager mPager;
             //Creating a request queue
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             //Adding our request to the queue
-            requestQueue.add(jsonArrayRequest);
             requestQueue.add(bannerjsonArrayRequest);
         }
 
 
-        private void showGrid(JSONArray jsonArray){
 
-            for(int i = 0; i<jsonArray.length(); i++){
+        private void showbanner(JSONArray jsonArray){
 
-                JSONObject obj = null;
-                try {
+             for(int i = 0; i<jsonArray.length(); i++){
+
+                 JSONObject obj = null;
+                 try {
 
                     obj = jsonArray.getJSONObject(i);
 
 
-                    images.add(obj.getString(TAG_IMAGE_URL));
-                    names.add(obj.getString(TAG_NAME));
-                    color.add(obj.getString(TAG_COLOR));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            //Creating GridViewAdapter Object
-            GridViewAdapter gridViewAdapter = new GridViewAdapter(this,images,names,color);
-
-            //Adding adapter to gridview
-            gridView.setAdapter(gridViewAdapter);
-        }
-
-    private void showbanner(JSONArray jsonArray){
-
-        for(int i = 0; i<jsonArray.length(); i++){
-
-            JSONObject obj = null;
-            try {
-
-                obj = jsonArray.getJSONObject(i);
-
-
-                banimages.add(obj.getString(TAG_IMAGE_URL));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                     banimages.add(obj.getString(TAG_IMAGE_URL));
+                    } catch (JSONException e) {
+                         e.printStackTrace();
+                    }
         }
         init();
 
-    }
+         }
 
 
     //banner
-private void init() {
+        private void init() {
 
-    mPager = (ViewPager) findViewById(R.id.pager);
-    mPager.setAdapter(new Banner_Adapter(HomeActivity.this,banimages));
+            mPager = (ViewPager) findViewById(R.id.pager);
+             mPager.setAdapter(new Banner_Adapter(HomeActivity.this,banimages));
 
 
-    CirclePageIndicator indicator = (CirclePageIndicator)
-            findViewById(R.id.indicator);
+             CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
 
-    indicator.setViewPager(mPager);
+            indicator.setViewPager(mPager);
 
-    final float density = getResources().getDisplayMetrics().density;
+            final float density = getResources().getDisplayMetrics().density;
 
 //Set circle indicator radius
-    indicator.setRadius(3 * density);
+        indicator.setRadius(3 * density);
 
-    NUM_PAGES =banimages.size();
+        NUM_PAGES =banimages.size();
 
     // Auto start of viewpager
-    final Handler handler = new Handler();
-    final Runnable Update = new Runnable() {
+        final Handler handler = new Handler();
+            final Runnable Update = new Runnable() {
         public void run() {
             if (currentPage == NUM_PAGES) {
                 currentPage = 0;
             }
             mPager.setCurrentItem(currentPage++, true);
         }
-    };
-    Timer swipeTimer = new Timer();
-    swipeTimer.schedule(new TimerTask() {
+        };
+         Timer swipeTimer = new Timer();
+         swipeTimer.schedule(new TimerTask() {
         @Override
         public void run() {
             handler.post(Update);
@@ -382,13 +322,11 @@ private void init() {
     }, 5000, 5000);
 
     // Pager listener over indicator
-    indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+         indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageSelected(int position) {
             currentPage = position;
-
-
         }
 
         @Override
@@ -400,10 +338,8 @@ private void init() {
         public void onPageScrollStateChanged(int pos) {
 
         }
-    });
-
-}
-
+        });
+      }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -430,4 +366,18 @@ private void init() {
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+    public void onclickhandler(View view) {
+        if (view == findViewById(R.id.indoorTXT_id)) {
+
+            Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+
+        } else if (view == findViewById(R.id.indoorIMG_iid)) {
+            Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
 }
