@@ -1,14 +1,17 @@
 package com.webquiver.lelu;
 
+import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -21,9 +24,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +54,7 @@ import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    ProgressBar progressBar;
 
 //fragment
     Fragment fr = null;
@@ -62,23 +68,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
 
+    //api
     public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
     public static final String BANNER_URL = "https://api.myjson.com/bins/pbguj";
-
-
     public static final String TAG_IMAGE_URL = "image";
-    public static final String TAG_NAME = "name";
-    public static final String TAG_COLOR = "color";
+
 
     //GridView Object
     private ExpandableHeightGridView gridView;
 
-
-    private ArrayList<String> images;
-    private ArrayList<String> names;
     private ArrayList<String> banimages;
-    private ArrayList<String> color;
-
 
     CollapsingToolbarLayout collapsingToolbarLayout;
     LinearLayout categorylayout;
@@ -92,12 +91,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-         ImageView search = (ImageView) findViewById(R.id.search);
+         final ImageView search = (ImageView) findViewById(R.id.search);
+
+        progressBar=(ProgressBar)findViewById(R.id.prog_id);
 
         banimages = new ArrayList<>();
 
-
-    //fr
+    //fragment
         fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.frag_container, HomeFragment.getInstance());
@@ -113,20 +113,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout = (DrawerLayout)findViewById(R.id.dl_drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nv_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
-/*
-  search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-
-
-                collapsingToolbarLayout.setBackgroundResource(R.drawable.banner2);
-
-            }
-        });
-*/
 
 //custom toolbar
         ActionBar ab = getSupportActionBar();
@@ -149,11 +135,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-
-
-
-
-
         //show and hide category layout when wxpanded and collapsed
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
@@ -164,6 +145,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
 
                    categorylayout.setVisibility(View.INVISIBLE);
+                    search.setVisibility(View.INVISIBLE);
 
                     //LinearLayout layout = (LinearLayout)findViewById(R.id.adlyt_id);
                  //   LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -179,9 +161,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                   //  layout.setLayoutParams(params);
 
                     categorylayout.setVisibility(View.VISIBLE);
+                    search.setVisibility(View.VISIBLE);
                 }
                else {
                     categorylayout.setVisibility(View.VISIBLE);
+                    search.setVisibility(View.INVISIBLE);
 
                 }
 
@@ -232,9 +216,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         private void getData(){
             //Showing a progress dialog while our app fetches the data from url
-         //   final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
+           //final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
 
-            //Creating a json array request to get the json from our api
+
+            progressBar.setVisibility(View.VISIBLE);
 
             //get banner json
             JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest(BANNER_URL,
@@ -242,16 +227,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onResponse(JSONArray response) {
                             //Dismissing the progressdialog on response
-                            //         loading.dismiss();
+             //                       loading.dismiss();
 
-                            //Displaying our grid
+                            progressBar.setVisibility(View.INVISIBLE);
+
+                            //Displaying banner
                             showbanner(response);
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            Toast.makeText(HomeActivity.this,"No response from api",Toast.LENGTH_LONG).show();
                         }
                     }
             );
@@ -365,6 +352,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.dl_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
+
     }
 
 
@@ -379,5 +368,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
