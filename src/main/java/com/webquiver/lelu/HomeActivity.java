@@ -234,6 +234,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             //Displaying banner
                             showbanner(response);
                         }
+
                     },
                     new Response.ErrorListener() {
                         @Override
