@@ -179,7 +179,9 @@
 
         android:layout_width="match_parent"
         android:text="Register Now"
+        android:id="@+id/regbtn_id"
         android:layout_marginTop="15dp"
+        android:onClick="onclickhandler"
         android:layout_marginRight="25dp"
         android:layout_marginLeft="25dp"
         fontPath="fonts/latoregular.ttf"

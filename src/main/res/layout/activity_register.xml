@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/activity_register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    tools:context="com.webquiver.lelu.RegisterActivity">
+
+    <RelativeLayout
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Sign Up"
+            fontPath="fonts/latoregular.ttf"
+            android:textColor="#fff"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+
+        <ImageView
+            android:id="@+id/backPic"
+            android:layout_gravity="start"
+            android:src="@drawable/back_btn"
+            android:layout_width="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_height="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            fontPath="fonts/latoregular.ttf"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="#fff"
+            android:gravity="center"
+
+            android:layout_toEndOf="@+id/backPic" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="10dp"
+        >
+    </View>
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:src="@drawable/logo"
+        />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="10dp"
+        >
+    </View>
+
+    <RelativeLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:orientation="vertical"
+            android:id="@+id/hh"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="10dp"
+                >
+            </View>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                fontPath="fonts/latoregular.ttf"
+                android:hint="Name"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="25dp"
+                android:inputType="text"
+                android:background="@drawable/regedittext_shape_rounded"
+                android:id="@+id/nameET_id"
+                android:cursorVisible="false"
+                android:layout_height="45dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                fontPath="fonts/latoregular.ttf"
+                android:hint="Password"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="25dp"
+                android:inputType="textPassword"
+                android:background="@drawable/regedittext_shape_rounded"
+                android:id="@+id/passworET_id"
+                android:cursorVisible="false"
+                android:layout_height="45dp" />
+
+
+
+
+            <EditText
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                fontPath="fonts/latoregular.ttf"
+
+                android:textAlignment="center"
+                android:inputType="number"
+                android:hint="Phone Number"
+                android:cursorVisible="false"
+                android:layout_width="match_parent"
+                android:id="@+id/phoneET_id"
+                android:background="@drawable/regedittext_shape_rounded"
+                android:layout_height="45dp" />
+            <EditText
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                fontPath="fonts/latoregular.ttf"
+
+                android:textAlignment="center"
+                android:inputType="textEmailAddress"
+                android:hint="E Mail"
+                android:cursorVisible="false"
+                android:layout_width="match_parent"
+                android:id="@+id/emailET_id"
+                android:background="@drawable/regedittext_shape_rounded"
+                android:layout_height="45dp" />
+
+
+            <EditText
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                fontPath="fonts/latoregular.ttf"
+                android:textAlignment="center"
+                android:inputType="text"
+                android:hint="Company Name"
+                android:cursorVisible="false"
+                android:layout_width="match_parent"
+                android:id="@+id/companyET_id"
+                android:background="@drawable/regedittext_shape_rounded"
+                android:layout_height="45dp" />
+
+            <EditText
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                fontPath="fonts/latoregular.ttf"
+                android:textAlignment="center"
+                android:inputType="text"
+                android:hint="Place"
+                android:cursorVisible="false"
+                android:layout_width="match_parent"
+                android:id="@+id/placeET_id"
+                android:background="@drawable/regedittext_shape_rounded"
+                android:layout_height="45dp" />
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/regnow_id"
+                android:paddingLeft="17dp"
+                android:paddingRight="17dp"
+                android:paddingTop="17dp"
+                android:paddingBottom="17dp"
+                android:src="@drawable/tick_login"
+                android:background="@drawable/llist"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_centerHorizontal="true" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/loginbtn2_id"
+        android:layout_marginTop="5dp"
+        android:visibility="invisible"
+        android:onClick="onclickhandler"
+        android:text="Already Have an Account ? \n Login Here"
+        android:textColor="#fff"
+        fontPath="fonts/latoregular.ttf"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</LinearLayout>

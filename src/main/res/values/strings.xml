@@ -2,6 +2,7 @@
     <string name="app_name">Lelu</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="large_text">
+         <string name="str_atv_places">Place</string>
         "Material is the metaphor.\n\n"
 
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."

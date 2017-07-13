@@ -1,4 +1,4 @@
-package com.webquiver.lelu.classes;
+package com.webquiver.lelu.adapters;
 
 /**
  * Created by WebQuiver 04 on 7/10/2017.
@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.webquiver.lelu.R;
+import com.webquiver.lelu.classes.CustomVolleyRequest;
 
 import java.util.ArrayList;
 

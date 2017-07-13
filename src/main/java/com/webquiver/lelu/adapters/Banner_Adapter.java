@@ -1,4 +1,4 @@
-package com.webquiver.lelu.classes;
+package com.webquiver.lelu.adapters;
 
 /**
  * Created by WebQuiver 04 on 7/10/2017.
@@ -13,6 +13,7 @@ package com.webquiver.lelu.classes;
         import android.widget.ImageView;
         import android.widget.LinearLayout;
 
+        import com.squareup.picasso.NetworkPolicy;
         import com.squareup.picasso.Picasso;
         import com.webquiver.lelu.R;
 
@@ -53,6 +54,7 @@ public class Banner_Adapter extends PagerAdapter {
         ImageView imageView = (ImageView) itemView.findViewById(R.id.image);
 
         Picasso.with(context).load(arrayList.get(position))
+                .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(imageView);
 
         container.addView(itemView);

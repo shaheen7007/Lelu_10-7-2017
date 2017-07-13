@@ -2,7 +2,6 @@ package com.webquiver.lelu;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
-                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
+                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 return false;
 
             }
@@ -83,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                 passwordET.setFocusable(true);
                 passwordET.setCursorVisible(true);
                 passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
-                usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
+                usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 return false;
 
 
@@ -95,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 passwordET.setCursorVisible(true);
                 passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
-                usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
+                usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 return false;
 
 
@@ -105,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 passwordET.setCursorVisible(false);
-                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
+                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 return false;
             }
         });
@@ -160,7 +158,17 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+    public void onclickhandler(View view) {
+        if (view == findViewById(R.id.regbtn_id)) {
 
+            Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+            startActivity(intent);
+
+        } else if (view == findViewById(R.id.indoorIMG_iid)) {
+
+
+        }
+    }
 
 
 

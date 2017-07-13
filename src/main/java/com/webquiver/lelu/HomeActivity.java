@@ -1,19 +1,13 @@
 package com.webquiver.lelu;
 
-import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -24,12 +18,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -40,8 +31,7 @@ import com.android.volley.toolbox.Volley;
 
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
-import com.webquiver.lelu.classes.GridViewAdapter;
-import com.webquiver.lelu.classes.Banner_Adapter;
+import com.webquiver.lelu.adapters.Banner_Adapter;
 import com.webquiver.lelu.fragments.HomeFragment;
 
 import org.json.JSONArray;
@@ -70,7 +60,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     //api
     public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
-    public static final String BANNER_URL = "https://api.myjson.com/bins/pbguj";
+    public static final String BANNER_URL = "https://api.myjson.com/bins/q388b";
     public static final String TAG_IMAGE_URL = "image";
 
 
@@ -114,7 +104,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nv_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//custom toolbar
+        //custom toolbar
         ActionBar ab = getSupportActionBar();
         LayoutInflater li = LayoutInflater.from(this);
         View customView = li.inflate(R.layout.custombar, null);
@@ -171,13 +161,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-
-
-
-
-
-
-
 
 
 
