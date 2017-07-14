@@ -121,16 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
 
-                if (emailvalidation(email.getText().toString()))
-                {
-
-
-                    (email).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
-
-
-                }
-                else
-                    (email).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                smalltick();
 
                 return false;
 
@@ -152,6 +143,8 @@ public class RegisterActivity extends AppCompatActivity {
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                smalltick();
                 return false;
 
             }
@@ -173,6 +166,9 @@ public class RegisterActivity extends AppCompatActivity {
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                smalltick();
+
                 return false;
 
             }
@@ -195,6 +191,8 @@ public class RegisterActivity extends AppCompatActivity {
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
+                smalltick();
+
                 return false;
 
 
@@ -214,6 +212,8 @@ public class RegisterActivity extends AppCompatActivity {
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                smalltick();
 
                 return false;
 
@@ -235,6 +235,8 @@ public class RegisterActivity extends AppCompatActivity {
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
+                smalltick();
+
                 return false;
 
 
@@ -255,6 +257,9 @@ public class RegisterActivity extends AppCompatActivity {
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                smalltick();
+
                 return false;
 
 
@@ -275,6 +280,9 @@ public class RegisterActivity extends AppCompatActivity {
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                smalltick();
+
                 return false;
             }
         });
@@ -292,6 +300,9 @@ public class RegisterActivity extends AppCompatActivity {
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                smalltick();
+
                 return false;
             }
         });
@@ -311,6 +322,9 @@ public class RegisterActivity extends AppCompatActivity {
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                smalltick();
+
                 return false;
             }
         });
@@ -330,6 +344,9 @@ public class RegisterActivity extends AppCompatActivity {
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                smalltick();
+
                 return false;
             }
         });
@@ -348,6 +365,9 @@ public class RegisterActivity extends AppCompatActivity {
               //  phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                smalltick();
+
                 return false;
             }
         });
@@ -400,6 +420,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Adding our dialog box to the view of alert dialog
         alert.setView(confirmDialog);
+        alert.setCancelable(false);
 
         //Creating an alert dialog
         final AlertDialog alertDialog = alert.create();
@@ -425,30 +446,33 @@ public class RegisterActivity extends AppCompatActivity {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
+
+                                try {
+                                    JSONObject jsonResponse = new JSONObject(response);
+                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+                                        //Asking user to confirm otp
+                                        Toast.makeText(RegisterActivity.this, "Registration Successfull", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(RegisterActivity.this, "Wrong OTP", Toast.LENGTH_LONG).show();
+                                        confirmOtp();
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                loading.dismiss();
+
                                 //if the server response is success
-                                if (response.equalsIgnoreCase("success")) {
+                           //     if (response.equalsIgnoreCase("success")) {
                                     //dismissing the progressbar
-                                    loading.dismiss();
+                                  //  loading.dismiss();
 
                                     //Starting a new activity
-                                    Toast.makeText(RegisterActivity.this, "Correct", Toast.LENGTH_LONG).show();
 
-                                } else {
-                                    //Displaying a toast if the otp entered is wrong
-                                    Toast.makeText(RegisterActivity.this, "Wrong OTP", Toast.LENGTH_LONG).show();
 
                                    //edit
-                                    loading.dismiss();
 
-
-                                    try {
-                                        //Asking user to enter otp again
-                                        confirmOtp();
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
                                 }
-                            }
                         },
                         new Response.ErrorListener() {
                             @Override
@@ -462,7 +486,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Map<String, String> params = new HashMap<String, String>();
                         //Adding the parameters otp and username
                         params.put(Config.KEY_OTP, otp);
-                        params.put(Config.KEY_USERNAME, username);
+                        params.put(Config.KEY_PHONE, phonestring);
                         return params;
                     }
                 };
@@ -535,6 +559,9 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put(Config.KEY_USERNAME, username);
                 params.put(Config.KEY_PASSWORD, password);
                 params.put(Config.KEY_PHONE, phonestring);
+                params.put(Config.KEY_COMPANY, companynamestring);
+                params.put(Config.KEY_EMAIL, emailstring);
+                params.put(Config.KEY_PLACE, placestring);
                 return params;
             }
         };
@@ -571,6 +598,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
                 placeET.setText(place.getName());
+                smalltick();
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
@@ -586,6 +614,10 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
+
+    //validations
+
+
     public static boolean emailvalidation(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
@@ -593,7 +625,129 @@ public class RegisterActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
+    public static boolean phonevalidation(String phone) {
 
+        if (phone.length()==10)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public static boolean passwordvalidation(String pass) {
+        if (pass.length()<8)
+            return false;
+
+       return true;
+    }
+
+
+    public static boolean companyvalidation(String company) {
+
+        if (company.length()>=2)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public static boolean placevalidation(String company) {
+
+        if (company.length()>=2)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public static boolean namevalidation(String company) {
+
+        if (company.length()>=2)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+
+public void smalltick()
+{
+
+    if (emailvalidation(email.getText().toString()))
+    {
+
+
+        (email).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
+
+
+    }
+    else
+        (email).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+
+    if (phonevalidation(phone.getText().toString()))
+    {
+
+
+        (phone).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
+
+
+    }
+    else
+        (phone).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+
+    if (passwordvalidation(pass.getText().toString()))
+    {
+
+
+        (pass).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
+
+
+    }
+    else
+        (pass).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+
+    if (companyvalidation(companyname.getText().toString()))
+    {
+
+
+        (companyname).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
+
+
+    }
+    else
+        (companyname).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+    if (placevalidation(placeET.getText().toString()))
+    {
+
+
+        (placeET).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
+
+
+    }
+    else
+        (placeET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+    if (namevalidation(name.getText().toString()))
+    {
+
+
+        (name).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
+
+
+    }
+    else
+        (name).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+
+}
 
 
 
