@@ -82,6 +82,18 @@ public class LoginActivity extends AppCompatActivity {
                 passwordET.setCursorVisible(true);
                 passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
                 usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+
+                if (isEmailValid(usernameET.getText().toString()))
+                {
+                    (usernameET).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
+
+
+                }
+                else
+                    (usernameET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+
                 return false;
 
 
@@ -94,6 +106,18 @@ public class LoginActivity extends AppCompatActivity {
                 passwordET.setCursorVisible(true);
                 passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
                 usernameET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                if (isEmailValid(usernameET.getText().toString()))
+                {
+                    (usernameET).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
+
+
+                }
+                else
+                    (usernameET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+
+
                 return false;
 
 
@@ -104,6 +128,18 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 passwordET.setCursorVisible(false);
                 passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                if (passwordET.getText().toString().length()>=8)
+                {
+                    (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
+
+
+                }
+                else
+                    (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+
+
+
                 return false;
             }
         });
@@ -111,6 +147,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
 //check email format correct or not
+
+        /*
         usernameET.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {}
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
@@ -128,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
+*/
 
 
 
@@ -147,14 +185,6 @@ public class LoginActivity extends AppCompatActivity {
             Matcher matcher = pattern.matcher(email);
             return matcher.matches();
         }
-
-
-
-
-
-
-
-
 
 
 

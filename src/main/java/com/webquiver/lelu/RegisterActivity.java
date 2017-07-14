@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +24,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.webquiver.lelu.classes.Config;
 
 import org.json.JSONException;
@@ -30,12 +38,14 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText name,phone,email,companyname,place,pass;
+    EditText name,phone,email,companyname, placeET,pass;
     ImageView regbtn;
     private AppCompatButton buttonConfirm;
 
@@ -69,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
         phone=(EditText)findViewById(R.id.phoneET_id);
         email=(EditText)findViewById(R.id.emailET_id);
         companyname=(EditText)findViewById(R.id.companyET_id);
-        place=(EditText)findViewById(R.id.placeET_id);
+        placeET =(EditText)findViewById(R.id.placeET_id);
         pass=(EditText)findViewById(R.id.passworET_id);
         regbtn=(ImageView)findViewById(R.id.regnow_id);
 
@@ -94,7 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-        //code for the redlinr in edittext
+        //code for the redlinr and tick in edittext
         name.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -106,9 +116,22 @@ public class RegisterActivity extends AppCompatActivity {
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+
+                if (emailvalidation(email.getText().toString()))
+                {
+
+
+                    (email).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
+
+
+                }
+                else
+                    (email).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
                 return false;
 
             }
@@ -127,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 return false;
 
@@ -136,15 +159,15 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-        place.setOnTouchListener(new View.OnTouchListener() {
+        placeET.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                place.setFocusable(true);
-                place.setCursorVisible(true);
+               // placeET.setFocusable(true);
+               // placeET.setCursorVisible(true);
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -165,7 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -185,7 +208,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -205,7 +228,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -226,7 +249,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -246,7 +269,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -263,7 +286,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -275,13 +298,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         companyname.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                place.setFocusable(true);
-                place.setCursorVisible(true);
+               // placeET.setFocusable(true);
+               // placeET.setCursorVisible(true);
+                findPlace(v);
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
-                //place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                //placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -292,15 +316,15 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-        place.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        placeET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-               // place.setFocusable(true);
-               // place.setCursorVisible(true);
+               // placeET.setFocusable(true);
+               // placeET.setCursorVisible(true);
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                //place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
-                //place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                //placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                //placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -317,8 +341,8 @@ public class RegisterActivity extends AppCompatActivity {
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
-                place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
-                //place.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                //placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
               //  phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -430,7 +454,7 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 alertDialog.dismiss();
-                                Toast.makeText(RegisterActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, "error2", Toast.LENGTH_LONG).show();
                             }
                         }) {
                     @Override
@@ -466,7 +490,7 @@ public class RegisterActivity extends AppCompatActivity {
         phonestring = phone.getText().toString().trim();
         emailstring = email.getText().toString().trim();
         companynamestring = companyname.getText().toString().trim();
-        placestring = place.getText().toString().trim();
+        placestring = placeET.getText().toString().trim();
 
 
         //Again creating the string request
@@ -479,17 +503,13 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                         try {
-
-
-                          //edit
-
-                            confirmOtp();
                             //Creating the json object from the response
                             JSONObject jsonResponse = new JSONObject(response);
-
                             //If it is success
                             if(jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")){
                                 //Asking user to confirm otp
+                                Toast.makeText(RegisterActivity.this,jsonResponse.getString(Config.KEY_OTP), Toast.LENGTH_LONG).show();
+
                                 confirmOtp();
                             }else{
                                 //If not successful user may already have registered
@@ -504,7 +524,8 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loading.dismiss();
-                        Toast.makeText(RegisterActivity.this, error.getMessage(),Toast.LENGTH_LONG).show();
+                        //
+                        Toast.makeText(RegisterActivity.this,"error1",Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
@@ -521,5 +542,59 @@ public class RegisterActivity extends AppCompatActivity {
         //Adding request the the queue
         requestQueue.add(stringRequest);
     }
+
+
+
+    public void findPlace(View view) {
+        try {
+            Intent intent =
+                    new PlaceAutocomplete
+                            .IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                            .setBoundsBias(new LatLngBounds(
+                                    new LatLng(9.931233,76.267303),
+                                    new LatLng(9.931233,76.267303)))
+                            .build(this);
+            startActivityForResult(intent, 1);
+        } catch (GooglePlayServicesRepairableException e) {
+            // TODO: Handle the error.
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // TODO: Handle the error.
+        }
+    }
+
+    // A place has been received; use requestCode to track the request.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                // retrive the data by using getPlace() method.
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
+                placeET.setText(place.getName());
+
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Log.e("Tag", status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
+
+
+
+    public static boolean emailvalidation(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+
+
+
 
 }
