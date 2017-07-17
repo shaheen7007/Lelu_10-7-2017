@@ -8,7 +8,8 @@
 
     <TextView
         android:textColor="#000000"
-        android:text="Enter the OTP received"
+        android:textAlignment="center"
+        android:text="You haven't verified your phone number\nEnter the OTP recieved to verify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

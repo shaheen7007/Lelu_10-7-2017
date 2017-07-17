@@ -93,10 +93,12 @@
                 android:textAlignment="center"
                 fontPath="fonts/latoregular.ttf"
 
+                android:hint="Phone Number"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="25dp"
-                android:inputType="textEmailAddress"
+                android:inputType="phone"
+                android:maxLength="10"
                 android:background="@drawable/edittext_shape_rounded"
                 android:id="@+id/username_id"
                 android:cursorVisible="false"
@@ -106,7 +108,7 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
                 fontPath="fonts/latoregular.ttf"
-
+                android:hint="Password"
                 android:textAlignment="center"
                 android:inputType="textPassword"
                 android:cursorVisible="false"
@@ -114,10 +116,6 @@
                 android:id="@+id/password_id"
                 android:background="@drawable/edittext_shape_rounded"
                 android:layout_height="45dp" />
-
-
-
-
         </LinearLayout>
 
 
@@ -134,8 +132,6 @@
             android:background="@drawable/llist"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
-
-
     </RelativeLayout>
 
 
@@ -152,7 +148,7 @@
         android:layout_gravity="center_horizontal"
         android:text="Forgot Your Password ?"
         fontPath="fonts/latoregular.ttf"
-
+        android:id="@+id/forgotpassbtn_id"
         android:textColor="#fff"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:layout_centerVertical="true"

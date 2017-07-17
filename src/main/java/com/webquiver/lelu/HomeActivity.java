@@ -32,6 +32,7 @@ import com.android.volley.toolbox.Volley;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
 import com.webquiver.lelu.adapters.Banner_Adapter;
+import com.webquiver.lelu.classes.SessionManagement;
 import com.webquiver.lelu.fragments.HomeFragment;
 
 import org.json.JSONArray;
@@ -60,7 +61,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     //api
     public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
-    public static final String BANNER_URL = "https://api.myjson.com/bins/q388b";
+    public static final String BANNER_URL = "https://api.myjson.com/bins/pbguj";
     public static final String TAG_IMAGE_URL = "image";
 
 
@@ -73,6 +74,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     LinearLayout categorylayout;
     DrawerLayout mDrawerLayout;
 
+    SessionManagement sessionManagement;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        //check if logged in or not
+        sessionManagement=new SessionManagement(getApplicationContext());
+        sessionManagement.checkLogin();
+
+
+
          final ImageView search = (ImageView) findViewById(R.id.search);
 
         progressBar=(ProgressBar)findViewById(R.id.prog_id);
@@ -319,7 +329,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_camera) {
 
-            Toast.makeText(HomeActivity.this,"cam",Toast.LENGTH_SHORT).show();
+
+           sessionManagement.logoutUser();
+            finish();
 
         } else if (id == R.id.nav_gallery) {
 

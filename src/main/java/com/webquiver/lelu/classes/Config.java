@@ -10,8 +10,11 @@ package com.webquiver.lelu.classes;
  */
 public class Config {
     //URLs to register.php and confirm.php file
-    public static final String REGISTER_URL = "http://192.168.1.2:1111/customer_login";
-    public static final String CONFIRM_URL = "http://192.168.1.2:1111/verify_otp";
+    public static final String REGISTER_URL = "http://192.168.1.5:1111/customer_signup";
+    public static final String LOGIN_URL = "http://192.168.1.5:1111/customer_login";
+    public static final String CONFIRM_URL = "http://192.168.1.5:1111/verify_otp";
+    public static final String FORGOT_URL = "http://192.168.1.5:1111/forget_pass";
+    public static final String FORGOT2_URL = "http://192.168.1.5:1111/otp_forget_pass";
 
     //Keys to send username, password, phone and otp
     public static final String KEY_USERNAME = "username";
@@ -24,4 +27,6 @@ public class Config {
 
     //JSON Tag from response from server
     public static final String TAG_RESPONSE= "message";
+
+
 }

@@ -91,6 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
                 register();
 
             }
@@ -517,7 +518,7 @@ public class RegisterActivity extends AppCompatActivity {
         placestring = placeET.getText().toString().trim();
 
 
-        //Again creating the string request
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.REGISTER_URL,
                 new Response.Listener<String>() {
                     @Override
