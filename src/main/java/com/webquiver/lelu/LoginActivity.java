@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
                                                 forgotpass();
-                                                Toast.makeText(LoginActivity.this,jsonResponse.getString(Config.KEY_OTP), Toast.LENGTH_LONG).show();
+                                               // Toast.makeText(LoginActivity.this,jsonResponse.getString(Config.KEY_OTP), Toast.LENGTH_LONG).show();
 
                                             } else {
                                                 Toast.makeText(LoginActivity.this, "Phone number not registered", Toast.LENGTH_LONG).show();
@@ -133,17 +133,6 @@ public class LoginActivity extends AppCompatActivity {
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-                                        //loading.dismiss();
-
-                                        //if the server response is success
-                                        //     if (response.equalsIgnoreCase("success")) {
-                                        //dismissing the progressbar
-                                        //  loading.dismiss();
-
-                                        //Starting a new activity
-
-
-                                        //edit
 
                                     }
                                 },
@@ -219,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                         else {
                                             //If not successful user may already have registered
-                                            Toast.makeText(LoginActivity.this, "Invalid phonenumber or password", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_LONG).show();
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -458,7 +447,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean passwordvalid(String f_pass) {
 
-        if (f_pass.length()>8)
+        if (f_pass.length()>=8)
         {
             return  true;
         }
@@ -471,7 +460,7 @@ public class LoginActivity extends AppCompatActivity {
     // if user not confirmed phonenumber
     private void confirmotp()  throws JSONException {
 
-        Toast.makeText(LoginActivity.this,otpnew,Toast.LENGTH_LONG).show();
+        //Toast.makeText(LoginActivity.this,otpnew,Toast.LENGTH_LONG).show();
 
         //Creating a LayoutInflater object for the dialog box
         LayoutInflater li = LayoutInflater.from(this);

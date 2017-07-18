@@ -92,6 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
+
                 register();
 
             }
@@ -395,6 +396,12 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         }
+        else if (view == findViewById(R.id.backtext_id)) {
+                    onBackPressed();
+
+        } else if (view == findViewById(R.id.backPic)) {
+                    onBackPressed();
+        }
     }
 
 
@@ -453,6 +460,9 @@ public class RegisterActivity extends AppCompatActivity {
                                     if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
                                         //Asking user to confirm otp
                                         Toast.makeText(RegisterActivity.this, "Registration Successfull", Toast.LENGTH_LONG).show();
+                                        Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                     } else {
                                         Toast.makeText(RegisterActivity.this, "Wrong OTP", Toast.LENGTH_LONG).show();
                                         confirmOtp();
@@ -506,7 +516,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void register() {
 
         //Displaying a progress dialog
-        final ProgressDialog loading = ProgressDialog.show(this, "Registering", "Please wait...", false, false);
+
 
 
         //Getting user data
@@ -517,58 +527,80 @@ public class RegisterActivity extends AppCompatActivity {
         companynamestring = companyname.getText().toString().trim();
         placestring = placeET.getText().toString().trim();
 
+        if(namevalidation(username))
+        {
+            if(passwordvalidation(password))
+            {
+                if(phonevalidation(phonestring))
+                {
+                  if(companyvalidation(companynamestring))
+                  {
+
+                      final ProgressDialog loading = ProgressDialog.show(this, "Registering", "Please wait...", false, false);
+                      StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.REGISTER_URL,
+                              new Response.Listener<String>() {
+                                  @Override
+                                  public void onResponse(String response) {
+                                      loading.dismiss();
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.REGISTER_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        loading.dismiss();
+
+                                      try {
+                                          //Creating the json object from the response
+                                          JSONObject jsonResponse = new JSONObject(response);
+                                          //If it is success
+                                          if(jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")){
+                                              //Asking user to confirm otp
+                                              //   Toast.makeText(RegisterActivity.this,jsonResponse.getString(Config.KEY_OTP), Toast.LENGTH_LONG).show();
+
+                                              confirmOtp();
+                                          }else{
+                                              //If not successful user may already have registered
+                                              Toast.makeText(RegisterActivity.this, "Username or Phone number already registered", Toast.LENGTH_LONG).show();
+                                          }
+                                      } catch (JSONException e) {
+                                          e.printStackTrace();
+                                      }
+                                  }
+                              },
+                              new Response.ErrorListener() {
+                                  @Override
+                                  public void onErrorResponse(VolleyError error) {
+                                      loading.dismiss();
+                                      //
+                                      Toast.makeText(RegisterActivity.this,"error1",Toast.LENGTH_LONG).show();
+                                  }
+                              }) {
+                          @Override
+                          protected Map<String, String> getParams() throws AuthFailureError {
+                              Map<String, String> params = new HashMap<>();
+                              //Adding the parameters to the request
+                              params.put(Config.KEY_USERNAME, username);
+                              params.put(Config.KEY_PASSWORD, password);
+                              params.put(Config.KEY_PHONE, phonestring);
+                              params.put(Config.KEY_COMPANY, companynamestring);
+                              params.put(Config.KEY_EMAIL, emailstring);
+                              params.put(Config.KEY_PLACE, placestring);
+                              return params;
+                          }
+                      };
+
+                      //Adding request the the queue
+                      requestQueue.add(stringRequest);
 
 
 
-                        try {
-                            //Creating the json object from the response
-                            JSONObject jsonResponse = new JSONObject(response);
-                            //If it is success
-                            if(jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")){
-                                //Asking user to confirm otp
-                                Toast.makeText(RegisterActivity.this,jsonResponse.getString(Config.KEY_OTP), Toast.LENGTH_LONG).show();
-
-                                confirmOtp();
-                            }else{
-                                //If not successful user may already have registered
-                                Toast.makeText(RegisterActivity.this, "Username or Phone number already registered", Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        loading.dismiss();
-                        //
-                        Toast.makeText(RegisterActivity.this,"error1",Toast.LENGTH_LONG).show();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                //Adding the parameters to the request
-                params.put(Config.KEY_USERNAME, username);
-                params.put(Config.KEY_PASSWORD, password);
-                params.put(Config.KEY_PHONE, phonestring);
-                params.put(Config.KEY_COMPANY, companynamestring);
-                params.put(Config.KEY_EMAIL, emailstring);
-                params.put(Config.KEY_PLACE, placestring);
-                return params;
+                  }
+                }
             }
-        };
+        }
+        else
+        {
+            Toast.makeText(this, "Please fill all fields and retry", Toast.LENGTH_SHORT).show();
+        }
 
-        //Adding request the the queue
-        requestQueue.add(stringRequest);
+
+
     }
 
 
@@ -749,6 +781,14 @@ public void smalltick()
 
 
 }
+
+
+
+
+
+
+
+
 
 
 

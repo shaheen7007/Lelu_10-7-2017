@@ -1,5 +1,6 @@
 package com.webquiver.lelu.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
@@ -18,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.webquiver.lelu.R;
+import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
 import com.webquiver.lelu.adapters.GridViewAdapter;
 
@@ -27,12 +29,20 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by WebQuiver 04 on 7/12/2017.
  */
 
 public class HomeFragment extends android.app.Fragment {
     private static HomeFragment homeFragment = null;
+
+
+    //sharedprefference
+    private SharedPreferences sharedPreferences;
+    public static final String HOME_PREFERENCE = "HOME_DATA";
+
 
     ProgressBar progressBar;
 
@@ -69,6 +79,8 @@ public class HomeFragment extends android.app.Fragment {
                 R.layout.home_frag, container, false);
 
         progressBar=(ProgressBar)rootView.findViewById(R.id.progbar_id);
+        sharedPreferences = this.getActivity().getSharedPreferences(HOME_PREFERENCE, MODE_PRIVATE);
+
 
         gridView = (ExpandableHeightGridView) rootView.findViewById(R.id.grid);
         gridView.setExpanded(true);
@@ -79,7 +91,7 @@ public class HomeFragment extends android.app.Fragment {
         color = new ArrayList<>();
 
 
-        mPager = (ViewPager) rootView.findViewById(R.id.pager);
+        //mPager = (ViewPager) rootView.findViewById(R.id.pager);
 
         //CirclePageIndicator indicator = (CirclePageIndicator)rootView.findViewById(R.id.indicator);
 
@@ -120,12 +132,25 @@ public class HomeFragment extends android.app.Fragment {
                         //         loading.dismiss();
 
                         //Displaying our grid
+                        SharedPreferences.Editor prefEdit = sharedPreferences.edit();
+                        String jsonstring=response.toString();
+                        prefEdit.putString(Config.JSONSTRING,jsonstring);
+                        prefEdit.apply();
                         showGrid(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
+                        JSONArray jsonArray = null;
+                        try {
+                            jsonArray = new JSONArray(sharedPreferences.getString(Config.JSONSTRING, "NULL"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        progressBar.setVisibility(View.INVISIBLE);
+                        showGrid(jsonArray);
 
                         Toast.makeText(getActivity(),"No response from api",Toast.LENGTH_LONG).show();
 

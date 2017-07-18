@@ -36,7 +36,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDmAScM8u941nhbTeirsKmTsF5zavS0Dv0" />
 
-        <activity android:name=".ItemActivity" />
+        <activity
+            android:name=".ItemActivity"
+            android:label="@string/title_activity_item"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

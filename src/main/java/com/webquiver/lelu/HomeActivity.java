@@ -3,6 +3,7 @@ package com.webquiver.lelu;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -30,6 +31,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.viewpagerindicator.CirclePageIndicator;
+import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
 import com.webquiver.lelu.adapters.Banner_Adapter;
 import com.webquiver.lelu.classes.SessionManagement;
@@ -61,10 +63,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     //api
     public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
-    public static final String BANNER_URL = "https://api.myjson.com/bins/pbguj";
+    public static final String BANNER_URL = "https://api.myjson.com/bins/15eqh3";
     public static final String TAG_IMAGE_URL = "image";
-
-
     //GridView Object
     private ExpandableHeightGridView gridView;
 
@@ -76,6 +76,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     SessionManagement sessionManagement;
 
+    private SharedPreferences sharedPreferences;
+    public static final String BANNER_PREFERENCE = "BANNER_DATA";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
+
+       sharedPreferences = getSharedPreferences(BANNER_PREFERENCE, MODE_PRIVATE);
+
+
 
         //check if logged in or not
         sessionManagement=new SessionManagement(getApplicationContext());
@@ -147,9 +156,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                    categorylayout.setVisibility(View.INVISIBLE);
                     search.setVisibility(View.INVISIBLE);
 
-                    //LinearLayout layout = (LinearLayout)findViewById(R.id.adlyt_id);
-                 //   LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                  //  params.setMargins(30, 20, 30, 0);
+                   // LinearLayout layout = (LinearLayout)findViewById(R.id.adlyt_id);
+                   // LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                  ///  params.setMargins(30, 20, 30, 0);
                   //  layout.setLayoutParams(params);
 
 
@@ -224,6 +233,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                             progressBar.setVisibility(View.INVISIBLE);
 
+                           SharedPreferences.Editor prefEdit = sharedPreferences.edit();
+                            String jsonstring=response.toString();
+                           prefEdit.putString(Config.JSONSTRING,jsonstring);
+                            prefEdit.apply();
                             //Displaying banner
                             showbanner(response);
                         }
@@ -233,6 +246,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Toast.makeText(HomeActivity.this,"No response from api",Toast.LENGTH_LONG).show();
+                            //set from preference
+                            JSONArray jsonArray = null;
+                            try {
+                               jsonArray = new JSONArray(sharedPreferences.getString(Config.JSONSTRING, "NULL"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                           }
+                            progressBar.setVisibility(View.INVISIBLE);
+                            showbanner(jsonArray);
+
                         }
                     }
             );
@@ -364,20 +387,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
