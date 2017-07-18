@@ -67,11 +67,6 @@ public class HomeFragment extends android.app.Fragment {
     private ArrayList<String> color;
 
 
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    LinearLayout categorylayout;
-    DrawerLayout mDrawerLayout;
-
-
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -189,13 +184,6 @@ public class HomeFragment extends android.app.Fragment {
         //Adding adapter to gridview
         gridView.setAdapter(gridViewAdapter);
     }
-
-
-
-    //banner
-
-
-
 
 
     public static HomeFragment getInstance() {
