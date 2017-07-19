@@ -34,7 +34,7 @@
                 android:background="#dcd9d9"
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+                app:layout_scrollFlags="snap">
 
 
                 <ProgressBar
@@ -59,17 +59,11 @@
                         android:layout_alignParentTop="true"
 
                         android:gravity="bottom|end"
-                        android:padding="160dip"
+                        android:padding="210dip"
                         app:fillColor="#ffffff"
                         app:pageColor="#a19b9b"
                         app:snap="false" />
                 </RelativeLayout>
-
-
-
-
-
-
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"

@@ -70,7 +70,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private ArrayList<String> banimages;
 
-    CollapsingToolbarLayout collapsingToolbarLayout;
+
     LinearLayout categorylayout;
     DrawerLayout mDrawerLayout;
 
@@ -115,7 +115,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        collapsingToolbarLayout=(CollapsingToolbarLayout)findViewById(R.id.toolbar_layout);
+
         categorylayout=(LinearLayout)findViewById(R.id.categorylyt_id);
 
         //navigation drawer
@@ -135,11 +135,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
 
-
-
-
                 mDrawerLayout.openDrawer(Gravity.LEFT);
-
 
             }
         });
@@ -219,8 +215,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         private void getData(){
             //Showing a progress dialog while our app fetches the data from url
            //final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
-
-
             progressBar.setVisibility(View.VISIBLE);
 
             //get banner json

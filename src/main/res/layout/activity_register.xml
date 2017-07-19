@@ -112,7 +112,7 @@
                 fontPath="fonts/latoregular.ttf"
                 android:hint="Password"
                 android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="25dp"
                 android:inputType="textPassword"
                 android:background="@drawable/regedittext_shape_rounded"
@@ -184,7 +184,8 @@
                 android:background="@drawable/regedittext_shape_rounded"
                 android:layout_height="45dp" />
 
-            <ImageView
+
+       <ImageView
                 android:layout_width="70dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -197,6 +198,11 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_centerHorizontal="true" />
+
+
+
+
+
 
         </LinearLayout>
 

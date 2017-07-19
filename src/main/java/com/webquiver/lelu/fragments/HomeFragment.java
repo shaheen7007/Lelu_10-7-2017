@@ -1,5 +1,6 @@
 package com.webquiver.lelu.fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -18,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
@@ -102,6 +104,11 @@ public class HomeFragment extends android.app.Fragment {
 
                 Toast.makeText(getActivity(), String.valueOf(names.get(position)), Toast.LENGTH_SHORT).show();
 
+                Intent intent=new Intent(getActivity(), ItemActivity.class);
+                intent.putExtra("name",String.valueOf(names.get(position)));
+                intent.putExtra("color",String.valueOf(color.get(position)));
+                intent.putStringArrayListExtra("images",images);
+                startActivity(intent);
             }
         });
 
