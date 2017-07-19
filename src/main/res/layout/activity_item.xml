@@ -39,7 +39,7 @@
 
                 <ProgressBar
                     android:layout_width="wrap_content"
-                    android:id="@+id/prog_id"
+                    android:id="@+id/progbr_id"
                     android:layout_gravity="center"
                     android:layout_height="wrap_content" />
 

@@ -32,4 +32,6 @@ dependencies {
     compile project(':VIEWPAGERlibrary')
     compile 'com.google.android.gms:play-services-places:10.2.1'
     compile 'com.pkmmte.view:circularimageview:1.1'
+
+
 }

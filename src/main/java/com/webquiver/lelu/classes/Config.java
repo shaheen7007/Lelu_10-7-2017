@@ -36,6 +36,7 @@ public class Config {
 
     //Shared Prefference
     public static final String JSONSTRING="jsonstring";
+    public static final String JSONSTRING1="jsonstring1";
 
 
 }
