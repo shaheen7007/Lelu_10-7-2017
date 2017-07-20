@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/gridshape"
+    android:layout_height="wrap_content"
+    android:padding="5dp" >
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_height="100dp">
+
+            <ImageView
+                android:layout_width="90dp"
+                android:background="#000"
+                android:layout_height="match_parent" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                >
+            </View>
+
+
+            <LinearLayout
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+               android:weightSum="2"
+               android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Baybee BMW Car"
+                    android:textColor="#000"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:layout_height="0dp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_height="0dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="@string/rs_symbol"
+                        android:textColor="#000"
+                        android:id="@+id/pricetxt_id"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:text="@string/rs_symbol"
+                        android:textColor="#ef0404"
+                        android:id="@+id/realprice_id"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:text="(33% off)"
+                        android:textColor="#ef0404"
+                        android:id="@+id/percentage_id"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:orientation="vertical"
+        android:weightSum="2"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="10dp"
+                android:src="@drawable/min"
+                android:id="@+id/cartminus_id"
+                android:scaleType="fitXY"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:text="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_height="wrap_content"
+                android:id="@+id/qtytxt_id" />
+
+            <ImageView
+                android:layout_width="10dp"
+                android:src="@drawable/plus"
+                android:id="@+id/cartplus_id"
+                android:scaleType="fitXY"
+                android:layout_height="10dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+</LinearLayout>

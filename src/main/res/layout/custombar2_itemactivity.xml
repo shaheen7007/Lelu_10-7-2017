@@ -3,20 +3,21 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <ImageView android:src="@drawable/back_btn"
+    <ImageView android:src="@drawable/ack"
         android:background="?attr/actionBarItemBackground"
         android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_height="22dp"
         android:scaleType="fitCenter"
         android:layout_marginTop="5dp"
-        android:id="@+id/menuitem"
+        android:id="@+id/back_id"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"/>
 
 
-    <ImageView android:src="@drawable/cart"
+    <ImageView android:src="@drawable/cart2"
         android:background="?attr/actionBarItemBackground"
         android:layout_width="25dp"
+        android:onClick="onclickhandler_itemactivity"
         android:layout_height="25dp"
         android:layout_marginLeft="19dp"
         android:scaleType="fitCenter"
@@ -24,5 +25,4 @@
         android:id="@+id/cartitem"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"/>
-
 </RelativeLayout>

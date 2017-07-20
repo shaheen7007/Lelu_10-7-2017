@@ -39,7 +39,9 @@
         <activity
             android:name=".ItemActivity"
             android:label="@string/title_activity_item"
-            android:theme="@style/AppTheme"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".CartActivity"></activity>
     </application>
 
 </manifest>

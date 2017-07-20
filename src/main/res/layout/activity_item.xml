@@ -90,8 +90,7 @@
             app:layout_anchorGravity="center_vertical|end"
             app:srcCompat="@drawable/search" />
 
-        <include layout="@layout/content_home"
-            android:layout_width="190dp" />
+        <include layout="@layout/content_item" />
     </android.support.design.widget.CoordinatorLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nv_navigation_view"

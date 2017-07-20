@@ -2,10 +2,11 @@ package com.webquiver.lelu;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
+
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -23,7 +25,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.adapters.Banner_Adapter;
-import com.webquiver.lelu.adapters.GridViewAdapter;
 import com.webquiver.lelu.classes.Config;
 
 import org.json.JSONArray;
@@ -31,10 +32,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class ItemActivity extends AppCompatActivity {
+
+
+    //cart
+
+
+
+
 
 
     //images slider
@@ -57,6 +64,23 @@ public class ItemActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setCollapsible(false);
         setSupportActionBar(toolbar);
+
+
+
+
+
+        //price text strike and ruppee symbol
+        TextView realprice = (TextView) findViewById(R.id.realprice_id);
+        TextView price = (TextView) findViewById(R.id.pricetxt_id);
+        realprice.setText(realprice.getText().toString()+" "+"14,500.00");
+        price.setText(price.getText().toString()+" "+"10,500.00");
+        realprice.setPaintFlags(realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+
+
+
+
+
 
         //initialisation
         images = new ArrayList<>();
@@ -208,6 +232,32 @@ public class ItemActivity extends AppCompatActivity {
             init(images);
         }
     }
+
+
+
+
+
+    public void onclickhandler_itemactivity(View view) {
+        if (view == findViewById(R.id.cartitem)) {
+
+            Intent intent=new Intent(ItemActivity.this,CartActivity.class);
+            startActivity(intent);
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
