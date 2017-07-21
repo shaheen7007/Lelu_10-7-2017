@@ -271,9 +271,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                  try {
 
                     obj = jsonArray.getJSONObject(i);
-
-
-
                      banimages.add(obj.getString(TAG_IMAGE_URL));
                     } catch (JSONException e) {
                          e.printStackTrace();

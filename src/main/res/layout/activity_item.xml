@@ -23,7 +23,7 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/app_bar_height"
+            android:layout_height="@dimen/image_height"
             android:fitsSystemWindows="true"
             android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -59,7 +59,7 @@
                         android:layout_alignParentTop="true"
 
                         android:gravity="bottom|end"
-                        android:padding="210dip"
+                        android:padding="150dip"
                         app:fillColor="#ffffff"
                         app:pageColor="#a19b9b"
                         app:snap="false" />

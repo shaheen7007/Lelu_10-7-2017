@@ -125,7 +125,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:layout_width="match_parent"
-        android:background="#80f4dfdf"
+        android:background="@color/colorgrey"
         android:layout_height=".7dp"
         >
     </View>
@@ -190,7 +190,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:layout_width="match_parent"
-        android:background="#80f4dfdf"
+        android:background="@color/colorgrey"
         android:layout_height=".7dp"
         >
     </View>
@@ -232,7 +232,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:layout_width="match_parent"
-        android:background="#80f4dfdf"
+        android:background="@color/colorgrey"
         android:layout_height=".7dp"
         >
     </View>
@@ -303,6 +303,7 @@
             android:layout_gravity="bottom"
             android:gravity="center"
             android:text="ADD TO CART"
+            android:id="@+id/addtocartbtn_id"
             android:textColor="#FFF"
             android:textAlignment="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"

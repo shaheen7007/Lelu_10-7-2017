@@ -44,6 +44,8 @@ public class ItemActivity extends AppCompatActivity {
 
 
 
+
+
     //images slider
     private static ViewPager mPager;
     private static int currentPage = 0;
@@ -244,17 +246,12 @@ public class ItemActivity extends AppCompatActivity {
             startActivity(intent);
 
         }
+        else if (view == findViewById(R.id.addtocartbtn_id))
+        {
+            Toast.makeText(ItemActivity.this,"ADD",Toast.LENGTH_LONG).show();
+
+        }
     }
-
-
-
-
-
-
-
-
-
-
 
 
 
