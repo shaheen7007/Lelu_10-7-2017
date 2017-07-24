@@ -1,26 +1,26 @@
 package com.webquiver.lelu;
 
-import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.ListView;
-import android.widget.Toast;
+        import android.app.ProgressDialog;
+        import android.support.v7.app.AppCompatActivity;
+        import android.os.Bundle;
+        import android.util.Log;
+        import android.widget.ListView;
+        import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.webquiver.lelu.adapters.CartAdapter;
-import com.webquiver.lelu.classes.AppController;
-import com.webquiver.lelu.classes.CartItem;
+        import com.android.volley.Response;
+        import com.android.volley.VolleyError;
+        import com.android.volley.VolleyLog;
+        import com.android.volley.toolbox.JsonArrayRequest;
+        import com.webquiver.lelu.adapters.CartAdapter;
+        import com.webquiver.lelu.classes.AppController;
+        import com.webquiver.lelu.classes.CartItem;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+        import org.json.JSONArray;
+        import org.json.JSONException;
+        import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -39,37 +39,37 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-            listView = (ListView) findViewById(R.id.cartlist);
-            adapter = new CartAdapter(this, movieList);
-            listView.setAdapter(adapter);
+        listView = (ListView) findViewById(R.id.cartlist);
+        adapter = new CartAdapter(this, movieList);
+        listView.setAdapter(adapter);
 
-            pDialog = new ProgressDialog(this);
-            // Showing progress dialog before making http request
-            pDialog.setMessage("Loading...");
-          //  pDialog.show();
+        pDialog = new ProgressDialog(this);
+        // Showing progress dialog before making http request
+        pDialog.setMessage("Loading...");
+        //  pDialog.show();
 
 
 
-            // Creating volley request here
+        // Creating volley request here
 
 
         //dummy data
 
-            CartItem C_item = new CartItem();
-            C_item.setNAME("Baybee BMW");
-            C_item.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
-            C_item.setQUANTITY(1);
-            C_item.setPRICE("10,200.00");
-            C_item.setREALPRICE("10,376.00");
-            movieList.add(C_item);
+        CartItem C_item = new CartItem();
+        C_item.setNAME("Baybee BMW");
+        C_item.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+        C_item.setQUANTITY(1);
+        C_item.setPRICE("10,200.00");
+        C_item.setREALPRICE("10,376.00");
+        movieList.add(C_item);
 
-            CartItem C_item3 = new CartItem();
-            C_item3.setNAME("Baybee");
-            C_item3.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
-            C_item3.setQUANTITY(1);
-            C_item3.setPRICE("10,200.00");
-            C_item3.setREALPRICE("10,376.00");
-            movieList.add(C_item3);
+        CartItem C_item3 = new CartItem();
+        C_item3.setNAME("Baybee");
+        C_item3.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+        C_item3.setQUANTITY(1);
+        C_item3.setPRICE("10,200.00");
+        C_item3.setREALPRICE("10,376.00");
+        movieList.add(C_item3);
 
         CartItem C_item2 = new CartItem();
         C_item2.setNAME("Baybee BMW");
@@ -104,7 +104,7 @@ public class CartActivity extends AppCompatActivity {
         movieList.add(C_item6);
 
 
-            // Parsing json
+        // Parsing json
                        /*
                             for (int i = 0; i < response.length(); i++) {
                                 try {
@@ -127,28 +127,27 @@ public class CartActivity extends AppCompatActivity {
                             }
                             */
 
-            adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+    }
+
+
+
+
+    // Adding request to request queue
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        hidePDialog();
+    }
+
+    private void hidePDialog() {
+        if (pDialog != null) {
+            pDialog.dismiss();
+            pDialog = null;
         }
-
-
-
-
-            // Adding request to request queue
-
-        @Override
-        public void onDestroy() {
-            super.onDestroy();
-            hidePDialog();
-        }
-
-        private void hidePDialog() {
-            if (pDialog != null) {
-                pDialog.dismiss();
-                pDialog = null;
-            }
-        }
+    }
 
 
 
 }
-

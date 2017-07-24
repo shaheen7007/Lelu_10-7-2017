@@ -35,7 +35,9 @@ public class CartItem
         return QUANTITY;
     }
     public void setQUANTITY(int QUANTITY) {
+
         this.QUANTITY = QUANTITY;
+
     }
     public String getNAME() {
         return NAME;

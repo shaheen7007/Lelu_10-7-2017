@@ -12,7 +12,7 @@
         android:layout_height="80dp">
 
         <LinearLayout
-            android:layout_weight="1.5"
+            android:layout_weight="1.45"
             android:layout_width="0dp"
             android:layout_height="match_parent">
 
@@ -101,15 +101,13 @@
         <LinearLayout
             android:layout_width="0dp"
             android:gravity="end"
-            android:layout_marginRight="5dp"
-            android:layout_weight=".5"
+            android:layout_weight=".55"
             android:orientation="horizontal"
             android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:gravity="end"
-                android:layout_marginRight="3dp"
                 android:weightSum="3"
                 android:orientation="horizontal"
                 android:layout_height="match_parent">
@@ -119,38 +117,39 @@
                 android:layout_gravity="center"
                 android:id="@+id/cartminus_id"
                android:text="-"
-                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_weight=".8"
                 android:textStyle="bold"
-                android:textAlignment="textEnd"
                 android:textColor="#565555"
                android:textSize="40sp"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent" />
 
-            <TextView
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_width="0dp"
-                android:text="1"
-                android:textColor="#ef0404"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:gravity="center"
+                <TextView
 
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:layout_height="wrap_content"
-                android:id="@+id/cartItemQtytxt_id" />
+                    android:layout_width="0dp"
+                    android:text="1"
+                    android:textColor="#ef0404"
+                    android:layout_weight="1.4"
+                    android:background="@drawable/cartitem_shape"
+                    android:layout_gravity="center"
+                    android:gravity="center"
 
-            <TextView
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cartItemQtytxt_id" />
+
+                <TextView
                 android:layout_width="0dp"
                 android:layout_gravity="center"
                 android:id="@+id/cartplustx_id"
                 android:text="+"
-                android:layout_weight="1"
+                android:layout_weight=".8"
+                android:gravity="center"
                 android:textStyle="bold"
                 android:textColor="#565555"
                android:textSize="22sp"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent" />
         </LinearLayout>
             </LinearLayout>
 

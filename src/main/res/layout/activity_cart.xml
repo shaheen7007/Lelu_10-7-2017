@@ -70,8 +70,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="8dp"
-            android:fadeScrollbars="false"
-            android:scrollbarStyle="outsideInset"
             android:smoothScrollbar="true"
             android:scrollbarSize="6dp"
             android:layout_marginLeft="10dp"

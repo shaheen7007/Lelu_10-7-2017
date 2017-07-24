@@ -113,9 +113,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
 
 
-
-
-
         categorylayout=(LinearLayout)findViewById(R.id.categorylyt_id);
 
         //navigation drawer
