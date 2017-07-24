@@ -62,24 +62,33 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-             android:layout_weight="2.2"
+             android:layout_weight="2.4"
             android:id="@+id/cartlist"
+            android:divider="@null"
+            android:dividerHeight="0dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="8dp"
+            android:fadeScrollbars="false"
+            android:scrollbarStyle="outsideInset"
+            android:smoothScrollbar="true"
+            android:scrollbarSize="6dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginBottom="5dp"
+             />
 
         <LinearLayout
          android:layout_width="match_parent"
-         android:layout_weight="1.45"
+         android:layout_weight="1.2"
+            android:weightSum="4"
          android:orientation="vertical"
          android:background="@color/colorgrey"
          android:layout_height="0dp">
 
          <LinearLayout
              android:weightSum="2"
+             android:layout_weight="1"
              android:layout_marginTop="10dp"
              android:layout_marginLeft="10dp"
              android:layout_marginRight="10dp"
@@ -107,6 +116,7 @@
 
          <LinearLayout
              android:weightSum="2"
+             android:layout_weight="1"
              android:layout_marginTop="10dp"
              android:layout_marginLeft="10dp"
              android:layout_marginRight="10dp"
@@ -134,64 +144,13 @@
 
          </LinearLayout>
 
-         <LinearLayout
-             android:weightSum="2"
-             android:layout_marginTop="10dp"
-             android:layout_marginLeft="10dp"
-             android:layout_marginRight="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
 
-             <TextView
-                 android:layout_width="0dp"
-                 android:textAlignment="textStart"
-                 android:text="Sub Total"
-                 android:layout_weight="1"
-                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
 
-                 android:layout_height="wrap_content" />
 
-             <TextView
-                 android:layout_width="0dp"
-                 android:textAlignment="textEnd"
-                 android:text="-Rs. 150"
-                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-
-                 android:layout_weight="1"
-                 android:layout_height="wrap_content" />
-
-         </LinearLayout>
 
          <LinearLayout
              android:weightSum="2"
-             android:layout_marginTop="10dp"
-             android:layout_marginLeft="10dp"
-             android:layout_marginRight="10dp"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
-
-             <TextView
-                 android:layout_width="0dp"
-                 android:textAlignment="textStart"
-                 android:text="Coupon Discount"
-                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-
-                 android:layout_weight="1"
-                 android:layout_height="wrap_content" />
-
-             <TextView
-                 android:layout_width="0dp"
-                 android:textAlignment="textEnd"
-                 android:text="Rs. 0"
-                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-
-                 android:layout_weight="1"
-                 android:layout_height="wrap_content" />
-
-         </LinearLayout>
-
-         <LinearLayout
-             android:weightSum="2"
+             android:layout_weight="1"
              android:layout_marginTop="10dp"
              android:layout_marginLeft="10dp"
              android:layout_marginRight="10dp"
@@ -221,6 +180,7 @@
 
          <LinearLayout
              android:weightSum="2"
+             android:layout_weight="1"
              android:layout_marginTop="10dp"
              android:layout_marginLeft="10dp"
              android:layout_marginRight="10dp"
@@ -262,9 +222,8 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:background="#3c8e3b"
-            android:layout_weight=".35"
+            android:layout_weight=".4"
             android:layout_height="0dp" />
-
 
 
     </LinearLayout>

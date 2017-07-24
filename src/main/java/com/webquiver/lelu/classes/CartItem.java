@@ -13,15 +13,17 @@ public class CartItem
     private String IMAGE_URL;
     private String COLOR;
     private String PRICE;
+    private String REALPRICE;
 
 
-    public CartItem(int QUANTITY, String NAME, String PRODUCT_ID,String IMAGE_URL,String COLOR,String PRICE) {
+    public CartItem(int QUANTITY, String NAME, String PRODUCT_ID,String IMAGE_URL,String COLOR,String PRICE,String REALPRICE) {
     this.QUANTITY = QUANTITY;
     this.NAME = NAME;
     this.PRODUCT_ID = PRODUCT_ID;
     this.IMAGE_URL = IMAGE_URL;
     this.COLOR = COLOR;
     this.PRICE = PRICE;
+        this.REALPRICE=REALPRICE;
    }
     public CartItem() {
 
@@ -41,6 +43,14 @@ public class CartItem
     public void setNAME(String NAME) {
         this.NAME = NAME;
     }
+
+    public String getREALPRICE() {
+        return REALPRICE;
+    }
+    public void setREALPRICE(String REALPRICE) {
+        this.REALPRICE = REALPRICE;
+    }
+
     public String getCOLOR() {
         return COLOR;
     }

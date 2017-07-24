@@ -5,13 +5,17 @@ package com.webquiver.lelu.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.webquiver.lelu.CartActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.AppController;
 import com.webquiver.lelu.classes.CartItem;
@@ -24,9 +28,9 @@ public class CartAdapter extends BaseAdapter {
     private List<CartItem> cartitems;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
-    public CartAdapter(Activity activity, List<CartItem> movieItems) {
+    public CartAdapter(Activity activity, List<CartItem> cartitems) {
         this.activity = activity;
-        this.cartitems = movieItems;
+        this.cartitems = cartitems;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class CartAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
 
         if (inflater == null)
             inflater = (LayoutInflater) activity
@@ -55,12 +59,18 @@ public class CartAdapter extends BaseAdapter {
 
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();
-        NetworkImageView thumbNail = (NetworkImageView) convertView
+        final NetworkImageView thumbNail = (NetworkImageView) convertView
                 .findViewById(R.id.cartItemImage_id);
-        TextView title = (TextView) convertView.findViewById(R.id.cartItemName_id);
-        TextView rating = (TextView) convertView.findViewById(R.id.cartItemQtytxt_id);
-        TextView genre = (TextView) convertView.findViewById(R.id.cartItemRealprice_id);
-        TextView year = (TextView) convertView.findViewById(R.id.cartItemPriceTxt_id);
+        TextView item_name = (TextView) convertView.findViewById(R.id.cartItemName_id);
+        TextView item_qty = (TextView) convertView.findViewById(R.id.cartItemQtytxt_id);
+        TextView item_realprice = (TextView) convertView.findViewById(R.id.cartItemRealprice_id);
+        TextView item_price = (TextView) convertView.findViewById(R.id.cartItemPriceTxt_id);
+        TextView plus = (TextView) convertView.findViewById(R.id.cartplustx_id);
+        TextView minus = (TextView) convertView.findViewById(R.id.cartminus_id);
+
+        //strike price
+        item_realprice.setPaintFlags(item_realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
 
         // getting movie data for the row
         CartItem m = cartitems.get(position);
@@ -68,18 +78,24 @@ public class CartAdapter extends BaseAdapter {
         // thumbnail image
         thumbNail.setImageUrl(m.getIMAGE_URL(), imageLoader);
 
-        // title
-        title.setText(m.getNAME());
+        item_name.setText(m.getNAME());
+        item_price.setText("\u20B9"+" "+m.getPRICE());
+        item_qty.setText(String.valueOf(m.getQUANTITY()));
+      item_realprice.setText("\u20B9"+" "+m.getREALPRICE());
 
-        // rating
-//        rating.setText((m.getQUANTITY()));
 
-        // genre
+        final View finalConvertView = convertView;
+        plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-      //  genre.setText(m.getPRICE());
+                cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()+1);
+                getView(position, finalConvertView,parent);
 
-        // release year
-    //    year.setText(m.getPRICE());
+
+            }
+        });
+
 
         return convertView;
     }

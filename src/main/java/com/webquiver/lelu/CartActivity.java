@@ -46,25 +46,65 @@ public class CartActivity extends AppCompatActivity {
             pDialog = new ProgressDialog(this);
             // Showing progress dialog before making http request
             pDialog.setMessage("Loading...");
-            pDialog.show();
-            // Creating volley request obj
-            JsonArrayRequest movieReq = new JsonArrayRequest(url,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            Log.d(TAG, response.toString());
-                            hidePDialog();
-
-                            Toast.makeText(CartActivity.this,"respone",Toast.LENGTH_LONG).show();
-
-                            CartItem movie = new CartItem();
-                            movie.setNAME("gdhfh");
-                            movie.setIMAGE_URL("http://webmeup.com/upload/blog/mc_banner.jpg");
-                            movie.setQUANTITY(1);
-                            movieList.add(movie);
+          //  pDialog.show();
 
 
-                            // Parsing json
+
+            // Creating volley request here
+
+
+        //dummy data
+
+            CartItem C_item = new CartItem();
+            C_item.setNAME("Baybee BMW");
+            C_item.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+            C_item.setQUANTITY(1);
+            C_item.setPRICE("10,200.00");
+            C_item.setREALPRICE("10,376.00");
+            movieList.add(C_item);
+
+            CartItem C_item3 = new CartItem();
+            C_item3.setNAME("Baybee");
+            C_item3.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+            C_item3.setQUANTITY(1);
+            C_item3.setPRICE("10,200.00");
+            C_item3.setREALPRICE("10,376.00");
+            movieList.add(C_item3);
+
+        CartItem C_item2 = new CartItem();
+        C_item2.setNAME("Baybee BMW");
+        C_item2.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+        C_item2.setQUANTITY(1);
+        C_item2.setPRICE("10,200.00");
+        C_item2.setREALPRICE("10,376.00");
+        movieList.add(C_item2);
+
+        CartItem C_item4 = new CartItem();
+        C_item4.setNAME("Baybee");
+        C_item4.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+        C_item4.setQUANTITY(1);
+        C_item4.setPRICE("10,200.00");
+        C_item4.setREALPRICE("10,376.00");
+        movieList.add(C_item4);
+
+        CartItem C_item5 = new CartItem();
+        C_item5.setNAME("Baybee BMW");
+        C_item5.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+        C_item5.setQUANTITY(1);
+        C_item5.setPRICE("10,200.00");
+        C_item5.setREALPRICE("10,376.00");
+        movieList.add(C_item5);
+
+        CartItem C_item6 = new CartItem();
+        C_item6.setNAME("Baybee BMW");
+        C_item6.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+        C_item6.setQUANTITY(1);
+        C_item6.setPRICE("10,200.00");
+        C_item6.setREALPRICE("10,376.00");
+        movieList.add(C_item6);
+
+
+            // Parsing json
                        /*
                             for (int i = 0; i < response.length(); i++) {
                                 try {
@@ -87,22 +127,13 @@ public class CartActivity extends AppCompatActivity {
                             }
                             */
 
-                            adapter.notifyDataSetChanged();
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d(TAG, "Error: " + error.getMessage());
-                    Toast.makeText(CartActivity.this,"no respone",Toast.LENGTH_LONG).show();
+            adapter.notifyDataSetChanged();
+        }
 
-                    hidePDialog();
 
-                }
-            });
+
 
             // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(movieReq);
-        }
 
         @Override
         public void onDestroy() {
