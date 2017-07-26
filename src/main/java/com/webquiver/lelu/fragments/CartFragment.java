@@ -1,11 +1,15 @@
 package com.webquiver.lelu.fragments;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.adapters.CartAdapter;
@@ -115,7 +119,26 @@ public class CartFragment extends android.app.Fragment {
         adapter.notifyDataSetChanged();
 
 
+        TextView continu=(TextView)rootView.findViewById(R.id.continueBTN_id);
 
+      continu.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              //fragment
+              Fragment fr = null;
+              FragmentManager fm = null;
+              View selectedView = null;
+
+              //fragment
+              fm = getFragmentManager();
+              FragmentTransaction fragmentTransaction = fm.beginTransaction();
+              fragmentTransaction.replace(R.id.cart_FL, AddressFragment.getInstance());
+              fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+              fragmentTransaction.addToBackStack("cart");
+              //change
+              fragmentTransaction.commit();
+          }
+      });
 
 
         return rootView;

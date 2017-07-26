@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="5"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.webquiver.lelu.ItemActivity"
     tools:showIn="@layout/activity_item">
@@ -17,7 +18,8 @@
         android:weightSum="6"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_weight="1"
+        android:layout_height="0dp">
 
         <LinearLayout
             android:layout_marginLeft="15dp"
@@ -138,7 +140,8 @@
         android:layout_marginLeft="15dp"
         android:orientation="horizontal"
         android:weightSum="2"
-        android:layout_height="wrap_content">
+        android:layout_weight=".58"
+        android:layout_height="0dp">
 
         <TextView
             android:layout_width="0dp"
@@ -202,7 +205,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="5dp"
-        android:layout_height="wrap_content">
+        android:layout_weight="1.4"
+        android:layout_height="0dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -242,8 +246,9 @@
         android:orientation="vertical"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"
+        android:layout_weight="1.1"
         android:layout_marginRight="15dp"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -298,7 +303,8 @@
         android:layout_gravity="bottom"
         android:gravity="bottom"
         android:layout_marginTop="10dp"
-        android:layout_height="match_parent">
+        android:layout_weight=".97"
+        android:layout_height="0dp">
         <TextView
             android:layout_gravity="bottom"
             android:gravity="center"
@@ -309,7 +315,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:background="#3c8e3b"
-            android:layout_height="60dp" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 

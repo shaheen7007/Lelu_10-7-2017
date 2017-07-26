@@ -18,6 +18,7 @@ package com.webquiver.lelu;
         import com.webquiver.lelu.adapters.CartAdapter;
         import com.webquiver.lelu.classes.AppController;
         import com.webquiver.lelu.classes.CartItem;
+        import com.webquiver.lelu.fragments.AddressFragment;
         import com.webquiver.lelu.fragments.CartFragment;
         import com.webquiver.lelu.fragments.HomeFragment;
 
@@ -29,6 +30,11 @@ package com.webquiver.lelu;
         import java.util.List;
 
 public class CartActivity extends AppCompatActivity {
+
+
+
+
+
 
 
     private static final String TAG = CartActivity.class.getSimpleName();
@@ -55,8 +61,11 @@ public class CartActivity extends AppCompatActivity {
         //fragment
         fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.cart_FL, CartFragment.getInstance());
+        fragmentTransaction.add(R.id.cart_FL, CartFragment.getInstance());
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        //change
         fragmentTransaction.commit();
+
 
         // Creating volley request here
 
