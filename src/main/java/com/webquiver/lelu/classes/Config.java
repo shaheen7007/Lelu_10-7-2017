@@ -18,6 +18,20 @@ public class Config {
     public static final String FORGOT_URL = "http://lelu.webquiver.in/forget_pass";
     public static final String FORGOT2_URL = "http://lelu.webquiver.in/otp_forget_pass";
 
+
+
+
+    //urls ADDRESS
+
+    public static final String ADDR_SEND_URL = "http://192.168.1.5:1111/cust_addr";
+    public static final String ADDR_GET_URL = "http://192.168.1.5:1111/get_cust_addr";
+
+
+
+
+
+
+
     //Keys to send username, password, phone and otp
     public static final String KEY_USERNAME = "username";
     public static final String KEY_PASSWORD = "password";
@@ -29,6 +43,20 @@ public class Config {
 
     //JSON Tag from response from server
     public static final String TAG_RESPONSE= "message";
+
+
+
+
+    //keys of address
+    public static final String KEY_ADDR_MOBILE = "mobile";
+    public static final String KEY_ADDR_HOUSE = "house";
+    public static final String KEY_ADDR_PIN = "pin";
+    public static final String KEY_ADDR_STREET = "street";
+    public static final String KEY_ADDR_NAME = "name";
+    public static final String KEY_ADDR_DISTRICT = "dist";
+    public static final String KEY_ADDR_STATE = "state";
+    public static final String KEY_ADDR_PHONE = "phone";
+
 
 
 

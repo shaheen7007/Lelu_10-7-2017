@@ -7,11 +7,11 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:weightSum="5"
-         android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
+         android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/cartitem_shape"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
 
         <LinearLayout
@@ -19,11 +19,12 @@
             android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:weightSum="2"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1.5"
+                android:layout_weight="1.75"
                 android:textColor="#000"
                 android:id="@+id/ADDR_name_id"
                 android:text="Shaheen Shabib"
@@ -31,11 +32,19 @@
                 android:layout_height="wrap_content" />
 
             <LinearLayout
-                android:layout_weight=".5"
+                android:layout_weight=".25"
                 android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:gravity="end"
-                android:layout_height="match_parent"></LinearLayout>
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/address_tick"
+                    android:layout_gravity="end"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -46,7 +55,7 @@
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_height="wrap_content">
 
             <TextView
@@ -72,6 +81,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:text="Eranjipalam"
+                android:gravity="top"
+                android:layout_gravity="top"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_height="wrap_content"
                 android:id="@+id/ADDR_place_id" />
@@ -128,7 +139,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
             android:layout_height="wrap_content">
 
@@ -142,11 +153,29 @@
 
         </LinearLayout>
 
+        <View
+
+            android:layout_width="match_parent"
+            android:background="#fff"
+            android:layout_height="40dp"
+            >
+        </View>
+
+        <View
+
+            android:layout_width="match_parent"
+            android:background="@color/colorgrey2"
+            android:layout_height="1.5dp"
+            >
+        </View>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="2"
+            android:paddingTop="8dp"
+            android:paddingBottom="10dp"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content">
 
@@ -156,10 +185,10 @@
                 android:text="Edit"
                 android:textColor="@color/colorgreen"
                 android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/ADDR_editBTN_id" />
 
 
@@ -183,10 +212,10 @@
                 android:gravity="center"
                 android:text="Add New"
                 android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/ADDR_addnewBTN_id" />
 
 

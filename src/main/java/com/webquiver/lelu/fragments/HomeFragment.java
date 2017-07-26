@@ -84,7 +84,6 @@ public class HomeFragment extends android.app.Fragment {
 
         images = new ArrayList<>();
         names = new ArrayList<>();
-
         color = new ArrayList<>();
 
 
@@ -132,7 +131,6 @@ public class HomeFragment extends android.app.Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                         //Dismissing the progressdialog on response
                         //         loading.dismiss();
-
                         //Displaying our grid
                         SharedPreferences.Editor prefEdit = sharedPreferences.edit();
                         String jsonstring=response.toString();

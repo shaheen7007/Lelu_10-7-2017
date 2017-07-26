@@ -244,8 +244,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-
         //code for the redlinr in edittext
 
         phoneET.setOnTouchListener(new View.OnTouchListener() {

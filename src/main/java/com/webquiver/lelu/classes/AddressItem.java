@@ -7,7 +7,6 @@ package com.webquiver.lelu.classes;
 public class AddressItem
 {
 
-
     private String NAME;
     private String ADDRESS1;
     private String PLACE;
@@ -15,9 +14,10 @@ public class AddressItem
     private String PINCODE;
     private String STATE;
     private String PHONE;
+    private int ID;
 
 
-    public AddressItem(String NAME, String ADDRESS1, String PLACE, String DISTRICT, String PINCODE, String STATE,String PHONE) {
+    public AddressItem(String NAME, String ADDRESS1, String PLACE, String DISTRICT, String PINCODE, String STATE,String PHONE,Integer ID) {
     this.ADDRESS1 = ADDRESS1;
     this.NAME = NAME;
     this.PLACE = PLACE;
@@ -25,6 +25,7 @@ public class AddressItem
     this.PINCODE = PINCODE;
     this.STATE = STATE;
         this.PHONE=PHONE;
+        this.ID=ID;
    }
     public AddressItem() {
 
@@ -82,14 +83,18 @@ public class AddressItem
         return PLACE;
     }
     public void setPLACE(String PLACE) {
+
         this.PLACE = PLACE;
+
     }
 
+    public int getID() {
 
+        return ID;
 
-
-
-
-
+    }
+    public void setID(Integer ID) {
+        this.ID = ID;
+    }
 
 }

@@ -22,7 +22,6 @@ import com.webquiver.lelu.classes.CustomVolleyRequest;
 
 import java.util.ArrayList;
 
-
 public class GridViewAdapter extends BaseAdapter {
 
     //Imageloader to load images
