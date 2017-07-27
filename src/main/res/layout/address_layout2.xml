@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:weightSum="5"
+         android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/cartitem_shape"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1.75"
+                android:textColor="#000"
+                android:id="@+id/ADDR_name_id"
+                android:text="Shaheen Shabib"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_weight=".25"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:gravity="end"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/address_tick"
+                    android:layout_gravity="end"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:text="afdf sfsfsdf dfdsdf"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_height="wrap_content"
+                android:id="@+id/ADDR_address1_id" />
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:text="Eranjipalam"
+                android:gravity="top"
+                android:layout_gravity="top"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_height="wrap_content"
+                android:id="@+id/ADDR_place_id" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:text="Kozhikode"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_height="wrap_content"
+                android:id="@+id/ADDR_district_id" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:text="PIN - 676541"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_height="wrap_content"
+                android:id="@+id/ADDR_pin_id" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:text="Kerala"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_height="wrap_content"
+                android:id="@+id/ADDR_state_id" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:text="Mobile - 9020707009"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_height="wrap_content"
+                android:id="@+id/ADDR_phone_id" />
+
+        </LinearLayout>
+
+        <View
+
+            android:layout_width="match_parent"
+            android:background="#fff"
+            android:layout_height="40dp"
+            >
+        </View>
+
+        <View
+
+            android:layout_width="match_parent"
+            android:background="@color/colorgrey2"
+            android:layout_height="1.5dp"
+            >
+        </View>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:paddingTop="8dp"
+            android:paddingBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:text="Edit"
+                android:textColor="@color/colorgreen"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/ADDR_editBTN_id" />
+
+
+            <View
+
+                android:layout_width="2dp"
+                android:background="@color/colorgrey2"
+                android:layout_height="match_parent"
+                >
+            </View>
+
+
+
+
+
+
+
+            <TextView
+                android:textColor="#4b4949"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:text="Select"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/ADDR_addnewBTN_id" />
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

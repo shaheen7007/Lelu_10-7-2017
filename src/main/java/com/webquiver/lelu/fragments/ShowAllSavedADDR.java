@@ -2,16 +2,12 @@ package com.webquiver.lelu.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,12 +36,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by WebQuiver 04 on 7/25/2017.
+ * Created by WebQuiver 04 on 7/27/2017.
  */
 
-public class AddressFragment extends android.app.Fragment {
+public class ShowAllSavedADDR extends android.app.Fragment {
 
-    private static AddressFragment addressFragment = null;
+    private static ShowAllSavedADDR showAllSavedADDR = null;
 
     private RequestQueue requestQueue;
     private RequestQueue requestQueue2;
@@ -62,11 +58,11 @@ public class AddressFragment extends android.app.Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(
-                R.layout.address_frag, container, false);
+                R.layout.address_frag_all, container, false);
 
-        listView = (ListView) rootView.findViewById(R.id.addressList_id);
+        listView = (ListView) rootView.findViewById(R.id.addressListall_id);
 
-       getall();
+        getall();
 
 /*
         AddressItem C_item = new AddressItem();
@@ -130,52 +126,22 @@ public class AddressFragment extends android.app.Fragment {
                             */
 
 
-        TextView showAllADDR=(TextView)rootView.findViewById(R.id.show_all_addr_txt_id);
-
-        showAllADDR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //fragment
-
-                Fragment fr = null;
-                FragmentManager fm = null;
-                View selectedView = null;
-
-                //fragment
-                fm = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.cart_FL, ShowAllSavedADDR.getInstance());
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                fragmentTransaction.addToBackStack("cart2");
-                //change
-                fragmentTransaction.commit();
-
-            }
-        });
-
-
-
-
-
-
-
-
         return rootView;
 
 
     }
 
-    public static AddressFragment getInstance() {
-        if (addressFragment == null) {
-            addressFragment = new AddressFragment();
+    public static ShowAllSavedADDR getInstance() {
+        if (showAllSavedADDR == null) {
+            showAllSavedADDR = new ShowAllSavedADDR();
         }
-        return addressFragment;
+        return showAllSavedADDR;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        addressFragment = null;
+        showAllSavedADDR = null;
     }
 
 
@@ -314,69 +280,46 @@ public class AddressFragment extends android.app.Fragment {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void showADDR(String jsonArray) throws JSONException {
 
         JSONObject json = new JSONObject(jsonArray);
         JSONArray arr = json.getJSONArray("addr");
-             for (i = 0; i < arr.length(); i++) {
+        for (i = 0; i < arr.length(); i++) {
 
-                try {
+            try {
 
-                    JSONObject tt= arr.getJSONObject(i);
+                JSONObject tt = arr.getJSONObject(i);
 
-                    AddressItem C_item5 = new AddressItem();
-                    C_item5.setNAME(tt.getString("ca_name"));
-                    C_item5.setADDRESS1(tt.getString("ca_house"));
-                    C_item5.setPINCODE(tt.getString("ca_pin"));
-                    C_item5.setPHONE(tt.getString("ca_phone"));
-                    C_item5.setDISTRICT(tt.getString("ca_dist"));
-                    C_item5.setSTATE(tt.getString("ca_state"));
-                    C_item5.setPLACE(tt.getString("ca_street"));
-                    C_item5.setID(Integer.parseInt(tt.getString("ca_id")));
+                AddressItem C_item5 = new AddressItem();
+                C_item5.setNAME(tt.getString("ca_name"));
+                C_item5.setADDRESS1(tt.getString("ca_house"));
+                C_item5.setPINCODE(tt.getString("ca_pin"));
+                C_item5.setPHONE(tt.getString("ca_phone"));
+                C_item5.setDISTRICT(tt.getString("ca_dist"));
+                C_item5.setSTATE(tt.getString("ca_state"));
+                C_item5.setPLACE(tt.getString("ca_street"));
+                C_item5.setID(Integer.parseInt(tt.getString("ca_id")));
 
-                    movieList.add(C_item5);
+                movieList.add(C_item5);
 
-                } catch (JSONException e) {
+            } catch (JSONException e) {
 
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(),"json catch",Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "json catch", Toast.LENGTH_LONG).show();
 
-                }
             }
+        }
 
-        adapter = new AddressAdapter(getActivity(), movieList.subList(i-1,i));         //.subList(i-1, i)
+        adapter = new AddressAdapter(getActivity(), movieList);         //.subList(i-1, i)
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
     }
 
 
-
-
-
-
-
     public void showADDR2(String jsonArray) throws JSONException {
 
         //fuction when new address is saved
-
 
 
         JSONObject json = new JSONObject(jsonArray);
@@ -387,7 +330,7 @@ public class AddressFragment extends android.app.Fragment {
 
             try {
 
-                JSONObject tt= arr.getJSONObject(i);
+                JSONObject tt = arr.getJSONObject(i);
 
                 AddressItem C_item5 = new AddressItem();
                 C_item5.setNAME(tt.getString("ca_name"));
@@ -404,20 +347,16 @@ public class AddressFragment extends android.app.Fragment {
             } catch (JSONException e) {
 
                 e.printStackTrace();
-                Toast.makeText(getActivity(),"json catch",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "json catch", Toast.LENGTH_LONG).show();
 
             }
         }
 
-        adapter = new AddressAdapter(getActivity(), movieList2.subList(i-1,i));         //.subList(i-1, i)
+        adapter = new AddressAdapter(getActivity(), movieList2);        //.subList(i-1, i)
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
     }
-
-
-
-
 
 
 
@@ -466,7 +405,7 @@ public class AddressFragment extends android.app.Fragment {
                 inflater = (LayoutInflater) activity
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (convertView == null)
-                convertView = inflater.inflate(R.layout.address_layout, null);
+                convertView = inflater.inflate(R.layout.address_layout2, null);
 
             TextView addr_name = (TextView) convertView.findViewById(R.id.ADDR_name_id);
             TextView addr_address1 = (TextView) convertView.findViewById(R.id.ADDR_address1_id);
@@ -655,7 +594,7 @@ public class AddressFragment extends android.app.Fragment {
 
                                                     getall2();
 
-                                                   // notifyDataSetChanged();
+                                                    // notifyDataSetChanged();
 
 
                                                     //get the last saved address
@@ -874,6 +813,14 @@ public class AddressFragment extends android.app.Fragment {
 
 
     }
+
+
+
+
+
+
+
+
 
 
 }
