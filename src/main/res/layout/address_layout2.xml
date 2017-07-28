@@ -216,7 +216,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:id="@+id/ADDR_addnewBTN_id" />
+                android:id="@+id/ADDR_selectBTN_id" />
 
 
         </LinearLayout>

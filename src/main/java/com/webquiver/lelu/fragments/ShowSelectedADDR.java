@@ -45,9 +45,14 @@ import java.util.Map;
  * Created by WebQuiver 04 on 7/25/2017.
  */
 
-public class AddressFragment extends android.app.Fragment {
 
-    private static AddressFragment addressFragment = null;
+//This fragment is used to show the selected address (selected from all address)
+
+
+public class ShowSelectedADDR extends android.app.Fragment {
+
+    private static ShowSelectedADDR addressFragment = null;
+    int position;
 
     private RequestQueue requestQueue;
     private RequestQueue requestQueue2;
@@ -56,6 +61,8 @@ public class AddressFragment extends android.app.Fragment {
     private List<AddressItem> movieList = new ArrayList<AddressItem>();
     private ListView listView;
     private AddressAdapter adapter;
+
+    int i;
 
 
     //sharedpref
@@ -67,7 +74,10 @@ public class AddressFragment extends android.app.Fragment {
     String PREF_CAID="pref_caid";
     String caidstring;
 
-    int i;
+
+
+
+
 
 
     @Override
@@ -78,6 +88,7 @@ public class AddressFragment extends android.app.Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.addressList_id);
 
+
         pref = this.getActivity().getSharedPreferences(SessionManagement.PREF_NAME,Context.MODE_PRIVATE);
         pref_cid = this.getActivity().getSharedPreferences(PREF_CAID,Context.MODE_PRIVATE);
         editor = pref.edit();
@@ -85,8 +96,18 @@ public class AddressFragment extends android.app.Fragment {
 
 
 
+        Bundle b=getArguments();
 
-       getall();
+
+        String pos =  b.getString("p");
+        position=Integer.parseInt(pos);
+
+
+    //    Toast.makeText(getActivity(),pos,Toast.LENGTH_LONG).show();
+
+
+
+        getall();
 
 /*
         AddressItem C_item = new AddressItem();
@@ -166,7 +187,7 @@ public class AddressFragment extends android.app.Fragment {
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.cart_FL, ShowAllSavedADDR.getInstance());
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-
+                fragmentTransaction.addToBackStack("cart2");
                 //change
                 fragmentTransaction.commit();
 
@@ -181,15 +202,16 @@ public class AddressFragment extends android.app.Fragment {
             @Override
             public void onClick(View v) {
 
-           // Toast.makeText(getActivity(),SessionManagement.KEY_ADDR_ID,Toast.LENGTH_LONG).show();
+                // Toast.makeText(getActivity(),SessionManagement.KEY_ADDR_ID,Toast.LENGTH_LONG).show();
 
-               String ca_id=pref_cid.getString("caid","def");
+                String ca_id=pref_cid.getString("caid","def");
 
-              Toast.makeText(getActivity(),ca_id,Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),ca_id,Toast.LENGTH_LONG).show();
 
 
             }
         });
+
 
 
 
@@ -209,9 +231,9 @@ public class AddressFragment extends android.app.Fragment {
 
     }
 
-    public static AddressFragment getInstance() {
+    public static ShowSelectedADDR getInstance() {
         if (addressFragment == null) {
-            addressFragment = new AddressFragment();
+            addressFragment = new ShowSelectedADDR();
         }
         return addressFragment;
     }
@@ -278,7 +300,7 @@ public class AddressFragment extends android.app.Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 //Adding the parameters to the request
-                params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));             //change
+                params.put(Config.KEY_ADDR_MOBILE,pref.getString(SessionManagement.KEY_PHONE,""));             //change
                 return params;
             }
         };
@@ -379,37 +401,44 @@ public class AddressFragment extends android.app.Fragment {
 
         JSONObject json = new JSONObject(jsonArray);
         JSONArray arr = json.getJSONArray("addr");
-             for (i = 0; i < arr.length(); i++) {
+        for (i = 0; i < arr.length(); i++) {
 
-                try {
+            try {
 
-                    JSONObject tt= arr.getJSONObject(i);
+                JSONObject tt= arr.getJSONObject(i);
 
-                    AddressItem C_item5 = new AddressItem();
-                    C_item5.setNAME(tt.getString("ca_name"));
-                    C_item5.setADDRESS1(tt.getString("ca_house"));
-                    C_item5.setPINCODE(tt.getString("ca_pin"));
-                    C_item5.setPHONE(tt.getString("ca_phone"));
-                    C_item5.setDISTRICT(tt.getString("ca_dist"));
-                    C_item5.setSTATE(tt.getString("ca_state"));
-                    C_item5.setPLACE(tt.getString("ca_street"));
-                    C_item5.setID(Integer.parseInt(tt.getString("ca_id")));
+                AddressItem C_item5 = new AddressItem();
+                C_item5.setNAME(tt.getString("ca_name"));
+                C_item5.setADDRESS1(tt.getString("ca_house"));
+                C_item5.setPINCODE(tt.getString("ca_pin"));
+                C_item5.setPHONE(tt.getString("ca_phone"));
+                C_item5.setDISTRICT(tt.getString("ca_dist"));
+                C_item5.setSTATE(tt.getString("ca_state"));
+                C_item5.setPLACE(tt.getString("ca_street"));
+                C_item5.setID(Integer.parseInt(tt.getString("ca_id")));
 
-                    caidstring=tt.getString("ca_id");
+                caidstring=tt.getString("ca_id");
 
-                    movieList.add(C_item5);
+                movieList.add(C_item5);
 
-                } catch (JSONException e) {
+            } catch (JSONException e) {
 
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(),"json catch",Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                Toast.makeText(getActivity(),"json catch",Toast.LENGTH_LONG).show();
 
-                }
             }
+        }
 
-       editorcaid.putString("caid",caidstring);
+
+        editorcaid.putString("caid",caidstring);
         editorcaid.commit();
-        adapter = new AddressAdapter(getActivity(), movieList.subList(i-1,i));         //.subList(i-1, i)
+
+
+
+
+
+
+        adapter = new AddressAdapter(getActivity(), movieList.subList(position,position+1));         //.subList(i-1, i)
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -448,7 +477,7 @@ public class AddressFragment extends android.app.Fragment {
                 C_item5.setID(Integer.parseInt(tt.getString("ca_id")));
 
 
-                caidstring=tt.getString(tt.getString("ca_id"));
+                caidstring=tt.getString("ca_id");
 
 
                 movieList2.add(C_item5);
@@ -463,6 +492,7 @@ public class AddressFragment extends android.app.Fragment {
 
         editorcaid.putString("caid",caidstring);
         editorcaid.commit();
+
         adapter = new AddressAdapter(getActivity(), movieList2.subList(i-1,i));         //.subList(i-1, i)
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -709,7 +739,7 @@ public class AddressFragment extends android.app.Fragment {
 
                                                     getall2();
 
-                                                   // notifyDataSetChanged();
+                                                    // notifyDataSetChanged();
 
 
                                                     //get the last saved address
@@ -807,7 +837,7 @@ public class AddressFragment extends android.app.Fragment {
                                     Map<String, String> params = new HashMap<>();
                                     //Adding the parameters to the request
                                     params.put(Config.KEY_ADDR_NAME, name.getText().toString());
-                                    params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));             //change
+                                    params.put(Config.KEY_ADDR_MOBILE, pref.getString(SessionManagement.KEY_PHONE,""));             //change
                                     params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
                                     params.put(Config.KEY_ADDR_STREET, place.getText().toString());
                                     params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());

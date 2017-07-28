@@ -2,6 +2,8 @@ package com.webquiver.lelu.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -344,6 +346,7 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
                 movieList2.add(C_item5);
 
+
             } catch (JSONException e) {
 
                 e.printStackTrace();
@@ -357,7 +360,6 @@ public class ShowAllSavedADDR extends android.app.Fragment {
         adapter.notifyDataSetChanged();
 
     }
-
 
 
 
@@ -437,10 +439,6 @@ public class ShowAllSavedADDR extends android.app.Fragment {
             addr_selectBTN.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
-
-
 
 
 
@@ -534,223 +532,29 @@ public class ShowAllSavedADDR extends android.app.Fragment {
             });
 
 
-
-
-
-            TextView addr_newBTN=(TextView)convertView.findViewById(R.id.ADDR_addnewBTN_id);
-            addr_newBTN.setOnClickListener(new View.OnClickListener() {
+            TextView selectADDR_BTN=(TextView)convertView.findViewById(R.id.ADDR_selectBTN_id);
+            selectADDR_BTN.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
-                    //  addrtems.get(position).setQUANTITY(addrtems.get(position).getQUANTITY()+1);
-                    // getView(position, finalConvertView,parent);
-                    LayoutInflater li = LayoutInflater.from(v.getRootView().getContext());
-                    //Creating a view to get the dialog box
-                    final View confirmDialog = li.inflate(R.layout.address_edit_dlg_layout, null);
-
-                    AlertDialog.Builder alert = new AlertDialog.Builder(v.getRootView().getContext());
-                    alert.setView(confirmDialog);
-                    alert.setCancelable(true);
-                    Button buttonSave = (Button) confirmDialog.findViewById(R.id.buttonSave);
-                    final Button buttonCancel = (Button) confirmDialog.findViewById(R.id.buttonCancel);
-
-                    final EditText name=(EditText)confirmDialog.findViewById(R.id.ADR_nameET);
-                    final EditText address1=(EditText)confirmDialog.findViewById(R.id.ADR_Address1ET);
-                    final EditText place=(EditText)confirmDialog.findViewById(R.id.ADR_PlaceET);
-                    final EditText district=(EditText)confirmDialog.findViewById(R.id.ADR_DistrictET);
-                    final EditText pincode=(EditText)confirmDialog.findViewById(R.id.ADR_PincodeET);
-                    final EditText state=(EditText)confirmDialog.findViewById(R.id.ADR_StateET);
-                    final EditText phone=(EditText)confirmDialog.findViewById(R.id.ADR_PhoneET);
-
-                    final AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
-
-                    buttonSave.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(final View v) {
-
-
-                            requestQueue = Volley.newRequestQueue((v.getRootView().getContext()));
 
 
 
+                    Bundle bundle = new Bundle();
+                    bundle.putString("p",String.valueOf(position));
+                    ShowSelectedADDR showSelectedADDR=new ShowSelectedADDR();
+                    showSelectedADDR.setArguments(bundle);
 
-                            final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
-                            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_SEND_URL,
-                                    new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            loading.dismiss();
+                    FragmentManager fm = null;
+                    fm = getFragmentManager();
 
-                                            try {
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.replace(R.id.cart_FL, showSelectedADDR);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
-                                                JSONObject jsonResponse = new JSONObject(response);
-                                                if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
-
-                                                    Toast.makeText((v.getRootView().getContext()),"Address added",Toast.LENGTH_LONG).show();
-
-                                                    alertDialog.dismiss();
-
-                                                    getall2();
-
-                                                    // notifyDataSetChanged();
-
-
-                                                    //get the last saved address
-
-                                                /*
-                                                final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
-                                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_GET_URL,
-                                                        new Response.Listener<String>() {
-                                                            @Override
-                                                            public void onResponse(String response) {
-                                                                loading.dismiss();
-                                                                Toast.makeText((v.getRootView().getContext()), "response", Toast.LENGTH_LONG).show();
-
-
-                                                                try {
-
-
-                                                                    JSONObject jsonResponse = new JSONObject(response);
-
-
-                                                                    //   JSONArray jsonArray=new JSONArray(response);
-
-                                                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
-
-
-                                                                        showADDR(response);
-
-
-
-                                                                    } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
-
-                                                                        Toast.makeText((v.getRootView().getContext()), "Failed", Toast.LENGTH_LONG).show();
-
-
-                                                                    } else {
-
-                                                                        Toast.makeText((v.getRootView().getContext()), "Invalid user", Toast.LENGTH_LONG).show();
-                                                                    }
-                                                                } catch (JSONException e) {
-                                                                    e.printStackTrace();
-                                                                }
-                                                            }
-                                                        },
-                                                        new Response.ErrorListener() {
-                                                            @Override
-                                                            public void onErrorResponse(VolleyError error) {
-                                                                loading.dismiss();
-                                                                //
-                                                                Toast.makeText((v.getRootView().getContext()), "error1", Toast.LENGTH_LONG).show();
-                                                            }
-                                                        }) {
-                                                    @Override
-                                                    protected Map<String, String> getParams() throws AuthFailureError {
-                                                        Map<String, String> params = new HashMap<>();
-                                                        //Adding the parameters to the request
-                                                        params.put(Config.KEY_ADDR_MOBILE, "9020707009");             //change
-                                                        return params;
-                                                    }
-                                                };
-
-                                                //Adding request the the queue
-                                                requestQueue.add(stringRequest);
-
-                                                */
-
-                                                }
-                                                else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed"))
-                                                {
-
-                                                    Toast.makeText((v.getRootView().getContext()),"Failed",Toast.LENGTH_LONG).show();
-
-
-                                                }
-
-
-                                                else {
-
-                                                    Toast.makeText((v.getRootView().getContext()), "Invalid user", Toast.LENGTH_LONG).show();
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            loading.dismiss();
-                                            //
-                                            Toast.makeText((v.getRootView().getContext()), "error1", Toast.LENGTH_LONG).show();
-                                        }
-                                    }) {
-                                @Override
-                                protected Map<String, String> getParams() throws AuthFailureError {
-                                    Map<String, String> params = new HashMap<>();
-                                    //Adding the parameters to the request
-                                    params.put(Config.KEY_ADDR_NAME, name.getText().toString());
-                                    params.put(Config.KEY_ADDR_MOBILE, "9020707009");             //change
-                                    params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
-                                    params.put(Config.KEY_ADDR_STREET, place.getText().toString());
-                                    params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());
-                                    params.put(Config.KEY_ADDR_DISTRICT, district.getText().toString());
-                                    params.put(Config.KEY_ADDR_PIN, pincode.getText().toString());
-                                    params.put(Config.KEY_ADDR_STATE, state.getText().toString());
-                                    return params;
-                                }
-                            };
-
-                            //Adding request the the queue
-                            requestQueue.add(stringRequest);
-
-
-                     /*
-
-                        AddressItem C_item3 = new AddressItem();
-                        C_item3.setNAME(name.getText().toString());
-                        C_item3.setADDRESS1(address1.getText().toString());
-                        C_item3.setPLACE(place.getText().toString());
-                        C_item3.setDISTRICT(district.getText().toString());
-                        C_item3.setSTATE(state.getText().toString());
-                        C_item3.setPINCODE("PIN - "+pincode.getText().toString());
-                        C_item3.setPHONE("Mobile: "+phone.getText().toString());
-                        addrtems.add(0,C_item3);
-                       // addrtems.smoothScrollToPosition(0);
-                       // adapter.notifyDataSetChanged();
-                        getView(position, finalConvertView,parent);
-
-                        alertDialog.dismiss();
-
-                        //
-                        //   EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
-
-                        //  if (new_QTY.getText().toString().equals("")||Integer.parseInt(new_QTY.getText().toString())>100)
-                        //  {
-
-                        //       new_QTY.setError("Enter valid number");
-
-                        //   }
-                        //  else {
-                        //addrtems.get(position).setQUANTITY(Integer.parseInt(new_QTY.getText().toString()));
-                        //     alertDialog.dismiss();
-                        //
-
-                        */
-                        }
-                    });
-
-
-                    buttonCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            //   EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
-                            alertDialog.dismiss();
-                        }
-                    });
+                    //change
+                    fragmentTransaction.commit();
 
 
 

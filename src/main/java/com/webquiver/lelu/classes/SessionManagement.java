@@ -27,7 +27,7 @@ public class SessionManagement {
     int PRIVATE_MODE = 0;
 
     // Sharedpref file name
-    private static final String PREF_NAME = "userdetails";
+    public static final String PREF_NAME = "userdetails";
 
 
     private static final String IS_LOGIN = "IsLoggedIn";
