@@ -12,8 +12,8 @@ public class CartItem
     private String PRODUCT_ID;
     private String IMAGE_URL;
     private String COLOR;
-    private String PRICE;
-    private String REALPRICE;
+    private String PRICE;                     //offer price(amount to be paid)
+    private String REALPRICE;                 //original price (price without offer)
 
 
     public CartItem(int QUANTITY, String NAME, String PRODUCT_ID,String IMAGE_URL,String COLOR,String PRICE,String REALPRICE) {

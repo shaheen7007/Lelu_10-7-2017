@@ -47,11 +47,15 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
     private RequestQueue requestQueue;
     private RequestQueue requestQueue2;
+    private RequestQueue requestQueue_editADDR;
+
 
     //private ProgressDialog pDialog;
     private List<AddressItem> movieList = new ArrayList<AddressItem>();
     private ListView listView;
     private AddressAdapter adapter;
+
+    String selectedID;
 
     int i;
 
@@ -455,7 +459,6 @@ public class ShowAllSavedADDR extends android.app.Fragment {
                     //  addrtems.get(position).setQUANTITY(addrtems.get(position).getQUANTITY()+1);
                     // getView(position, finalConvertView,parent);
 
-
                     LayoutInflater li = LayoutInflater.from(v.getRootView().getContext());
 
                     //Creating a view to get the dialog box
@@ -483,6 +486,10 @@ public class ShowAllSavedADDR extends android.app.Fragment {
                     phone.setText(addrtems.get(position).getPHONE());
                     state.setText(addrtems.get(position).getSTATE());
 
+                    selectedID=String.valueOf(addrtems.get(position).getID());
+
+                    Toast.makeText(getActivity(),selectedID,Toast.LENGTH_LONG).show();
+
                     final AlertDialog alertDialog = alert.create();
                     alertDialog.show();
 
@@ -490,18 +497,85 @@ public class ShowAllSavedADDR extends android.app.Fragment {
                         @Override
                         public void onClick(View v) {
 
+                            requestQueue_editADDR = Volley.newRequestQueue(getActivity());
 
-                            addrtems.get(position).setNAME(name.getText().toString());
-                            addrtems.get(position).setADDRESS1(address1.getText().toString());
-                            addrtems.get(position).setPLACE(place.getText().toString());
-                            addrtems.get(position).setDISTRICT(district.getText().toString());
-                            addrtems.get(position).setPINCODE("PIN - "+pincode.getText().toString());
-                            addrtems.get(position).setPHONE("Mobile: "+phone.getText().toString());
-                            addrtems.get(position).setSTATE(state.getText().toString());
 
-                            getView(position, finalConvertView,parent);
+                            final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_EDIT_URL,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            loading.dismiss();
+                                            Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
-                            alertDialog.dismiss();
+                                            try {
+
+                                                JSONObject jsonResponse = new JSONObject(response);
+
+                                                //  JSONArray jsonArray=new JSONArray(response);
+
+                                                Toast.makeText(getActivity(),jsonResponse.getString(Config.TAG_RESPONSE),Toast.LENGTH_LONG).show();
+
+                                                if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                                    addrtems.get(position).setNAME(name.getText().toString());
+                                                    addrtems.get(position).setADDRESS1(address1.getText().toString());
+                                                    addrtems.get(position).setPLACE(place.getText().toString());
+                                                    addrtems.get(position).setDISTRICT(district.getText().toString());
+                                                    addrtems.get(position).setPINCODE("PIN - "+pincode.getText().toString());
+                                                    addrtems.get(position).setPHONE("Mobile: "+phone.getText().toString());
+                                                    addrtems.get(position).setSTATE(state.getText().toString());
+
+                                                    getView(position, finalConvertView,parent);
+
+                                                    alertDialog.dismiss();
+
+
+                                                } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+
+                                                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                                                    alertDialog.dismiss();
+
+                                                } else {
+                                                    alertDialog.dismiss();
+                                                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                Toast.makeText(getActivity(),"catch0",Toast.LENGTH_LONG).show();
+
+                                            }
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            loading.dismiss();
+                                            //
+                                            Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+                                        }
+                                    }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<>();
+                                    //Adding the parameters to the request
+                                    // params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
+                                    params.put("ca_id", selectedID);
+                                    params.put(Config.KEY_ADDR_NAME, name.getText().toString());
+                                    //  params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));             //change
+                                    params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
+                                    params.put(Config.KEY_ADDR_STREET, place.getText().toString());
+                                    params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());
+                                    params.put(Config.KEY_ADDR_DISTRICT, district.getText().toString());
+                                    params.put(Config.KEY_ADDR_PIN, pincode.getText().toString());
+                                    params.put(Config.KEY_ADDR_STATE, state.getText().toString());
+
+                                    return params;
+                                }
+                            };
+
+                            //Adding request the the queue
+                            requestQueue_editADDR.add(stringRequest);
 
                             //
                             //   EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);

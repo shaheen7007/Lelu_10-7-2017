@@ -56,6 +56,8 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
     private RequestQueue requestQueue;
     private RequestQueue requestQueue2;
+    private RequestQueue requestQueue_editADDR;
+
 
     //private ProgressDialog pDialog;
     private List<AddressItem> movieList = new ArrayList<AddressItem>();
@@ -74,10 +76,7 @@ public class ShowSelectedADDR extends android.app.Fragment {
     String PREF_CAID="pref_caid";
     String caidstring;
 
-
-
-
-
+    String selectedID;             //ca_id of selected address
 
 
     @Override
@@ -429,7 +428,6 @@ public class ShowSelectedADDR extends android.app.Fragment {
             }
         }
 
-
         editorcaid.putString("caid",caidstring);
         editorcaid.commit();
 
@@ -630,25 +628,100 @@ public class ShowSelectedADDR extends android.app.Fragment {
                     phone.setText(addrtems.get(position).getPHONE());
                     state.setText(addrtems.get(position).getSTATE());
 
+                    selectedID=String.valueOf(addrtems.get(position).getID());
+
+
                     final AlertDialog alertDialog = alert.create();
                     alertDialog.show();
+
+
+
+
+
+
+
+                    Toast.makeText(getActivity(),selectedID,Toast.LENGTH_LONG).show();
+
+
 
                     buttonSave.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
 
-                            addrtems.get(position).setNAME(name.getText().toString());
-                            addrtems.get(position).setADDRESS1(address1.getText().toString());
-                            addrtems.get(position).setPLACE(place.getText().toString());
-                            addrtems.get(position).setDISTRICT(district.getText().toString());
-                            addrtems.get(position).setPINCODE("PIN - "+pincode.getText().toString());
-                            addrtems.get(position).setPHONE("Mobile: "+phone.getText().toString());
-                            addrtems.get(position).setSTATE(state.getText().toString());
+                            requestQueue_editADDR = Volley.newRequestQueue(getActivity());
 
-                            getView(position, finalConvertView,parent);
+                            final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_EDIT_URL,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            loading.dismiss();
+                                            Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
-                            alertDialog.dismiss();
+                                            try {
+
+                                                JSONObject jsonResponse = new JSONObject(response);
+
+                                                //   JSONArray jsonArray=new JSONArray(response);
+
+                                                if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                                    addrtems.get(position).setNAME(name.getText().toString());
+                                                    addrtems.get(position).setADDRESS1(address1.getText().toString());
+                                                    addrtems.get(position).setPLACE(place.getText().toString());
+                                                    addrtems.get(position).setDISTRICT(district.getText().toString());
+                                                    addrtems.get(position).setPINCODE("PIN - "+pincode.getText().toString());
+                                                    addrtems.get(position).setPHONE("Mobile: "+phone.getText().toString());
+                                                    addrtems.get(position).setSTATE(state.getText().toString());
+
+                                                    getView(position, finalConvertView,parent);
+
+                                                    alertDialog.dismiss();
+
+                                                } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+
+                                                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                                                    alertDialog.dismiss();
+
+                                                } else {
+                                                    alertDialog.dismiss();
+                                                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            loading.dismiss();
+                                            //
+                                            Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+                                        }
+                                    }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<>();
+                                    //Adding the parameters to the request
+                                    // params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
+                                    params.put(Config.KEY_CA_ID, selectedID);
+                                    params.put(Config.KEY_ADDR_NAME, name.getText().toString());
+                                    //  params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));             //change
+                                    params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
+                                    params.put(Config.KEY_ADDR_STREET, place.getText().toString());
+                                    params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());
+                                    params.put(Config.KEY_ADDR_DISTRICT, district.getText().toString());
+                                    params.put(Config.KEY_ADDR_PIN, pincode.getText().toString());
+                                    params.put(Config.KEY_ADDR_STATE, state.getText().toString());
+
+                                    return params;
+                                }
+                            };
+
+                            //Adding request the the queue
+                            requestQueue_editADDR.add(stringRequest);
 
                             //
                             //   EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
@@ -657,7 +730,6 @@ public class ShowSelectedADDR extends android.app.Fragment {
                             //  {
 
                             //       new_QTY.setError("Enter valid number");
-
                             //   }
                             //  else {
                             //addrtems.get(position).setQUANTITY(Integer.parseInt(new_QTY.getText().toString()));
@@ -674,12 +746,8 @@ public class ShowSelectedADDR extends android.app.Fragment {
                             alertDialog.dismiss();
                         }
                     });
-
                 }
             });
-
-
-
 
 
             TextView addr_newBTN=(TextView)convertView.findViewById(R.id.ADDR_addnewBTN_id);
@@ -707,7 +775,6 @@ public class ShowSelectedADDR extends android.app.Fragment {
                     final EditText pincode=(EditText)confirmDialog.findViewById(R.id.ADR_PincodeET);
                     final EditText state=(EditText)confirmDialog.findViewById(R.id.ADR_StateET);
                     final EditText phone=(EditText)confirmDialog.findViewById(R.id.ADR_PhoneET);
-
                     final AlertDialog alertDialog = alert.create();
                     alertDialog.show();
 
@@ -717,8 +784,6 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
 
                             requestQueue = Volley.newRequestQueue((v.getRootView().getContext()));
-
-
 
 
                             final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
@@ -740,7 +805,6 @@ public class ShowSelectedADDR extends android.app.Fragment {
                                                     getall2();
 
                                                     // notifyDataSetChanged();
-
 
                                                     //get the last saved address
 

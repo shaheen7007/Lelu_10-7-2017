@@ -25,6 +25,13 @@ public class Config {
 
     public static final String ADDR_SEND_URL = "http://192.168.1.5:1111/cust_addr";
     public static final String ADDR_GET_URL = "http://192.168.1.5:1111/get_cust_addr";
+    public static final String ADDR_EDIT_URL = "http://192.168.1.5:1111/up_cust_addr";
+
+
+    //urls CART
+    public static final String CART_GET_URL = "http://192.168.1.5:1111/get_cart";
+    public static final String CART_ADD_URL = "http://192.168.1.5:1111/add_cart";
+
 
 
 
@@ -56,6 +63,23 @@ public class Config {
     public static final String KEY_ADDR_DISTRICT = "dist";
     public static final String KEY_ADDR_STATE = "state";
     public static final String KEY_ADDR_PHONE = "phone";
+    public static final String KEY_CA_ID = "ca_id";
+
+
+
+
+
+    //keys of cart
+    public static final String KEY_CART_ProdId = "prod_code";
+    public static final String KEY_CART_ProdQty = "qty";
+
+
+
+
+
+
+
+
 
 
 
@@ -68,3 +92,5 @@ public class Config {
 
 
 }
+
+

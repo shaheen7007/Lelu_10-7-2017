@@ -5,9 +5,13 @@ package com.webquiver.lelu.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +21,35 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.webquiver.lelu.CartActivity;
+import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.AppController;
 import com.webquiver.lelu.classes.CartItem;
+import com.webquiver.lelu.classes.Config;
+import com.webquiver.lelu.classes.SessionManagement;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CartAdapter extends BaseAdapter {
     private Activity activity;
+    RequestQueue requestQueue;
+    SharedPreferences pref;
+    TextView item_qty;
     private LayoutInflater inflater;
     private List<CartItem> cartitems;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
@@ -34,6 +57,7 @@ public class CartAdapter extends BaseAdapter {
     public CartAdapter(Activity activity, List<CartItem> cartitems) {
         this.activity = activity;
         this.cartitems = cartitems;
+
     }
 
     @Override
@@ -54,6 +78,10 @@ public class CartAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
+        requestQueue= Volley.newRequestQueue(activity);            //
+        pref = activity.getSharedPreferences(SessionManagement.PREF_NAME,Context.MODE_PRIVATE);
+
+
         if (inflater == null)
             inflater = (LayoutInflater) activity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -65,7 +93,7 @@ public class CartAdapter extends BaseAdapter {
         final NetworkImageView thumbNail = (NetworkImageView) convertView
                 .findViewById(R.id.cartItemImage_id);
         TextView item_name = (TextView) convertView.findViewById(R.id.cartItemName_id);
-        final TextView item_qty = (TextView) convertView.findViewById(R.id.cartItemQtytxt_id);
+        item_qty = (TextView) convertView.findViewById(R.id.cartItemQtytxt_id);
 
         TextView item_realprice = (TextView) convertView.findViewById(R.id.cartItemRealprice_id);
         TextView item_price = (TextView) convertView.findViewById(R.id.cartItemPriceTxt_id);
@@ -93,8 +121,55 @@ public class CartAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()+1);
-                getView(position, finalConvertView,parent);
+
+                final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                loading.dismiss();
+
+                                try {
+
+                                    JSONObject jsonResponse = new JSONObject(response);
+                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                        cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()+1);
+                                        getView(position, finalConvertView,parent);
+                                        Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                    else {
+                                        Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    loading.dismiss();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                loading.dismiss();
+                                //
+                                Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        //Adding the parameters to the request
+                        params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
+                        params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
+                        params.put(Config.KEY_CART_ProdQty, String.valueOf(cartitems.get(position).getQUANTITY()+1));
+                        return params;
+                    }
+                };
+
+                //Adding request the the queue
+                requestQueue.add(stringRequest);
 
 
             }
@@ -128,7 +203,7 @@ public class CartAdapter extends BaseAdapter {
                 buttonSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
+                        final EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
 
                         if (new_QTY.getText().toString().equals("")||Integer.parseInt(new_QTY.getText().toString())>100)
                         {
@@ -137,8 +212,58 @@ public class CartAdapter extends BaseAdapter {
 
                         }
                         else {
-                            cartitems.get(position).setQUANTITY(Integer.parseInt(new_QTY.getText().toString()));
-                            alertDialog.dismiss();
+
+                            final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            loading.dismiss();
+
+                                            try {
+
+                                                JSONObject jsonResponse = new JSONObject(response);
+                                                if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                                    cartitems.get(position).setQUANTITY(Integer.parseInt(new_QTY.getText().toString()));
+                                                    getView(position, finalConvertView,parent);
+                                                    alertDialog.dismiss();
+                                                    Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+
+                                                }
+
+                                                else {
+                                                    alertDialog.dismiss();
+                                                    Toast.makeText(activity, "Failed to add", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                alertDialog.dismiss();
+                                            }
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            loading.dismiss();
+                                            //
+                                            Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
+                                        }
+                                    }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<>();
+                                    //Adding the parameters to the request
+                                    params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
+                                    params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
+                                    params.put(Config.KEY_CART_ProdQty,new_QTY.getText().toString());
+                                    return params;
+                                }
+                            };
+
+                            //Adding request the the queue
+                            requestQueue.add(stringRequest);
+
                         }
                     }
                 });
@@ -147,7 +272,7 @@ public class CartAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
 
-                        EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
+
                         alertDialog.dismiss();
                     }
                 });
@@ -159,6 +284,30 @@ public class CartAdapter extends BaseAdapter {
             }
         });
 
+
+
+        /*
+        item_qty.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+*/
 
         return convertView;
     }

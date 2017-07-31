@@ -6,7 +6,8 @@
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_bg"
+
+    android:background="@drawable/login_backg"
     tools:context="com.webquiver.lelu.RegisterActivity">
 
     <RelativeLayout
@@ -59,8 +60,8 @@
 
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:src="@drawable/logo"
@@ -103,7 +104,7 @@
                 android:background="@drawable/regedittext_shape_rounded"
                 android:id="@+id/nameET_id"
                 android:cursorVisible="false"
-                android:layout_height="45dp" />
+                android:layout_height="35dp" />
 
 
             <EditText
@@ -118,7 +119,7 @@
                 android:background="@drawable/regedittext_shape_rounded"
                 android:id="@+id/passworET_id"
                 android:cursorVisible="false"
-                android:layout_height="45dp" />
+                android:layout_height="35dp" />
 
 
 
@@ -136,7 +137,7 @@
                 android:layout_width="match_parent"
                 android:id="@+id/phoneET_id"
                 android:background="@drawable/regedittext_shape_rounded"
-                android:layout_height="45dp" />
+                android:layout_height="35dp" />
             <EditText
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="25dp"
@@ -150,7 +151,7 @@
                 android:layout_width="match_parent"
                 android:id="@+id/emailET_id"
                 android:background="@drawable/regedittext_shape_rounded"
-                android:layout_height="45dp" />
+                android:layout_height="35dp" />
 
 
             <EditText
@@ -165,7 +166,7 @@
                 android:layout_width="match_parent"
                 android:id="@+id/companyET_id"
                 android:background="@drawable/regedittext_shape_rounded"
-                android:layout_height="45dp" />
+                android:layout_height="35dp" />
 
             <EditText
                 android:layout_marginTop="15dp"
@@ -182,16 +183,16 @@
                 android:layout_width="match_parent"
                 android:id="@+id/placeET_id"
                 android:background="@drawable/regedittext_shape_rounded"
-                android:layout_height="45dp" />
+                android:layout_height="35dp" />
 
 
        <ImageView
-                android:layout_width="70dp"
+                android:layout_width="60dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:id="@+id/regnow_id"
                 android:src="@drawable/tick_login"
                 android:layout_alignParentTop="true"

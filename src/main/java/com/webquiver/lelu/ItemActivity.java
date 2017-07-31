@@ -1,5 +1,7 @@
 package com.webquiver.lelu;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -18,31 +20,34 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.adapters.Banner_Adapter;
 import com.webquiver.lelu.classes.Config;
+import com.webquiver.lelu.classes.SessionManagement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ItemActivity extends AppCompatActivity {
 
 
-    //cart
-
-
-
-
-
+    //sharedpref
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
 
 
@@ -59,6 +64,11 @@ public class ItemActivity extends AppCompatActivity {
     public static final String ITEM_PREFERENCE="item_pref";
     private SharedPreferences sharedPreferences;
 
+
+    RequestQueue requestQueue;
+
+    TextView qty;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +78,13 @@ public class ItemActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
+       qty=(TextView)findViewById(R.id.qtytxt_id);
+
+
+        pref = this.getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
+        editor = pref.edit();
+
+        requestQueue = Volley.newRequestQueue(this);
 
 
 
@@ -235,10 +252,6 @@ public class ItemActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
     public void onclickhandler_itemactivity(View view) {
         if (view == findViewById(R.id.cartitem)) {
 
@@ -246,9 +259,75 @@ public class ItemActivity extends AppCompatActivity {
             startActivity(intent);
 
         }
+
+
+
+        else if (view == findViewById(R.id.cartminus_id))
+        {
+            qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString())-1));
+        }
+
+        else if (view == findViewById(R.id.cartplus_id))
+        {
+
+            qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString())+1));
+
+        }
+
+
+
+
+
         else if (view == findViewById(R.id.addtocartbtn_id))
         {
-            Toast.makeText(ItemActivity.this,"ADD",Toast.LENGTH_LONG).show();
+
+            final ProgressDialog loading = ProgressDialog.show(ItemActivity.this, "Adding to cart", "Please wait...", false, false);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            loading.dismiss();
+
+                            try {
+
+                                JSONObject jsonResponse = new JSONObject(response);
+                                if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                    Toast.makeText(ItemActivity.this,"Item added to cart",Toast.LENGTH_SHORT).show();
+
+                                }
+
+                                else {
+
+                                    Toast.makeText(ItemActivity.this, "Failed to add", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            loading.dismiss();
+                            //
+                            Toast.makeText(ItemActivity.this, "error1", Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    //Adding the parameters to the request
+                    params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE,""));
+                    params.put(Config.KEY_CART_ProdId, "2");
+                    params.put(Config.KEY_CART_ProdQty,qty.getText().toString());
+                    return params;
+                }
+            };
+
+            //Adding request the the queue
+            requestQueue.add(stringRequest);
+
 
         }
     }
