@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_cart"
-    android:background="#fff"
+    android:background="@color/colorgrey2"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
@@ -66,13 +66,11 @@
             android:id="@+id/cartlist"
             android:divider="@null"
             android:dividerHeight="0dp"
+            android:layout_marginTop="6dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="8dp"
             android:smoothScrollbar="true"
             android:scrollbarSize="6dp"
-            android:layout_marginLeft="10dp"
             />
 
         <LinearLayout
@@ -80,7 +78,7 @@
             android:layout_weight="1.2"
             android:weightSum="4"
             android:orientation="vertical"
-            android:background="@color/colorgrey2"
+            android:background="#fff"
             android:layout_height="0dp">
 
             <LinearLayout

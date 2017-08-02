@@ -71,6 +71,7 @@
                 android:layout_width="match_parent"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:text="You have 3 addresses saved"
+                android:id="@+id/numaddrTXT_id"
                 android:textAlignment="center"
                 android:layout_height="match_parent" />
 

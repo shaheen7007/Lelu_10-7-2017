@@ -57,6 +57,8 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
     String selectedID;
 
+    TextView showALL_TXT_id;
+
     int i;
 
 
@@ -67,6 +69,8 @@ public class ShowAllSavedADDR extends android.app.Fragment {
                 R.layout.address_frag_all, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.addressListall_id);
+        showALL_TXT_id=(TextView)rootView.findViewById(R.id.numaddrTXT_id);
+
 
         getall();
 
@@ -130,6 +134,7 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
                             }
                             */
+
 
 
         return rootView;
@@ -290,6 +295,10 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
         JSONObject json = new JSONObject(jsonArray);
         JSONArray arr = json.getJSONArray("addr");
+
+        showALL_TXT_id.setText("You have "+arr.length()+" addresses saved");
+
+
         for (i = 0; i < arr.length(); i++) {
 
             try {
@@ -439,15 +448,6 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
 
             final View finalConvertView = convertView;
-
-            addr_selectBTN.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-
-                }
-            });
 
 
             //alert dialog to enter quantity

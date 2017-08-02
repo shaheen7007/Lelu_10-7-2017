@@ -23,9 +23,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.adapters.CartAdapter;
-import com.webquiver.lelu.classes.AddressItem;
+import com.webquiver.lelu.adapters.OrderAdapter;
 import com.webquiver.lelu.classes.CartItem;
 import com.webquiver.lelu.classes.Config;
+import com.webquiver.lelu.classes.ODRItem;
 import com.webquiver.lelu.classes.SessionManagement;
 
 import org.json.JSONArray;
@@ -41,31 +42,30 @@ import java.util.Map;
  * Created by WebQuiver 04 on 7/24/2017.
  */
 
-public class CartFragment extends android.app.Fragment {
+public class OrderFragment extends Fragment {
 
-    private static CartFragment cartFragment = null;
-    private static final String url = "https://api.myjson.com/bins/15eqh3";
+    private static OrderFragment cartFragment = null;
+
     private ProgressDialog pDialog;
-    private List<CartItem> movieList;
+    private List<ODRItem> movieList;
     private ListView listView;
-    private CartAdapter adapter;
+    private OrderAdapter adapter;
     private RequestQueue requestQueue;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
+
     int i;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(
-                R.layout.cart_frag, container, false);
+                R.layout.order_frag, container, false);
 
-        movieList= new ArrayList<CartItem>();
-        listView = (ListView) rootView.findViewById(R.id.cartlist);
-        adapter = new CartAdapter(getActivity(), movieList);
+        movieList= new ArrayList<ODRItem>();
+        listView = (ListView) rootView.findViewById(R.id.order_list);
+        adapter = new OrderAdapter(getActivity(), movieList);
         listView.setAdapter(adapter);
 
 
@@ -73,12 +73,7 @@ public class CartFragment extends android.app.Fragment {
         editor = pref.edit();
 
 
-
-
-
-
-/* DUMMY DATAS
-
+    /* DUMMY DATAS
 
         CartItem C_item = new CartItem();
         C_item.setNAME("Baybee BMW");
@@ -153,38 +148,18 @@ public class CartFragment extends android.app.Fragment {
                             */
 
 
-getall();
-    //    adapter.notifyDataSetChanged();
+    getall();
+    //  adapter.notifyDataSetChanged();
 
-        TextView continu=(TextView)rootView.findViewById(R.id.continueBTN_id);
-
-      continu.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              //fragment
-              Fragment fr = null;
-              FragmentManager fm = null;
-              View selectedView = null;
-
-              //fragment
-              fm = getFragmentManager();
-              FragmentTransaction fragmentTransaction = fm.beginTransaction();
-              fragmentTransaction.replace(R.id.cart_FL, AddressFragment.getInstance());
-              fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-              fragmentTransaction.addToBackStack("cart");
-              //change
-              fragmentTransaction.commit();
-          }
-      });
 
 
         return rootView;
 
 
     }
-    public static CartFragment getInstance() {
+    public static OrderFragment getInstance() {
         if (cartFragment == null) {
-            cartFragment = new CartFragment();
+            cartFragment = new OrderFragment();
         }
         return cartFragment;
     }
@@ -196,14 +171,12 @@ getall();
     }
 
 
-
-
     public void getall() {
 
         requestQueue = Volley.newRequestQueue(getActivity());
 
         final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_GET_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_GET_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -219,7 +192,7 @@ getall();
                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
 
-                                        showCART(response);
+                                        showODR(response);
 
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
@@ -239,8 +212,9 @@ getall();
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loading.dismiss();
-                        //
+
                         Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+
                     }
                 }) {
             @Override
@@ -248,6 +222,7 @@ getall();
                 Map<String, String> params = new HashMap<>();
                 //Adding the parameters to the request
                 params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
+
                 return params;
             }
         };
@@ -258,23 +233,41 @@ getall();
 
     }
 
-    public void showCART(String jsonArray) throws JSONException {
+
+
+    public void showODR(String jsonArray) throws JSONException {
+
         JSONObject json = new JSONObject(jsonArray);
-        JSONArray arr = json.getJSONArray("products");
+        JSONArray arr = json.getJSONArray("orders");
         for (i = 0; i < arr.length(); i++) {
 
             try {
 
                 JSONObject tt = arr.getJSONObject(i);
+                ODRItem C_item5 = new ODRItem();
+                C_item5.setODR_ID(tt.getString("order_place_id"));
+              //  C_item5.setNAME(tt.getString("order_place_id"));
+                C_item5.setSTATUS(tt.getString("op_status"));
 
-                CartItem C_item5 = new CartItem();
-                C_item5.setNAME("default");
-                //C_item5.setDESC("default");
-                C_item5.setQUANTITY(Integer.parseInt(tt.getString("cp_qty")));
-                C_item5.setREALPRICE("default");
-                C_item5.setPRICE("default");
-                C_item5.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
-                C_item5.setPRODUCT_ID(tt.getString("cp_code"));
+
+                JSONArray prod=tt.getJSONArray("products");
+                C_item5.setNumberOfProducts(prod.length());
+
+
+             /*
+
+                for (int j=0;j<prod.length();j++)
+                {
+
+                    JSONObject p=prod.getJSONObject(j);
+                    Toast.makeText(getActivity(),p.getString("opp_code"),Toast.LENGTH_SHORT).show();
+
+                }
+
+            */
+
+
+
 
                 movieList.add(C_item5);
 
@@ -286,9 +279,10 @@ getall();
             }
         }
 
-        adapter = new CartAdapter(getActivity(), movieList);         //.subList(i-1, i)
+        adapter = new OrderAdapter(getActivity(), movieList);         //.subList(i-1, i)
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
 
     }
 

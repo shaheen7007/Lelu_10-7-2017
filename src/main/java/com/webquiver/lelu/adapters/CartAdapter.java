@@ -99,27 +99,37 @@ public class CartAdapter extends BaseAdapter {
         TextView item_price = (TextView) convertView.findViewById(R.id.cartItemPriceTxt_id);
         TextView plus = (TextView) convertView.findViewById(R.id.cartplustx_id);
         TextView minus = (TextView) convertView.findViewById(R.id.cartminus_id);
+        TextView remove = (TextView) convertView.findViewById(R.id.removeBTN_id);
 
         //strike price
         item_realprice.setPaintFlags(item_realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
 
-        // getting movie data for the row
-        CartItem m = cartitems.get(position);
+        if (getCount()==0) {
 
-        // thumbnail image
-        thumbNail.setImageUrl(m.getIMAGE_URL(), imageLoader);
+            Toast.makeText(activity, "CART IS EMPTY", Toast.LENGTH_LONG).show();
 
-        item_name.setText(m.getNAME());
-        item_price.setText("\u20B9"+" "+m.getPRICE());
-        item_qty.setText(String.valueOf(m.getQUANTITY()));
-      item_realprice.setText("\u20B9"+" "+m.getREALPRICE());
+        }
+
+
+            // getting ccart data for the row
+            CartItem m = cartitems.get(position);
+
+            // thumbnail image
+            thumbNail.setImageUrl(m.getIMAGE_URL(), imageLoader);
+
+            item_name.setText(m.getNAME());
+            item_price.setText("\u20B9" + " " + m.getPRICE());
+            item_qty.setText(String.valueOf(m.getQUANTITY()));
+            item_realprice.setText("\u20B9" + " " + m.getREALPRICE());
 
 
         final View finalConvertView = convertView;
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Toast.makeText(activity, cartitems.get(position).getPRODUCT_ID(), Toast.LENGTH_LONG).show();
 
 
                 final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
@@ -136,7 +146,7 @@ public class CartAdapter extends BaseAdapter {
 
                                         cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()+1);
                                         getView(position, finalConvertView,parent);
-                                        Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+                                //        Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
 
                                     }
 
@@ -175,6 +185,147 @@ public class CartAdapter extends BaseAdapter {
             }
         });
 
+        minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                loading.dismiss();
+
+                                try {
+
+                                    JSONObject jsonResponse = new JSONObject(response);
+                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                        cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
+                                        getView(position, finalConvertView,parent);
+                                        //        Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                    else {
+                                        Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    loading.dismiss();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                loading.dismiss();
+                                //
+                                Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        //Adding the parameters to the request
+                        params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
+                        params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
+                        params.put(Config.KEY_CART_ProdQty, String.valueOf(cartitems.get(position).getQUANTITY()-1));
+                        return params;
+                    }
+                };
+
+                //Adding request the the queue
+                requestQueue.add(stringRequest);
+
+
+            }
+        });
+
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //change
+
+                final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                loading.dismiss();
+
+                                try {
+
+                                    JSONObject jsonResponse = new JSONObject(response);
+                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                        //change
+                                        Toast.makeText(activity,""+getCount(),Toast.LENGTH_SHORT).show();
+
+
+                                        //cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
+
+                                     //   cartitems.remove(position-1);             //
+
+
+                                        cartitems.remove(position);
+                                        notifyDataSetChanged();
+                                  //     getView(position, finalConvertView,parent); //
+
+
+
+                                        // Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                    else {
+
+                                        Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    loading.dismiss();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                loading.dismiss();
+                                //
+                                Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
+                            }
+                        }) {
+
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        //Adding the parameters to the request
+                        params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
+                        params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
+                        params.put(Config.KEY_CART_ProdQty, String.valueOf(0));
+                        return params;
+                    }
+                };
+
+                //Adding request the the queue
+                requestQueue.add(stringRequest);
+
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
 
         //alert dialog to enter quantity
         item_qty.setOnClickListener(new View.OnClickListener() {
@@ -204,6 +355,8 @@ public class CartAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         final EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
+
+                        Toast.makeText(activity, cartitems.get(position).getPRODUCT_ID(), Toast.LENGTH_LONG).show();
 
                         if (new_QTY.getText().toString().equals("")||Integer.parseInt(new_QTY.getText().toString())>100)
                         {

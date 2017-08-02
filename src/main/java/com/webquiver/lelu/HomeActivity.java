@@ -3,6 +3,7 @@ package com.webquiver.lelu;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -346,6 +347,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             finish();
 
         } else if (id == R.id.nav_gallery) {
+
+            Intent intent=new Intent(HomeActivity.this,MyOrdersActivity.class);
+            startActivity(intent);
+
 
         } else if (id == R.id.nav_slideshow) {
 

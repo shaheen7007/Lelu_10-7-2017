@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_cart"
+    android:background="@color/colorgrey2"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.webquiver.lelu.CartActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:weightSum="4"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3.6"
+         android:id="@+id/order_list"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:layout_marginTop="6dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:smoothScrollbar="true"
+            android:scrollbarSize="6dp"
+            />
+
+
+        <TextView
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:text="menu"
+            android:textColor="#FFF"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_width="match_parent"
+            android:background="#3c8e3b"
+            android:layout_weight=".4"
+            android:layout_height="0dp"
+          />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

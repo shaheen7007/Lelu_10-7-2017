@@ -34,6 +34,10 @@ public class Config {
 
 
 
+    //urls ORDER
+    public static final String ODR_PLACE_URL = "http://192.168.1.5:1111/place_order";
+    public static final String ODR_GET_URL = "http://192.168.1.5:1111/get_place_order";
+
 
 
 

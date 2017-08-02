@@ -122,9 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
 
-
                 smalltick();
-
                 return false;
 
             }

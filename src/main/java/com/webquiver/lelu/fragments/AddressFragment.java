@@ -180,14 +180,6 @@ public class AddressFragment extends android.app.Fragment {
             }
         });
 
-
-
-
-
-
-
-
-
         TextView PlaceOrderBTN=(TextView)rootView.findViewById(R.id.placeorderBTN_id);
 
         PlaceOrderBTN.setOnClickListener(new View.OnClickListener() {
@@ -196,9 +188,56 @@ public class AddressFragment extends android.app.Fragment {
 
            // Toast.makeText(getActivity(),SessionManagement.KEY_ADDR_ID,Toast.LENGTH_LONG).show();
 
-               String ca_id=pref_cid.getString("caid","def");
+              final String ca_id=pref_cid.getString("caid","def");
 
-              Toast.makeText(getActivity(),ca_id,Toast.LENGTH_LONG).show();
+                final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_PLACE_URL,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                loading.dismiss();
+
+                                try {
+
+                                    JSONObject jsonResponse = new JSONObject(response);
+                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+
+                                        Toast.makeText(getActivity(),"Order Placed",Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                    else {
+
+                                        Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                loading.dismiss();
+                                //
+                                Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        //Adding the parameters to the request
+                        params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
+                        params.put(Config.KEY_CA_ID,ca_id);
+                        return params;
+                    }
+                };
+
+                //Adding request the the queue
+                requestQueue.add(stringRequest);
+
 
 
             }
