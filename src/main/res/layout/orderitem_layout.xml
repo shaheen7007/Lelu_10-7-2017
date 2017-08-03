@@ -157,6 +157,7 @@
             android:weightSum="2"
             android:layout_height="wrap_content">
 
+            <!--
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -164,13 +165,29 @@
                 android:textColor="#000"
                 android:textAlignment="center"
                 android:layout_height="wrap_content" />
+                -->
+            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                android:layout_width="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:progressTint="@color/colorgreen"
+                android:numStars="5"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialRatingBar.RatingBar"
+                android:id="@+id/ratingbar_id" />
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:text="WRITE A REVIEW"
+
                 android:textColor="@color/colorred"
                 android:textAlignment="center"
-                android:layout_height="wrap_content" />
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:id="@+id/writereviewTxt_id" />
 
 
 

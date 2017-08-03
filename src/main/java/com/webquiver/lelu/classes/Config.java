@@ -37,6 +37,8 @@ public class Config {
     //urls ORDER
     public static final String ODR_PLACE_URL = "http://192.168.1.5:1111/place_order";
     public static final String ODR_GET_URL = "http://192.168.1.5:1111/get_place_order";
+    public static final String ODR_REVIEW_URL = "";
+    public static final String ODR_RATING_URL = "";
 
 
 
@@ -82,7 +84,11 @@ public class Config {
 
 
 
+    //keys of order
 
+    public static final String KEY_ORDER_ID = "order_place_id";
+    public static final String KEY_ORDER_REVIEW = "order_review";
+    public static final String KEY_ORDER_RATING = "order_rating";
 
 
 

@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Order id #0012"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="#000"
+            android:textAlignment="center"
+            android:layout_height="wrap_content" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:id="@+id/listview_id"
+            android:layout_weight="1.88"
+            android:layout_marginTop="15dp"
+            android:layout_height="0dp">
+
+        </ListView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Close"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="25dp"
+            android:layout_weight=".12"
+            android:layout_marginTop="15dp"
+            android:id="@+id/closeTXT_id"
+            android:textColor="@color/colorred"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:gravity="end"
+            android:layout_height="0dp" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -55,8 +55,6 @@ public class CartFragment extends android.app.Fragment {
 
     int i;
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
