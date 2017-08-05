@@ -28,7 +28,6 @@
             android:scrollbarSize="6dp"
             />
 
-
         <!--
         <TextView
             android:layout_gravity="bottom"

@@ -23,7 +23,6 @@ public class MyOrdersActivity extends AppCompatActivity {
         View selectedView = null;
 
 
-
         //fragment
         fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();

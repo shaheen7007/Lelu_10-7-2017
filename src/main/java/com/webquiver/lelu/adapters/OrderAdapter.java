@@ -175,7 +175,6 @@ public class OrderAdapter extends BaseAdapter
             public void onClick(View v) {
 
                 movieList=new ArrayList<CartItem>();
-
                 LayoutInflater li = LayoutInflater.from(v.getRootView().getContext());
                 final View confirmDialog = li.inflate(R.layout.viewdet_dlg_layout, null);
 
@@ -186,7 +185,6 @@ public class OrderAdapter extends BaseAdapter
                 close=(TextView)confirmDialog.findViewById(R.id.closeTXT_id);
 
                 alertDialog = alert.create();
-
                 close.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -196,9 +194,7 @@ public class OrderAdapter extends BaseAdapter
                     }
                 });
 
-
                 getall(position);
-
 
             }
         });

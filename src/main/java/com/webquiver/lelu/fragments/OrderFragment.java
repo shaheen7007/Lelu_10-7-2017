@@ -5,11 +5,13 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.adapters.CartAdapter;
 import com.webquiver.lelu.adapters.OrderAdapter;
@@ -54,12 +57,14 @@ public class OrderFragment extends Fragment {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
-
     int i;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        container.removeAllViews();
+
         View rootView = inflater.inflate(
                 R.layout.order_frag, container, false);
 
@@ -148,13 +153,34 @@ public class OrderFragment extends Fragment {
                             */
 
 
+
+
+
+
     getall();
     //  adapter.notifyDataSetChanged();
 
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                Bundle bundle = new Bundle();
+                bundle.putString("p",String.valueOf(position));
+                OrderDetFragment showSelectedADDR=new OrderDetFragment();
+                showSelectedADDR.setArguments(bundle);
+                FragmentManager fm = null;
+                fm = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.Order_FL, showSelectedADDR);
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                fragmentTransaction.addToBackStack("ord");
+                fragmentTransaction.commit();
+
+            }
+        });
+
 
         return rootView;
-
 
     }
     public static OrderFragment getInstance() {
@@ -174,7 +200,6 @@ public class OrderFragment extends Fragment {
     public void getall() {
 
         requestQueue = Volley.newRequestQueue(getActivity());
-
         final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_GET_URL,
                 new Response.Listener<String>() {
@@ -230,9 +255,7 @@ public class OrderFragment extends Fragment {
         //Adding request the the queue
         requestQueue.add(stringRequest);
 
-
     }
-
 
 
     public void showODR(String jsonArray) throws JSONException {
@@ -267,8 +290,6 @@ public class OrderFragment extends Fragment {
             */
 
 
-
-
                 movieList.add(C_item5);
 
             } catch (JSONException e) {
@@ -286,7 +307,6 @@ public class OrderFragment extends Fragment {
 
 
     }
-
 
 
 }

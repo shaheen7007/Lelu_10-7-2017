@@ -65,6 +65,7 @@ public class ShowAllSavedADDR extends android.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        container.removeAllViews();
         View rootView = inflater.inflate(
                 R.layout.address_frag_all, container, false);
 

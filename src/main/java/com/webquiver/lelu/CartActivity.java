@@ -4,6 +4,7 @@ package com.webquiver.lelu;
         import android.app.FragmentManager;
         import android.app.FragmentTransaction;
         import android.app.ProgressDialog;
+        import android.content.Intent;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.view.View;
@@ -19,8 +20,20 @@ package com.webquiver.lelu;
 public class CartActivity extends AppCompatActivity {
 
 
-
-
+    @Override
+    public void onBackPressed() {
+        if (getIntent().hasExtra("home")) {
+            Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
+            openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
+            startActivity(openFragmentBIntent);
+            finish();
+        } else {
+            Intent openFragmentBIntent = new Intent(this, ItemActivity.class);
+            openFragmentBIntent.putExtra("cart", "cart");
+            startActivity(openFragmentBIntent);
+            finish();
+        }
+    }
 
 
 
@@ -36,6 +49,7 @@ public class CartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_cart);
 
         //fragment

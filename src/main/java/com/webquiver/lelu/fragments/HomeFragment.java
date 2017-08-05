@@ -1,5 +1,9 @@
 package com.webquiver.lelu.fragments;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,24 +16,34 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.R;
+import com.webquiver.lelu.adapters.CartAdapter;
+import com.webquiver.lelu.classes.CartItem;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
 import com.webquiver.lelu.adapters.GridViewAdapter;
+import com.webquiver.lelu.classes.SessionManagement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -38,11 +52,14 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class HomeFragment extends android.app.Fragment {
-    private static HomeFragment homeFragment = null;
+
+
+            private static HomeFragment homeFragment = null;
 
 
     //sharedprefference
     private SharedPreferences sharedPreferences;
+    SharedPreferences pref;
     public static final String HOME_PREFERENCE = "HOME_DATA";
 
 
@@ -68,6 +85,11 @@ public class HomeFragment extends android.app.Fragment {
 
     private ArrayList<String> color;
 
+    private RequestQueue requestQueue_cart;
+
+    TextView cartnum;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -81,6 +103,9 @@ public class HomeFragment extends android.app.Fragment {
 
         gridView = (ExpandableHeightGridView) rootView.findViewById(R.id.grid);
         gridView.setExpanded(true);
+
+
+
 
         images = new ArrayList<>();
         names = new ArrayList<>();
@@ -96,6 +121,8 @@ public class HomeFragment extends android.app.Fragment {
 
 
 
+
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v,
@@ -108,6 +135,9 @@ public class HomeFragment extends android.app.Fragment {
                 intent.putExtra("color",String.valueOf(color.get(position)));
                 intent.putStringArrayListExtra("images",images);
                 startActivity(intent);
+                getActivity().finish();
+
+
             }
         });
 
@@ -152,7 +182,7 @@ public class HomeFragment extends android.app.Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                         showGrid(jsonArray);
 
-                        Toast.makeText(getActivity(),"No response from api",Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(),"No response from api",Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -203,5 +233,24 @@ public class HomeFragment extends android.app.Fragment {
         super.onDestroy();
         homeFragment = null;
     }
+
+
+
+
+
+
+    //functions for getting and displaying number of items in cart(green circle)
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

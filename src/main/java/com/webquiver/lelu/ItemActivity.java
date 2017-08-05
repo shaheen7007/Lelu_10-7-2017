@@ -9,12 +9,17 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,14 +47,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ItemActivity extends AppCompatActivity {
+public class ItemActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+
+    @Override
+    public void onBackPressed()
+    {
+
+        Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
+        openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
+        startActivity(openFragmentBIntent);
+        finish();
+    }
+
+
 
 
     //sharedpref
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    SharedPreferences.Editor editor_num_pref;
 
-
+    SessionManagement sessionManagement;
 
     //images slider
     private static ViewPager mPager;
@@ -62,10 +81,16 @@ public class ItemActivity extends AppCompatActivity {
 
    //sharedpreference
     public static final String ITEM_PREFERENCE="item_pref";
+    public static final String NUM_PREFERENCE="num_pref";  //pref to store all numbers (items in cart,num of notific etc)
     private SharedPreferences sharedPreferences;
+    private SharedPreferences pref_numbers;
 
+    TextView cartnum;
+
+    DrawerLayout mDrawerLayout;
 
     RequestQueue requestQueue;
+    RequestQueue requestQueue_cart;
 
     TextView qty;
 
@@ -80,11 +105,20 @@ public class ItemActivity extends AppCompatActivity {
 
        qty=(TextView)findViewById(R.id.qtytxt_id);
 
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.dl_drawer_layout);
+
 
         pref = this.getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
         editor = pref.edit();
 
         requestQueue = Volley.newRequestQueue(this);
+        requestQueue_cart=Volley.newRequestQueue(this);
+
+
+
+        //check if logged in or not
+        sessionManagement=new SessionManagement(getApplicationContext());
+        sessionManagement.checkLogin();
 
 
 
@@ -105,6 +139,9 @@ public class ItemActivity extends AppCompatActivity {
         images = new ArrayList<>();
         progressBar=(ProgressBar)findViewById(R.id.progbr_id);
         sharedPreferences = this.getSharedPreferences(ITEM_PREFERENCE, MODE_PRIVATE);
+        pref_numbers = this.getSharedPreferences(NUM_PREFERENCE, MODE_PRIVATE);
+
+        editor_num_pref=pref_numbers.edit();
 
 
         //getintent
@@ -127,6 +164,11 @@ public class ItemActivity extends AppCompatActivity {
 
         //image slider
         getimgs();
+
+
+        getall();
+
+
 
 
 
@@ -275,9 +317,6 @@ public class ItemActivity extends AppCompatActivity {
         }
 
 
-
-
-
         else if (view == findViewById(R.id.addtocartbtn_id))
         {
 
@@ -287,13 +326,16 @@ public class ItemActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             loading.dismiss();
-
                             try {
 
                                 JSONObject jsonResponse = new JSONObject(response);
                                 if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
                                     Toast.makeText(ItemActivity.this,"Item added to cart",Toast.LENGTH_SHORT).show();
+
+
+                                    getall();
+
 
                                 }
 
@@ -333,11 +375,128 @@ public class ItemActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+
+
+            sessionManagement.logoutUser();
+            finish();
+
+        } else if (id == R.id.nav_gallery) {
+
+            Intent intent=new Intent(getApplicationContext(),MyOrdersActivity.class);
+            startActivity(intent);
+
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.dl_drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+
+
+    }
+
+
+
+
+
+
+    public void getall() {
+
+        requestQueue_cart = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_GET_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
+
+                        try {
+
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            //   JSONArray jsonArray=new JSONArray(response);
+
+                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+
+                                showNUM(response);
+
+
+                            } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+
+                                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+
+                            } else {
+
+                                Toast.makeText(getApplicationContext(), "Invalid user", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        //
+                        Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Adding the parameters to the request
+                params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
+                return params;
+            }
+        };
+
+        //Adding request the the queue
+        requestQueue_cart.add(stringRequest);
+
+
+    }
+
+    public void showNUM(String jsonArray) throws JSONException {
+
+        JSONObject json = new JSONObject(jsonArray);
+        JSONArray arr = json.getJSONArray("products");
+        editor_num_pref.putString(Config.KEY_NUM_CART,String.valueOf(arr.length()) );
+        editor_num_pref.commit();
+
+        cartnum=(TextView)findViewById(R.id.cartnumTXT_itemactivity_id);
+        String nn=pref_numbers.getString(Config.KEY_NUM_CART,"0");
+        if (nn.equals("0"))
+        {
+
+        }
+        else {
+            cartnum.setVisibility(View.VISIBLE);
+            cartnum.setText(nn);
+            }
+    }
+
+
+
+
+
+
+
 
 }
-
-
-
-
 
 

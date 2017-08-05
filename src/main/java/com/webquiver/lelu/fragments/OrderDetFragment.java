@@ -23,10 +23,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.webquiver.lelu.R;
-import com.webquiver.lelu.adapters.CartAdapter;
-import com.webquiver.lelu.classes.AddressItem;
+import com.webquiver.lelu.adapters.OrderAdapter;
+import com.webquiver.lelu.adapters.ViewDetAdapter;
 import com.webquiver.lelu.classes.CartItem;
 import com.webquiver.lelu.classes.Config;
+import com.webquiver.lelu.classes.ODRItem;
 import com.webquiver.lelu.classes.SessionManagement;
 
 import org.json.JSONArray;
@@ -42,25 +43,22 @@ import java.util.Map;
  * Created by WebQuiver 04 on 7/24/2017.
  */
 
-public class CartFragment extends android.app.Fragment {
+public class OrderDetFragment extends Fragment {
 
+    private static OrderDetFragment cartFragment = null;
 
-
-    private static CartFragment cartFragment = null;
-    private static final String url = "https://api.myjson.com/bins/15eqh3";
     private ProgressDialog pDialog;
     private List<CartItem> movieList;
     private ListView listView;
-    private CartAdapter adapter;
+    private ViewDetAdapter adapter;
     private RequestQueue requestQueue;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
+    TextView ordrID,ordrSTATUS;
+
     int i;
-
-
-
-
+    int poss;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -69,25 +67,27 @@ public class CartFragment extends android.app.Fragment {
         container.removeAllViews();
 
         View rootView = inflater.inflate(
-                R.layout.cart_frag, container, false);
+                R.layout.order_det_frag, container, false);
 
         movieList= new ArrayList<CartItem>();
-        listView = (ListView) rootView.findViewById(R.id.cartlist);
-        adapter = new CartAdapter(getActivity(), movieList);
+        listView = (ListView) rootView.findViewById(R.id.prod_list);
         listView.setAdapter(adapter);
-
-
         pref = this.getActivity().getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
         editor = pref.edit();
 
+        Bundle b=getArguments();
+
+        poss=Integer.parseInt(b.getString("p","0"));
+
+        ordrID=(TextView)rootView.findViewById(R.id.ordrID_id);
+        ordrSTATUS=(TextView)rootView.findViewById(R.id.ordrSTATUS_id);
 
 
 
 
 
-/* DUMMY DATAS
 
-
+    /* DUMMY DATAS
         CartItem C_item = new CartItem();
         C_item.setNAME("Baybee BMW");
         C_item.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
@@ -160,40 +160,15 @@ public class CartFragment extends android.app.Fragment {
                             }
                             */
 
-
-getall();
-    //    adapter.notifyDataSetChanged();
-
-        TextView continu=(TextView)rootView.findViewById(R.id.continueBTN_id);
-
-      continu.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              //fragment
-              Fragment fr = null;
-              FragmentManager fm = null;
-              View selectedView = null;
-
-              //fragment
-              fm = getFragmentManager();
-              FragmentTransaction fragmentTransaction = fm.beginTransaction();
-              fragmentTransaction.replace(R.id.cart_FL, AddressFragment.getInstance());
-              fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-              fragmentTransaction.addToBackStack("cart");
-              fragmentTransaction.commit();
-          }
-      });
-
-
-
+    getall(poss);
+    //  adapter.notifyDataSetChanged();
 
         return rootView;
 
-
     }
-    public static CartFragment getInstance() {
+    public static OrderDetFragment getInstance() {
         if (cartFragment == null) {
-            cartFragment = new CartFragment();
+            cartFragment = new OrderDetFragment();
         }
         return cartFragment;
     }
@@ -205,18 +180,17 @@ getall();
     }
 
 
-
-
-    public void getall() {
+    public void getall(int pos) {
+        final int posi=pos;
 
         requestQueue = Volley.newRequestQueue(getActivity());
 
-        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_GET_URL,
+        //   final ProgressDialog loading = ProgressDialog.show(activity, "Loading", "Please wait...", false, false);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_GET_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        loading.dismiss();
+                        //    loading.dismiss();
                         Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                         try {
@@ -228,7 +202,7 @@ getall();
                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
 
-                                        showCART(response);
+                                showODR(response,posi);
 
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
@@ -247,16 +221,18 @@ getall();
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        loading.dismiss();
-                        //
+                        //        loading.dismiss();
+
                         Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 //Adding the parameters to the request
-                params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
+                params.put(Config.KEY_ADDR_MOBILE, pref.getString(SessionManagement.KEY_PHONE, ""));
+
                 return params;
             }
         };
@@ -264,43 +240,75 @@ getall();
         //Adding request the the queue
         requestQueue.add(stringRequest);
 
-
     }
 
-    public void showCART(String jsonArray) throws JSONException {
+
+    public void showODR(String jsonArray,int pos) throws JSONException {
+
         JSONObject json = new JSONObject(jsonArray);
-        JSONArray arr = json.getJSONArray("products");
-        for (i = 0; i < arr.length(); i++) {
+        JSONArray arr = json.getJSONArray("orders");
+        //  for (int i = 0; i < arr.length(); i++) {
 
-            try {
+        try {
 
-                JSONObject tt = arr.getJSONObject(i);
+            JSONObject tt = arr.getJSONObject(pos);
 
-                CartItem C_item5 = new CartItem();
-                C_item5.setNAME("default");
-                //C_item5.setDESC("default");
-                C_item5.setQUANTITY(Integer.parseInt(tt.getString("cp_qty")));
-                C_item5.setREALPRICE("default");
-                C_item5.setPRICE("default");
-                C_item5.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
-                C_item5.setPRODUCT_ID(tt.getString("cp_code"));
+            ordrID.setText("Order id #"+tt.getString("order_place_id"));
+            ordrSTATUS.setText(tt.getString("op_status"));
 
-                movieList.add(C_item5);
+            //  ODRItem C_item5 = new ODRItem();
+            //  C_item5.setODR_ID(tt.getString("order_place_id"));
+            //  C_item5.setNAME(tt.getString("order_place_id"));
+            //  C_item5.setSTATUS(tt.getString("op_status"));
 
-            } catch (JSONException e) {
 
-                e.printStackTrace();
-                Toast.makeText(getActivity(), "json catch", Toast.LENGTH_LONG).show();
+            JSONArray prod = tt.getJSONArray("products");
+            // C_item5.setNumberOfProducts(prod.length());
 
+
+
+            //C_item5.setODR_ID(tt.getString("order_place_id"));
+            //  C_item5.setNAME(tt.getString("order_place_id"));
+
+            for (int j = 0; j < prod.length(); j++) {
+                CartItem Item_item = new CartItem();
+                JSONObject ss = prod.getJSONObject(j);
+                Item_item.setNAME("default");                         //change
+                Item_item.setPRICE("4,600.00");
+                Item_item.setQUANTITY(ss.getInt("opp_qty"));
+                Item_item.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+                movieList.add(Item_item);
             }
-        }
 
-        adapter = new CartAdapter(getActivity(), movieList);         //.subList(i-1, i)
-        listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+
+             /*
+
+                for (int j=0;j<prod.length();j++)
+                {
+
+                    JSONObject p=prod.getJSONObject(j);
+                    Toast.makeText(getActivity(),p.getString("opp_code"),Toast.LENGTH_SHORT).show();
+
+                }
+
+            */
+
+
+            adapter = new ViewDetAdapter(getActivity(), movieList);
+            listView.setAdapter(adapter);
+
+
+
+        } catch (JSONException e) {
+
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "json catch", Toast.LENGTH_LONG).show();
+
+        }
+        //  }
+
 
     }
-
 
 
 }

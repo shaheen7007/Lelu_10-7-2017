@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -103,7 +104,6 @@ public class CartAdapter extends BaseAdapter {
 
         //strike price
         item_realprice.setPaintFlags(item_realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
 
         if (getCount()==0) {
 
@@ -246,9 +246,17 @@ public class CartAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                //change
+                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 
-                final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
+                alertDialog.setTitle("Remove item ?");
+
+
+                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Add your code for the button here.
+
+
+                        final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
                         new Response.Listener<String>() {
                             @Override
@@ -261,7 +269,7 @@ public class CartAdapter extends BaseAdapter {
                                     if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
                                         //change
-                                        Toast.makeText(activity,""+getCount(),Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
 
 
                                         //cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
@@ -316,8 +324,29 @@ public class CartAdapter extends BaseAdapter {
             }
         });
 
+                alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Auto-generated method stub
+
+                        dialog.dismiss();
+
+                    }
+                });
+
+                alertDialog.show();
 
 
+
+
+
+
+
+
+
+            }
+        });
 
 
 

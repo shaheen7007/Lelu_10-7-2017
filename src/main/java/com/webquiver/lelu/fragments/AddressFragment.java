@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -79,6 +80,9 @@ public class AddressFragment extends android.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        container.removeAllViews();
+
         View rootView = inflater.inflate(
                 R.layout.address_frag, container, false);
 
@@ -186,62 +190,90 @@ public class AddressFragment extends android.app.Fragment {
             @Override
             public void onClick(View v) {
 
-           // Toast.makeText(getActivity(),SessionManagement.KEY_ADDR_ID,Toast.LENGTH_LONG).show();
-
-              final String ca_id=pref_cid.getString("caid","def");
-
-                final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_PLACE_URL,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                loading.dismiss();
-
-                                try {
-
-                                    JSONObject jsonResponse = new JSONObject(response);
-                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+                // Toast.makeText(getActivity(),SessionManagement.KEY_ADDR_ID,Toast.LENGTH_LONG).show();
 
 
-                                        Toast.makeText(getActivity(),"Order Placed",Toast.LENGTH_SHORT).show();
+                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
 
+                alertDialog.setTitle("Place Order ?");
+
+
+                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Add your code for the button here.
+
+
+                        final String ca_id = pref_cid.getString("caid", "def");
+
+                        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_PLACE_URL,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        loading.dismiss();
+
+                                        try {
+
+                                            JSONObject jsonResponse = new JSONObject(response);
+                                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+
+                                                Toast.makeText(getActivity(), "Order Placed", Toast.LENGTH_SHORT).show();
+
+                                            } else {
+
+                                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+
+                                        }
                                     }
-
-                                    else {
-
-                                        Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        loading.dismiss();
+                                        //
+                                        Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
+                                }) {
                             @Override
-                            public void onErrorResponse(VolleyError error) {
-                                loading.dismiss();
-                                //
-                                Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> params = new HashMap<>();
+                                //Adding the parameters to the request
+                                params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE, ""));
+                                params.put(Config.KEY_CA_ID, ca_id);
+                                return params;
                             }
-                        }) {
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<>();
-                        //Adding the parameters to the request
-                        params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
-                        params.put(Config.KEY_CA_ID,ca_id);
-                        return params;
+                        };
+
+                        //Adding request the the queue
+                        requestQueue.add(stringRequest);
+
+
                     }
-                };
+                });
 
-                //Adding request the the queue
-                requestQueue.add(stringRequest);
+                alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Auto-generated method stub
+
+                        dialog.dismiss();
+
+                    }
+                });
+
+                alertDialog.show();
+
+
 
 
 
             }
-        });
+                });
 
 
 

@@ -101,6 +101,16 @@ public class Config {
     public static final String JSONSTRING1="jsonstring1";
 
 
+
+
+    //keys of Number shared pref
+    public static final String KEY_NUM_CART = "num_cart";
+
+
+
+
+
+
 }
 
 

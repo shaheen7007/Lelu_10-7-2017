@@ -1,10 +1,15 @@
 package com.webquiver.lelu;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -23,12 +28,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.viewpagerindicator.CirclePageIndicator;
@@ -43,10 +52,45 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+
+
+    public void onBackPressed()
+    {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
+        alertDialog.setTitle("Exit ?");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Add your code for the button here.
+
+                finish();
+                System.exit(0);
+
+
+            }
+        });
+
+        alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+
+                dialog.dismiss();
+
+            }
+        });
+
+        alertDialog.show();
+
+    }
+
 
     ProgressBar progressBar;
 
@@ -54,6 +98,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     Fragment fr = null;
     FragmentManager fm = null;
     View selectedView = null;
+
 
 
 
@@ -77,8 +122,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     SessionManagement sessionManagement;
 
+
+
+    public static final String NUM_PREFERENCE="num_pref";
+    private SharedPreferences pref_numberss;
+
     private SharedPreferences sharedPreferences;
+
+    private SharedPreferences pref;
+    RequestQueue requestQueue_cart;
+   public TextView cartnum;
     public static final String BANNER_PREFERENCE = "BANNER_DATA";
+
+
+
+
+
+    SharedPreferences getPref_numberss;
+    SharedPreferences.Editor editor_num_pref;
+
+
 
 
     @Override
@@ -92,6 +155,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
        sharedPreferences = getSharedPreferences(BANNER_PREFERENCE, MODE_PRIVATE);
+        pref_numberss = this.getSharedPreferences(NUM_PREFERENCE, MODE_PRIVATE);
+        editor_num_pref=pref_numberss.edit();
+
+
+
+
+
+
+
+
+
+        pref_numberss = this.getSharedPreferences(NUM_PREFERENCE, MODE_PRIVATE);
+
 
 
 
@@ -101,13 +177,32 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-         final ImageView search = (ImageView) findViewById(R.id.search);
+        requestQueue_cart=Volley.newRequestQueue(getApplicationContext());
+        pref = this.getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
+
+
+        final ImageView search = (ImageView) findViewById(R.id.search);
 
         progressBar=(ProgressBar)findViewById(R.id.prog_id);
 
         banimages = new ArrayList<>();
 
-    //fragment
+
+
+
+
+        //
+        if (getIntent().hasExtra("OPEN_FRAGMENT_B"))
+        {
+            Fragment fragment = new HomeFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.frag_container, fragment).commit();
+        }
+
+
+
+
+        //fragment
         fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.frag_container, HomeFragment.getInstance());
@@ -127,6 +222,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         View customView = li.inflate(R.layout.custombar, null);
         ab.setCustomView(customView);
         ab.setDisplayShowCustomEnabled(true);
+
+
+
+        cartnum=(TextView)findViewById(R.id.numbercart_home_id) ;
+
+        if (isOnline()) {
+            getall(); //get number of items in cart
+        }
+   /*
+        String nn=pref_numberss.getString(Config.KEY_NUM_CART,"0");
+        if (nn.equals("0")) {
+
+        }
+        else {
+            cartnum.setVisibility(View.VISIBLE);
+            cartnum.setText(nn);
+        }
+
+
+*/
 
         ImageView menu = (ImageView) customView.findViewById(R.id.menuitem);
         menu.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +280,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                     categorylayout.setVisibility(View.VISIBLE);
                     search.setVisibility(View.VISIBLE);
+
                 }
                else {
                     categorylayout.setVisibility(View.VISIBLE);
@@ -348,7 +464,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_gallery) {
 
-            Intent intent=new Intent(HomeActivity.this,MyOrdersActivity.class);
+            Intent intent=new Intent(getApplicationContext(),MyOrdersActivity.class);
             startActivity(intent);
 
 
@@ -380,6 +496,105 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
 
         }
+        else  if (view == findViewById(R.id.cartitem)) {
+
+
+          Intent intent = new Intent(HomeActivity.this, CartActivity.class);
+
+            intent.putExtra("home","home");
+            startActivity(intent);
+            finish();
+
+        }
+    }
+
+
+
+
+    public void getall() {
+
+        // requestQueue_cart = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_GET_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
+
+                        try {
+
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            //   JSONArray jsonArray=new JSONArray(response);
+
+                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                showNUM(response);
+
+                            } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+
+                                Toast.makeText(getApplicationContext(), "Failed_num", Toast.LENGTH_LONG).show();
+
+                            } else {
+
+                                Toast.makeText(getApplicationContext(), "Invalid user", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        //
+                        Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Adding the parameters to the request
+                params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
+                return params;
+            }
+        };
+
+        //Adding request the the queue
+        requestQueue_cart.add(stringRequest);
+
+    }
+
+    public void showNUM(String jsonArray) throws JSONException {
+
+        JSONObject json = new JSONObject(jsonArray);
+        JSONArray arr = json.getJSONArray("products");
+        editor_num_pref.putString(Config.KEY_NUM_CART,String.valueOf(arr.length()) );
+        editor_num_pref.commit();
+
+        String nn=pref_numberss.getString(Config.KEY_NUM_CART,"0");
+        if (nn.equals("0"))
+        {
+
+        }
+        else {
+
+            cartnum.setVisibility(View.VISIBLE);
+            cartnum.setText(nn);
+
+        }
+    }
+
+
+    public boolean isOnline() {
+        ConnectivityManager conMgr = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
+            Toast.makeText(HomeActivity.this, "No Internet Connection!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
 }
