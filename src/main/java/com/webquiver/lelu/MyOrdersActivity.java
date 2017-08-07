@@ -17,11 +17,9 @@ public class MyOrdersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_orders);
 
-
         Fragment fr = null;
         FragmentManager fm = null;
         View selectedView = null;
-
 
         //fragment
         fm = getFragmentManager();
@@ -29,13 +27,8 @@ public class MyOrdersActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.Order_FL, OrderFragment.getInstance());
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         //change
+
         fragmentTransaction.commit();
-
-
-
-
-
-
 
     }
 }

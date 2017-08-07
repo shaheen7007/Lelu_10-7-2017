@@ -237,7 +237,18 @@ public class ShowSelectedADDR extends android.app.Fragment {
                                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
 
-                                                Toast.makeText(getActivity(), "Order Placed", Toast.LENGTH_SHORT).show();
+
+                                                Bundle bundle = new Bundle();
+                                                bundle.putString("p","999");
+                                                OrderDetFragment2 showSelectedADDR=new OrderDetFragment2();
+                                                showSelectedADDR.setArguments(bundle);
+                                                FragmentManager fm = null;
+                                                fm = getFragmentManager();
+                                                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                                                fragmentTransaction.replace(R.id.cart_FL, showSelectedADDR);
+                                                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                                                fragmentTransaction.addToBackStack("ord");
+                                                fragmentTransaction.commit();
 
                                             } else {
 

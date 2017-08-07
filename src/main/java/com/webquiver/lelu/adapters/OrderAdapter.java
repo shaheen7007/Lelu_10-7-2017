@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -49,6 +50,9 @@ import java.util.Map;
 public class OrderAdapter extends BaseAdapter
 
 {
+
+    int flag;
+
     private Activity activity;
     RequestQueue requestQueue;
     SharedPreferences pref;
@@ -64,6 +68,11 @@ public class OrderAdapter extends BaseAdapter
 
     ListView listView;
     AlertDialog alertDialog;
+
+
+
+    TextView addr,A_OID,A_ADR1,A_PLACE,A_DIST,A_STATE,A_PIN;
+
 
     public OrderAdapter(Activity activity, List<ODRItem> cartitems) {
         this.activity = activity;
@@ -181,20 +190,61 @@ public class OrderAdapter extends BaseAdapter
                 AlertDialog.Builder alert = new AlertDialog.Builder(v.getRootView().getContext());
                 alert.setView(confirmDialog);
                 alert.setCancelable(true);
-                listView = (ListView) confirmDialog.findViewById(R.id.listview_id);
-                close=(TextView)confirmDialog.findViewById(R.id.closeTXT_id);
+                listView = (ListView) confirmDialog.findViewById(R.id.prod_list);
+             //   close=(TextView)confirmDialog.findViewById(R.id.closeTXT_id);
 
                 alertDialog = alert.create();
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+           //     close.setOnClickListener(new View.OnClickListener() {
+             //       @Override
+             //       public void onClick(View v) {
 
-                        alertDialog.dismiss();
+//                        alertDialog.dismiss();
 
-                    }
-                });
+          //      }
+          //      });
+                addr=(TextView)confirmDialog.findViewById(R.id.ADDR_name_id) ;
+               A_OID=(TextView)confirmDialog.findViewById(R.id.ordrID_id);
+               A_ADR1=(TextView)confirmDialog.findViewById(R.id.ADDR_address1_id);
+               A_PLACE=(TextView)confirmDialog.findViewById(R.id.ADDR_place_id);
+               A_PIN=(TextView)confirmDialog.findViewById(R.id.ADDR_pin_id);
+               A_DIST=(TextView)confirmDialog.findViewById(R.id.ADDR_district_id);
+               A_STATE=(TextView)confirmDialog.findViewById(R.id.ADDR_state_id);
+
 
                 getall(position);
+
+
+                 flag=0;
+
+                addr.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                         public void onClick(View v) {
+
+                       LinearLayout fuladr = (LinearLayout) confirmDialog.findViewById(R.id.fuladr);
+
+                       if (flag == 0) {
+                           flag = 1;
+                           fuladr.setVisibility(View.VISIBLE);
+                       }
+                       else
+                       {
+                           flag=0;
+                           fuladr.setVisibility(View.GONE);
+                       }
+
+
+
+
+
+
+
+                   }
+                      });
+
+
+
+
+
 
             }
         });
@@ -482,6 +532,15 @@ public class OrderAdapter extends BaseAdapter
             try {
 
                 JSONObject tt = arr.getJSONObject(pos);
+
+                addr.setText(tt.getString("ca_name"));
+                A_ADR1.setText(tt.getString("ca_house"));
+                A_PLACE.setText(tt.getString("ca_street"));
+                A_DIST.setText(tt.getString("ca_dist"));
+                A_STATE.setText(tt.getString("ca_state"));
+                A_PIN.setText("PIN -"+tt.getString("ca_pin"));
+                A_OID.setText("Order id #"+tt.getString("order_place_id"));
+
                 //  ODRItem C_item5 = new ODRItem();
                 //  C_item5.setODR_ID(tt.getString("order_place_id"));
                 //  C_item5.setNAME(tt.getString("order_place_id"));

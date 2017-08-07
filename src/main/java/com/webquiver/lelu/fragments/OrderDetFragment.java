@@ -43,6 +43,14 @@ import java.util.Map;
  * Created by WebQuiver 04 on 7/24/2017.
  */
 
+
+
+//this fragment is not using
+
+
+
+
+
 public class OrderDetFragment extends Fragment {
 
     private static OrderDetFragment cartFragment = null;
@@ -56,6 +64,8 @@ public class OrderDetFragment extends Fragment {
     SharedPreferences.Editor editor;
 
     TextView ordrID,ordrSTATUS;
+
+    TextView ordrNAME,ordrADDR1,ordrPLACE,ordrDIST,ordrSTATE,ordrPIN;
 
     int i;
     int poss;
@@ -82,9 +92,12 @@ public class OrderDetFragment extends Fragment {
         ordrID=(TextView)rootView.findViewById(R.id.ordrID_id);
         ordrSTATUS=(TextView)rootView.findViewById(R.id.ordrSTATUS_id);
 
-
-
-
+        ordrNAME=(TextView)rootView.findViewById(R.id.ADDR_name_id);
+        ordrADDR1=(TextView)rootView.findViewById(R.id.ADDR_address1_id);
+        ordrPLACE=(TextView)rootView.findViewById(R.id.ADDR_place_id);
+        ordrDIST=(TextView)rootView.findViewById(R.id.ADDR_district_id);
+        ordrPIN=(TextView)rootView.findViewById(R.id.ADDR_pin_id);
+        ordrSTATE=(TextView)rootView.findViewById(R.id.ADDR_state_id);
 
 
     /* DUMMY DATAS
@@ -255,6 +268,13 @@ public class OrderDetFragment extends Fragment {
 
             ordrID.setText("Order id #"+tt.getString("order_place_id"));
             ordrSTATUS.setText(tt.getString("op_status"));
+            ordrNAME.setText(tt.getString("ca_name"));
+            ordrADDR1.setText(tt.getString("ca_house"));
+            ordrPLACE.setText(tt.getString("ca_street"));
+            ordrDIST.setText(tt.getString("ca_dist"));
+            ordrPIN.setText(tt.getString("ca_pin"));
+            ordrSTATE.setText(tt.getString("ca_state"));
+
 
             //  ODRItem C_item5 = new ODRItem();
             //  C_item5.setODR_ID(tt.getString("order_place_id"));
@@ -270,7 +290,8 @@ public class OrderDetFragment extends Fragment {
             //C_item5.setODR_ID(tt.getString("order_place_id"));
             //  C_item5.setNAME(tt.getString("order_place_id"));
 
-            for (int j = 0; j < prod.length(); j++) {
+
+            for (int j = 0; j < prod.length(); j++) {           //list products
                 CartItem Item_item = new CartItem();
                 JSONObject ss = prod.getJSONObject(j);
                 Item_item.setNAME("default");                         //change
@@ -305,6 +326,8 @@ public class OrderDetFragment extends Fragment {
             Toast.makeText(getActivity(), "json catch", Toast.LENGTH_LONG).show();
 
         }
+
+
         //  }
 
 

@@ -164,9 +164,10 @@ public class OrderFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
+
                 Bundle bundle = new Bundle();
                 bundle.putString("p",String.valueOf(position));
-                OrderDetFragment showSelectedADDR=new OrderDetFragment();
+                OrderDetFragment2 showSelectedADDR=new OrderDetFragment2();
                 showSelectedADDR.setArguments(bundle);
                 FragmentManager fm = null;
                 fm = getFragmentManager();
@@ -175,6 +176,8 @@ public class OrderFragment extends Fragment {
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 fragmentTransaction.addToBackStack("ord");
                 fragmentTransaction.commit();
+
+
 
             }
         });
