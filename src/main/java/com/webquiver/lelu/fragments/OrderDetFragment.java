@@ -48,9 +48,6 @@ import java.util.Map;
 //this fragment is not using
 
 
-
-
-
 public class OrderDetFragment extends Fragment {
 
     private static OrderDetFragment cartFragment = null;

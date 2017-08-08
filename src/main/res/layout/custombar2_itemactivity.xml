@@ -10,6 +10,7 @@
         android:scaleType="fitCenter"
         android:layout_marginTop="5dp"
         android:id="@+id/back_id"
+        android:onClick="onclickhandler_itemactivity"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"/>
 

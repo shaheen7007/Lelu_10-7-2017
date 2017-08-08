@@ -299,14 +299,22 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
             Intent intent=new Intent(ItemActivity.this,CartActivity.class);
             startActivity(intent);
+            finish();
 
         }
-
 
 
         else if (view == findViewById(R.id.cartminus_id))
         {
             qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString())-1));
+        }
+
+        else if (view == findViewById(R.id.back_id))
+        {
+            Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
+            openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
+            startActivity(openFragmentBIntent);
+            finish();
         }
 
         else if (view == findViewById(R.id.cartplus_id))

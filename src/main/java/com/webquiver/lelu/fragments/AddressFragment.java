@@ -11,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,6 +96,38 @@ public class AddressFragment extends android.app.Fragment {
         pref_cid = this.getActivity().getSharedPreferences(PREF_CAID,Context.MODE_PRIVATE);
         editor = pref.edit();
         editorcaid = pref_cid.edit();
+
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+       rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.i("test", "keyCode: " + keyCode);
+                if( keyCode == KeyEvent.KEYCODE_BACK ) {
+                    Log.i("test", "onKey Back listener is working!!!");
+                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+
+        //back btn
+
+        ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bckBTN_id);
+        bckBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            }
+        });
+
+
+
 
 
 

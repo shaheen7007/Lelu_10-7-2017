@@ -22,20 +22,23 @@ public class CartActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getIntent().hasExtra("home")) {
+
+     //   if (getIntent().hasExtra("home")) {
+
             Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
             openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
             startActivity(openFragmentBIntent);
             finish();
-        } else {
-            Intent openFragmentBIntent = new Intent(this, ItemActivity.class);
-            openFragmentBIntent.putExtra("cart", "cart");
-            startActivity(openFragmentBIntent);
-            finish();
-        }
+
+   //     } else {
+
+        //    Intent openFragmentBIntent = new Intent(this, ItemActivity.class);
+         //   openFragmentBIntent.putExtra("cart", "cart");
+         //   startActivity(openFragmentBIntent);
+         //   finish();
+
+    //    }
     }
-
-
 
     private static final String TAG = CartActivity.class.getSimpleName();
 
@@ -64,7 +67,7 @@ public class CartActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.cart_FL, CartFragment.getInstance());
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        //change
+     //   fragmentTransaction.addToBackStack("ct");
         fragmentTransaction.commit();
 
 

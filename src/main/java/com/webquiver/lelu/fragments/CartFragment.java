@@ -1,5 +1,6 @@
 package com.webquiver.lelu.fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -8,10 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +29,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.webquiver.lelu.CartActivity;
 import com.webquiver.lelu.HomeActivity;
+import com.webquiver.lelu.ItemActivity;
+import com.webquiver.lelu.LoginActivity;
 import com.webquiver.lelu.R;
+import com.webquiver.lelu.RegisterActivity;
 import com.webquiver.lelu.adapters.CartAdapter;
 import com.webquiver.lelu.classes.AddressItem;
 import com.webquiver.lelu.classes.CartItem;
@@ -47,8 +54,6 @@ import java.util.Map;
 
 public class CartFragment extends android.app.Fragment {
 
-
-
     private static CartFragment cartFragment = null;
     private static final String url = "https://api.myjson.com/bins/15eqh3";
     private ProgressDialog pDialog;
@@ -58,11 +63,9 @@ public class CartFragment extends android.app.Fragment {
     private RequestQueue requestQueue;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    AppCompatButton buttonSHOPNOW;
 
     int i;
-
-
-
 
 
     @Override
@@ -78,7 +81,6 @@ public class CartFragment extends android.app.Fragment {
         listView = (ListView) rootView.findViewById(R.id.cartlist);
         adapter = new CartAdapter(getActivity(), movieList);
         listView.setAdapter(adapter);
-
 
         pref = this.getActivity().getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
         editor = pref.edit();
@@ -163,6 +165,23 @@ public class CartFragment extends android.app.Fragment {
                             */
 
 
+
+        ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bckBTTN_cartfrag_id);
+        bckBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    Intent openFragmentBIntent = new Intent(getActivity(), HomeActivity.class);
+                    openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
+                    startActivity(openFragmentBIntent);
+                    getActivity().finish();
+
+            }
+        });
+
+
+
+
 getall();
     //    adapter.notifyDataSetChanged();
 
@@ -234,12 +253,49 @@ getall();
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
-                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                              //  Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
 
-                            } else {
 
-                                Toast.makeText(getActivity(), "Invalid user", Toast.LENGTH_LONG).show();
+
+                                LayoutInflater li = LayoutInflater.from(getActivity());
+                                //Creating a view to get the dialog box
+                                View confirmDialog = li.inflate(R.layout.cartempty_layout, null);
+
+                                //Initizliaing confirm button fo dialog box and edittext of dialog box
+                                buttonSHOPNOW = (AppCompatButton) confirmDialog.findViewById(R.id.buttonShop);
+
+                                //Creating an alertdialog builder
+                                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+                                //Adding our dialog box to the view of alert dialog
+                                alert.setView(confirmDialog);
+                                alert.setCancelable(false);
+
+                                //Creating an alert dialog
+                                final AlertDialog alertDialog = alert.create();
+
+                                //Displaying the alert dialog
+                                alertDialog.show();
+
+                                //On the click of the confirm button from alert dialog
+                                buttonSHOPNOW.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        //Hiding the alert dialog
+                                        alertDialog.dismiss();
+
+                                        Intent intent=new Intent(getActivity(),HomeActivity.class);
+                                        startActivity(intent);
+                                        getActivity().finish();
+
+
+                                    }
+
+                                });
+
+
                             }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

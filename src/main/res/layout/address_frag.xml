@@ -24,7 +24,8 @@
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"/>
+                android:layout_alignParentTop="true"
+                android:id="@+id/bckBTN_id" />
 
         </LinearLayout>
         <TextView

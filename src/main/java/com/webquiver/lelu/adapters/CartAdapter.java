@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.webquiver.lelu.CartActivity;
+import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.AppController;
@@ -47,6 +49,9 @@ import java.util.List;
 import java.util.Map;
 
 public class CartAdapter extends BaseAdapter {
+
+    AppCompatButton buttonSHOPNOW;
+
     private Activity activity;
     RequestQueue requestQueue;
     SharedPreferences pref;
@@ -280,6 +285,50 @@ public class CartAdapter extends BaseAdapter {
                                         cartitems.remove(position);
                                         notifyDataSetChanged();
                                   //     getView(position, finalConvertView,parent); //
+
+                                        if (cartitems.size()==0)
+                                        {
+
+                                            LayoutInflater li = LayoutInflater.from(activity);
+                                            //Creating a view to get the dialog box
+                                            View confirmDialog = li.inflate(R.layout.cartempty_layout, null);
+
+                                            //Initizliaing confirm button fo dialog box and edittext of dialog box
+                                            buttonSHOPNOW = (AppCompatButton) confirmDialog.findViewById(R.id.buttonShop);
+
+                                            //Creating an alertdialog builder
+                                            AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+
+                                            //Adding our dialog box to the view of alert dialog
+                                            alert.setView(confirmDialog);
+                                            alert.setCancelable(false);
+
+                                            //Creating an alert dialog
+                                            final AlertDialog alertDialog = alert.create();
+
+                                            //Displaying the alert dialog
+                                            alertDialog.show();
+
+                                            //On the click of the confirm button from alert dialog
+                                            buttonSHOPNOW.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    //Hiding the alert dialog
+                                                    alertDialog.dismiss();
+
+                                                    Intent intent=new Intent(activity,HomeActivity.class);
+                                                    activity.startActivity(intent);
+                                                    activity.finish();
+
+
+                                                }
+
+                                            });
+
+
+
+
+                                        }
 
 
 
