@@ -34,9 +34,7 @@
             android:name=".RegisterActivity"
             android:screenOrientation="portrait" />
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDmAScM8u941nhbTeirsKmTsF5zavS0Dv0" />
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".ItemActivity"

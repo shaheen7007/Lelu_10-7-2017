@@ -3,17 +3,22 @@ package com.webquiver.lelu;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,11 +37,21 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.webquiver.lelu.classes.Config;
+import com.webquiver.lelu.place.PlaceJSONParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,7 +60,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText name,phone,email,companyname, placeET,pass;
+    EditText name,phone,email,companyname,pass;
+    AutoCompleteTextView placeET;
+    PlacesTask placesTask;
+    ParserTask parserTask;
     ImageView regbtn;
     private AppCompatButton buttonConfirm;
 
@@ -77,11 +95,40 @@ public class RegisterActivity extends AppCompatActivity {
         //initialise components
         name=(EditText)findViewById(R.id.nameET_id);
         phone=(EditText)findViewById(R.id.phoneET_id);
-        email=(EditText)findViewById(R.id.emailET_id);
-        companyname=(EditText)findViewById(R.id.companyET_id);
-        placeET =(EditText)findViewById(R.id.placeET_id);
+        email=(EditText) findViewById(R.id.emailET_id);
+        companyname=(EditText) findViewById(R.id.companyET_id);
+        placeET =(AutoCompleteTextView) findViewById(R.id.placeET_id);
+        placeET.setThreshold(1);
         pass=(EditText)findViewById(R.id.passworET_id);
         regbtn=(ImageView)findViewById(R.id.regnow_id);
+
+
+
+        placeET.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                placesTask = new PlacesTask();
+                placesTask.execute(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+
+
+
+
+
 
 
 
@@ -128,7 +175,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
         pass.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -150,14 +196,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
-
         placeET.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-               // placeET.setFocusable(true);
-               // placeET.setCursorVisible(true);
+                placeET.setFocusable(true);
+               placeET.setCursorVisible(true);
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
@@ -229,7 +273,6 @@ public class RegisterActivity extends AppCompatActivity {
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 companyname.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
                 placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
-
                 name.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
@@ -238,7 +281,6 @@ public class RegisterActivity extends AppCompatActivity {
                 smalltick();
 
                 return false;
-
 
             }
         });
@@ -311,7 +353,6 @@ public class RegisterActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                // placeET.setFocusable(true);
                // placeET.setCursorVisible(true);
-                findPlace(v);
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 placeET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_selected));
@@ -378,10 +419,144 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try{
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb  = new StringBuffer();
+
+            String line = "";
+            while( ( line = br.readLine())  != null){
+                sb.append(line);
+            }
+
+            data = sb.toString();
+
+            br.close();
+
+        }catch(Exception e){
+            Log.d("Exception ", e.toString());
+        }finally{
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+    // Fetches all places from GooglePlaces AutoComplete Web Service
+    private class PlacesTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... place) {
+            // For storing data from web service
+            String data = "";
+
+            // Obtain browser key from https://code.google.com/apis/console
+            String key = "key=AIzaSyBKC5T0UivrnygT6wwuwHXJ4K9ix7u8_bA";
+
+            String input="";
+
+            try {
+                input = "input=" + URLEncoder.encode(place[0], "utf-8");
+            } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+            }
+
+
+            // place type to be searched
+            String types = "radius=1000";
+
+            // Sensor enabled
+            String sensor = "sensor=false";
+
+            String location="location=9.931233,76.267303"; //
+
+
+            // Building the parameters to the web service
+            String parameters = input+"&"+location+"&"+types+"&"+key;
+
+            // Output format
+            String output = "json";
 
 
 
+            // Building the url to the web service
+            String url = "https://maps.googleapis.com/maps/api/place/autocomplete/"+output+"?"+parameters;
 
+            try{
+                // Fetching the data from web service in background
+                data = downloadUrl(url);
+            }catch(Exception e){
+                Log.d("Background Task",e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            // Creating ParserTask
+            parserTask = new ParserTask();
+
+            // Starting Parsing the JSON string returned by Web Service
+            parserTask.execute(result);
+        }
+    }
+
+
+    /** A class to parse the Google Places in JSON format */
+    private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String,String>>>{
+
+        JSONObject jObject;
+
+        @Override
+        protected List<HashMap<String, String>> doInBackground(String... jsonData) {
+
+            List<HashMap<String, String>> places = null;
+
+            PlaceJSONParser placeJsonParser = new PlaceJSONParser();
+
+            try{
+                jObject = new JSONObject(jsonData[0]);
+
+                // Getting the parsed data as a List construct
+                places = placeJsonParser.parse(jObject);
+
+            }catch(Exception e){
+                Log.d("Exception",e.toString());
+            }
+            return places;
+        }
+
+        @Override
+        protected void onPostExecute(List<HashMap<String, String>> result) {
+
+            String[] from = new String[] { "description"};
+            int[] to = new int[] { android.R.id.text1 };
+
+            // Creating a SimpleAdapter for the AutoCompleteTextView
+            SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), result, android.R.layout.simple_list_item_2, from, to);
+
+            // Setting the adapter
+            placeET.setAdapter(adapter);
+
+        }
+    }
 
 
     public void onclickhandler(View view) {
@@ -602,50 +777,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-
-    public void findPlace(View view) {
-        try {
-            Intent intent =
-                    new PlaceAutocomplete
-                            .IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
-                            .setBoundsBias(new LatLngBounds(
-                                    new LatLng(9.931233,76.267303),
-                                    new LatLng(9.931233,76.267303)))
-                            .build(this);
-            startActivityForResult(intent, 1);
-        } catch (GooglePlayServicesRepairableException e) {
-            // TODO: Handle the error.
-        } catch (GooglePlayServicesNotAvailableException e) {
-            // TODO: Handle the error.
-        }
-    }
-
-    // A place has been received; use requestCode to track the request.
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                // retrive the data by using getPlace() method.
-                Place place = PlaceAutocomplete.getPlace(this, data);
-                Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
-                placeET.setText(place.getName());
-                smalltick();
-
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
-                Log.e("Tag", status.getStatusMessage());
-
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-            }
-        }
-    }
-
-
-
-
-
     //validations
 
 
@@ -779,15 +910,5 @@ public void smalltick()
 
 
 }
-
-
-
-
-
-
-
-
-
-
 
 }
