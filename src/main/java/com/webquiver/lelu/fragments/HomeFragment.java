@@ -121,8 +121,6 @@ public class HomeFragment extends android.app.Fragment {
 
 
 
-
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v,
@@ -188,8 +186,6 @@ public class HomeFragment extends android.app.Fragment {
                 }
         );
 
-
-
         //Creating a request queue
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         //Adding our request to the queue
@@ -235,21 +231,7 @@ public class HomeFragment extends android.app.Fragment {
     }
 
 
-
-
-
-
     //functions for getting and displaying number of items in cart(green circle)
-
-
-
-
-
-
-
-
-
-
 
 
 

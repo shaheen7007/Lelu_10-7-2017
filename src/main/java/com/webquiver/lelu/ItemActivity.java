@@ -325,6 +325,64 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
+        else if (view == findViewById(R.id.addtowishlist_id))
+        {
+            final ProgressDialog loading = ProgressDialog.show(ItemActivity.this, "Adding to wish list", "Please wait...", false, false);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.WISHLIST_ADD_URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            loading.dismiss();
+                            try {
+
+                                JSONObject jsonResponse = new JSONObject(response);
+                                if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                    Toast.makeText(ItemActivity.this,"Item added to your Wish List",Toast.LENGTH_SHORT).show();
+
+                                    getall();
+
+                                }
+
+                                else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("exist"))
+                                {
+                                    Toast.makeText(ItemActivity.this,"Item is already in your wish list ",Toast.LENGTH_SHORT).show();
+
+                                }
+
+                                else {
+
+                                    Toast.makeText(ItemActivity.this, "Failed \nPlease Retry", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            loading.dismiss();
+                            //
+                            Toast.makeText(ItemActivity.this, "error1", Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    //Adding the parameters to the request
+                    params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE,""));
+                    params.put(Config.KEY_CART_ProdId, "2");
+                    return params;
+                }
+            };
+
+            //Adding request the the queue
+            requestQueue.add(stringRequest);
+
+        }
+
+
         else if (view == findViewById(R.id.addtocartbtn_id))
         {
 
@@ -343,7 +401,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
 
                                     getall();
-
 
                                 }
 
@@ -377,7 +434,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
             //Adding request the the queue
             requestQueue.add(stringRequest);
-
 
         }
     }

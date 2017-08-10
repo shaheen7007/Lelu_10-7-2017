@@ -11,6 +11,14 @@ import org.json.JSONArray;
  * Created by Belal on 11/18/2015.
  */
 public class Config {
+
+
+    //BASE URL
+    public static final String BASE_URL = "http://192.168.1.8:1111/";
+
+
+
+
     //URLs to register.php and confirm.php file
     public static final String REGISTER_URL = "http://lelu.webquiver.in/customer_signup";
     public static final String LOGIN_URL = "http://lelu.webquiver.in/customer_login";
@@ -23,22 +31,22 @@ public class Config {
 
     //urls ADDRESS
 
-    public static final String ADDR_SEND_URL = "http://192.168.1.5:1111/cust_addr";
-    public static final String ADDR_GET_URL = "http://192.168.1.5:1111/get_cust_addr";
-    public static final String ADDR_EDIT_URL = "http://192.168.1.5:1111/up_cust_addr";
+    public static final String ADDR_SEND_URL = BASE_URL+"cust_addr";
+    public static final String ADDR_GET_URL = BASE_URL+"get_cust_addr";
+    public static final String ADDR_EDIT_URL = BASE_URL+"up_cust_addr";
 
 
     //urls CART
-    public static final String CART_GET_URL = "http://192.168.1.5:1111/get_cart";
-    public static final String CART_ADD_URL = "http://192.168.1.5:1111/add_cart";
+    public static final String CART_GET_URL = BASE_URL+"get_cart";
+    public static final String CART_ADD_URL = BASE_URL+"add_cart";
 
 
 
     //urls ORDER
-    public static final String ODR_PLACE_URL = "http://192.168.1.5:1111/place_order";
-    public static final String ODR_GET_URL = "http://192.168.1.5:1111/get_place_order";
-    public static final String ODR_REVIEW_URL = "";
-    public static final String ODR_RATING_URL = "";
+    public static final String ODR_PLACE_URL = BASE_URL+"place_order";
+    public static final String ODR_GET_URL = BASE_URL+"get_place_order";
+    public static final String ODR_REVIEW_URL = BASE_URL+"order_rating"; //same
+    public static final String ODR_RATING_URL = BASE_URL+"order_rating"; //same
 
 
 
@@ -87,13 +95,8 @@ public class Config {
     //keys of order
 
     public static final String KEY_ORDER_ID = "order_place_id";
-    public static final String KEY_ORDER_REVIEW = "order_review";
-    public static final String KEY_ORDER_RATING = "order_rating";
-
-
-
-
-
+    public static final String KEY_ORDER_REVIEW = "op_feedback";
+    public static final String KEY_ORDER_RATING = "op_rating";
 
 
     //Shared Prefference
@@ -101,11 +104,18 @@ public class Config {
     public static final String JSONSTRING1="jsonstring1";
 
 
-
-
     //keys of Number shared pref
     public static final String KEY_NUM_CART = "num_cart";
 
+
+
+    public static final String PICODE_URL = "http://postalpincode.in/api/pincode/";
+
+
+    //wish list urls
+    public static final String WISHLIST_ADD_URL = BASE_URL+"add_wish_list";
+    public static final String WISHLIST_GET_URL = BASE_URL+"get_wish_list";
+    public static final String WISHLIST_REMOVE_URL = BASE_URL+"del_wish_list";
 
 
 

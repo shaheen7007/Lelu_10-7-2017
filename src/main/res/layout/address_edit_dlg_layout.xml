@@ -39,6 +39,16 @@
         android:inputType="text" />
 
     <EditText
+        android:id="@+id/ADR_PincodeET"
+        android:hint="Pincode"
+        android:textAlignment="center"
+        android:maxLength="6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number" />
+
+
+    <EditText
         android:id="@+id/ADR_DistrictET"
         android:hint="District"
         android:textAlignment="center"
@@ -46,13 +56,6 @@
         android:layout_height="wrap_content"
         android:inputType="text" />
 
-    <EditText
-        android:id="@+id/ADR_PincodeET"
-        android:hint="Pincode"
-        android:textAlignment="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number" />
 
     <EditText
         android:id="@+id/ADR_StateET"

@@ -84,17 +84,9 @@
                 android:layout_width="30dp"
                 android:layout_gravity="center"
                 android:src="@drawable/love"
-                android:layout_height="30dp" />
-
-            <TextView
-
-                android:layout_width="match_parent"
-                android:id="@+id/likestext_id"
-                android:text="480 likes"
-                android:gravity="bottom"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textAlignment="center"
-                android:layout_height="match_parent" />
+                android:layout_height="30dp"
+                android:onClick="onclickhandler_itemactivity"
+                android:id="@+id/addtowishlist_id" />
 
         </LinearLayout>
 

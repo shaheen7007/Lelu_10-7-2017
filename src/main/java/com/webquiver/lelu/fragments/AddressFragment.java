@@ -11,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.webquiver.lelu.CartActivity;
@@ -67,6 +70,8 @@ public class AddressFragment extends android.app.Fragment {
     TextView showALL_TXT_id;
     TextView viewdeatails_TXT;
 
+    EditText district,state;
+
 
     //sharedpref
     SharedPreferences pref;
@@ -79,6 +84,8 @@ public class AddressFragment extends android.app.Fragment {
 
     int i;
 
+    RequestQueue queue; //for pincode api
+
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -88,6 +95,9 @@ public class AddressFragment extends android.app.Fragment {
 
         View rootView = inflater.inflate(
                 R.layout.address_frag, container, false);
+
+        queue=Volley.newRequestQueue(getActivity());
+
 
         listView = (ListView) rootView.findViewById(R.id.addressList_id);
         showALL_TXT_id=(TextView)rootView.findViewById(R.id.show_all_addr_txt_id);
@@ -125,11 +135,6 @@ public class AddressFragment extends android.app.Fragment {
 
             }
         });
-
-
-
-
-
 
 
        getall();
@@ -562,7 +567,7 @@ public class AddressFragment extends android.app.Fragment {
                 C_item5.setID(Integer.parseInt(tt.getString("ca_id")));
 
 
-                caidstring=tt.getString(tt.getString("ca_id"));
+                caidstring=tt.getString("ca_id");
 
 
                 movieList2.add(C_item5);
@@ -577,7 +582,8 @@ public class AddressFragment extends android.app.Fragment {
 
         editorcaid.putString("caid",caidstring);
         editorcaid.commit();
-        adapter = new AddressAdapter(getActivity(), movieList2.subList(i-1,i));         //.subList(i-1, i)
+
+        adapter = new AddressFragment.AddressAdapter(getActivity(), movieList2.subList(i-1,i));         //.subList(i-1, i)
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -626,7 +632,7 @@ public class AddressFragment extends android.app.Fragment {
                 convertView = inflater.inflate(R.layout.address_layout, null);
 
             TextView addr_name = (TextView) convertView.findViewById(R.id.ADDR_name_id);
-            TextView addr_address1 = (TextView) convertView.findViewById(R.id.ADDR_address1_id);
+            final TextView addr_address1 = (TextView) convertView.findViewById(R.id.ADDR_address1_id);
             TextView addr_place = (TextView) convertView.findViewById(R.id.ADDR_place_id);
             TextView addr_district = (TextView) convertView.findViewById(R.id.ADDR_district_id);
             TextView addr_state = (TextView) convertView.findViewById(R.id.ADDR_state_id);
@@ -844,13 +850,72 @@ public class AddressFragment extends android.app.Fragment {
                     final EditText name=(EditText)confirmDialog.findViewById(R.id.ADR_nameET);
                     final EditText address1=(EditText)confirmDialog.findViewById(R.id.ADR_Address1ET);
                     final EditText place=(EditText)confirmDialog.findViewById(R.id.ADR_PlaceET);
-                    final EditText district=(EditText)confirmDialog.findViewById(R.id.ADR_DistrictET);
+                    district=(EditText)confirmDialog.findViewById(R.id.ADR_DistrictET);
                     final EditText pincode=(EditText)confirmDialog.findViewById(R.id.ADR_PincodeET);
-                    final EditText state=(EditText)confirmDialog.findViewById(R.id.ADR_StateET);
+                    state=(EditText)confirmDialog.findViewById(R.id.ADR_StateET);
                     final EditText phone=(EditText)confirmDialog.findViewById(R.id.ADR_PhoneET);
-
                     final AlertDialog alertDialog = alert.create();
                     alertDialog.show();
+
+
+                    TextWatcher mTextEditorWatcher = new TextWatcher() {
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            if ((pincode.getText().toString()).length()==6)
+                            {
+
+                                final String url = Config.PICODE_URL+pincode.getText().toString();
+                                final JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                                        new Response.Listener<JSONObject>() {
+                                            @Override
+                                            public void onResponse(JSONObject response) {
+                                                // display response
+                                                Log.d("Response", response.toString());
+                                                Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_LONG).show();
+
+                                                try {
+
+                                                    if (response.getString("Status").equalsIgnoreCase("Success")) {
+
+                                                        getdiststate(response);
+
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener()
+                                        {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Log.d("Error.Response", error.toString());
+
+                                                Toast.makeText(getActivity(),error.toString(),Toast.LENGTH_LONG).show();
+
+                                            }
+                                        }
+                                );
+
+                                queue.add(getRequest);
+
+                            }
+
+                        }
+
+
+                        public void afterTextChanged(Editable s) {
+                        }
+
+                    };
+
+                    pincode.addTextChangedListener(mTextEditorWatcher);
+
+
 
                     buttonSave.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -858,8 +923,6 @@ public class AddressFragment extends android.app.Fragment {
 
 
                             requestQueue = Volley.newRequestQueue((v.getRootView().getContext()));
-
-
 
 
                             final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
@@ -880,8 +943,7 @@ public class AddressFragment extends android.app.Fragment {
 
                                                     getall2();
 
-                                                   // notifyDataSetChanged();
-
+                                                    // notifyDataSetChanged();
 
                                                     //get the last saved address
 
@@ -978,7 +1040,7 @@ public class AddressFragment extends android.app.Fragment {
                                     Map<String, String> params = new HashMap<>();
                                     //Adding the parameters to the request
                                     params.put(Config.KEY_ADDR_NAME, name.getText().toString());
-                                    params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));             //change
+                                    params.put(Config.KEY_ADDR_MOBILE, pref.getString(SessionManagement.KEY_PHONE,""));             //change
                                     params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
                                     params.put(Config.KEY_ADDR_STREET, place.getText().toString());
                                     params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());
@@ -1043,8 +1105,18 @@ public class AddressFragment extends android.app.Fragment {
                 }
             });
 
-
             return convertView;
+        }
+
+        private boolean validationADDaddress(String s, String s1, String s2, String s3, String s4, String s5, String s6, String s7) {
+
+            if (s.equals("")||s1.equals("")||s2.equals("")||s3.equals("")||s4.equals("")||s5.equals("")||s6.equals("")||s7.equals(""))
+            {
+                return false;
+            }
+            else
+                return true;
+
         }
 
 
@@ -1095,10 +1167,17 @@ public class AddressFragment extends android.app.Fragment {
 
 */
 
-
-
-
     }
 
+    private void getdiststate(JSONObject response)throws JSONException {
+
+        JSONArray arr = response.getJSONArray("PostOffice");
+
+        JSONObject tt= arr.getJSONObject(0);
+
+        district.setText(tt.getString("District"));
+        state.setText(tt.getString("State"));
+
+    }
 
 }

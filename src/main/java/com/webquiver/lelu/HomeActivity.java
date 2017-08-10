@@ -470,6 +470,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_slideshow) {
 
+            Intent intent=new Intent(getApplicationContext(),WishListActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

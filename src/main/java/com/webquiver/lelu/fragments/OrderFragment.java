@@ -73,10 +73,8 @@ public class OrderFragment extends Fragment {
         adapter = new OrderAdapter(getActivity(), movieList);
         listView.setAdapter(adapter);
 
-
         pref = this.getActivity().getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
         editor = pref.edit();
-
 
     /* DUMMY DATAS
 
@@ -164,7 +162,6 @@ public class OrderFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-
                 Bundle bundle = new Bundle();
                 bundle.putString("p",String.valueOf(position));
                 OrderDetFragment2 showSelectedADDR=new OrderDetFragment2();
@@ -182,8 +179,9 @@ public class OrderFragment extends Fragment {
             }
         });
 
-
         return rootView;
+
+
 
     }
     public static OrderFragment getInstance() {
@@ -198,7 +196,6 @@ public class OrderFragment extends Fragment {
         super.onDestroy();
         cartFragment = null;
     }
-
 
     public void getall() {
 
@@ -241,7 +238,7 @@ public class OrderFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         loading.dismiss();
 
-                        Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "error1-getorder", Toast.LENGTH_LONG).show();
 
                     }
                 }) {
@@ -275,6 +272,8 @@ public class OrderFragment extends Fragment {
               //  C_item5.setNAME(tt.getString("order_place_id"));
                 C_item5.setSTATUS(tt.getString("op_status"));
 
+                C_item5.setFEEDBACK(tt.getString("op_feedback"));
+                C_item5.setRATING(Float.parseFloat(tt.getString("op_rating")));
 
                 JSONArray prod=tt.getJSONArray("products");
                 C_item5.setNumberOfProducts(prod.length());

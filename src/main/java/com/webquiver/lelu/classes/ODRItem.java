@@ -9,6 +9,8 @@ public class ODRItem
 
     private String ODR_ID;
     private String STATUS;
+    private String FEEDBACK;
+    private float RATING;
     private String DATE;
     private String NAME;
 
@@ -41,6 +43,25 @@ public class ODRItem
     public void setSTATUS(String STATUS) {
         this.STATUS = STATUS;
     }
+
+    public String getFEEDBACK() {
+        return FEEDBACK;
+    }
+    public void setFEEDBACK(String FEEDBACK) {
+        this.FEEDBACK = FEEDBACK;
+    }
+
+    public float getRATING() {
+
+        return RATING;
+
+    }
+    public void setRATING(float RATING) {
+
+        this.RATING= RATING;
+
+    }
+
 
     public String getDATE() {
         return DATE;

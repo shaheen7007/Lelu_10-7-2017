@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_cart"
+    android:background="@color/colorgrey2"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.webquiver.lelu.CartActivity">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:background="@color/colorPrimary"
+        android:layout_height="50dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/menuitem"
+            android:layout_height="match_parent">
+            <ImageView android:src="@drawable/back_btn"
+                android:background="?attr/actionBarItemBackground"
+                android:layout_width="23dp"
+                android:layout_marginLeft="10dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"/>
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Wish List"
+            android:textColor="#fff"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/homeitem"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/WISH_FL"
+        android:background="@color/colorgrey2"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        tools:context="com.webquiver.lelu.CartActivity">
+    </FrameLayout>
+
+</LinearLayout>

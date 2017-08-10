@@ -14,8 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,16 +25,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.webquiver.lelu.CartActivity;
 import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.ItemActivity;
-import com.webquiver.lelu.LoginActivity;
 import com.webquiver.lelu.R;
-import com.webquiver.lelu.RegisterActivity;
 import com.webquiver.lelu.adapters.CartAdapter;
-import com.webquiver.lelu.classes.AddressItem;
+import com.webquiver.lelu.adapters.OrderAdapter;
+import com.webquiver.lelu.adapters.WishListAdapter;
 import com.webquiver.lelu.classes.CartItem;
 import com.webquiver.lelu.classes.Config;
+import com.webquiver.lelu.classes.ODRItem;
 import com.webquiver.lelu.classes.SessionManagement;
 
 import org.json.JSONArray;
@@ -52,21 +49,21 @@ import java.util.Map;
  * Created by WebQuiver 04 on 7/24/2017.
  */
 
-public class CartFragment extends android.app.Fragment {
+public class WishListFragment extends Fragment {
 
-    private static CartFragment cartFragment = null;
-    private static final String url = "https://api.myjson.com/bins/15eqh3";
+    private static WishListFragment cartFragment = null;
+
+    AppCompatButton buttonSHOPNOW;
+
     private ProgressDialog pDialog;
     private List<CartItem> movieList;
     private ListView listView;
-    private CartAdapter adapter;
+    private WishListAdapter adapter;
     private RequestQueue requestQueue;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    AppCompatButton buttonSHOPNOW;
 
     int i;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -75,27 +72,22 @@ public class CartFragment extends android.app.Fragment {
         container.removeAllViews();
 
         View rootView = inflater.inflate(
-                R.layout.cart_frag, container, false);
+                R.layout.wishlist_frag, container, false);
 
         movieList= new ArrayList<CartItem>();
-        listView = (ListView) rootView.findViewById(R.id.cartlist);
-        adapter = new CartAdapter(getActivity(), movieList);
+        listView = (ListView) rootView.findViewById(R.id.order_list);
+        adapter = new WishListAdapter(getActivity(), movieList);
         listView.setAdapter(adapter);
 
         pref = this.getActivity().getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
         editor = pref.edit();
 
-
-
-
-
-/* DUMMY DATAS
-
+    /* DUMMY DATAS
 
         CartItem C_item = new CartItem();
         C_item.setNAME("Baybee BMW");
         C_item.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
-        C_item.setQUANTITY(1);onclic
+        C_item.setQUANTITY(1);
         C_item.setPRICE("10,200.00");
         C_item.setREALPRICE("10,376.00");
         movieList.add(C_item);
@@ -164,56 +156,28 @@ public class CartFragment extends android.app.Fragment {
                             }
                             */
 
+        getall();
+        //  adapter.notifyDataSetChanged();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
 
-        ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bckBTTN_cartfrag_id);
-        bckBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                    Intent openFragmentBIntent = new Intent(getActivity(), HomeActivity.class);
-                    openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
-                    startActivity(openFragmentBIntent);
-                    getActivity().finish();
+
+
 
             }
         });
 
-
-
-
-getall();
-    //    adapter.notifyDataSetChanged();
-
-        TextView continu=(TextView)rootView.findViewById(R.id.continueBTN_id);
-
-      continu.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              //fragment
-              Fragment fr = null;
-              FragmentManager fm = null;
-              View selectedView = null;
-
-              //fragment
-              fm = getFragmentManager();
-              FragmentTransaction fragmentTransaction = fm.beginTransaction();
-              fragmentTransaction.replace(R.id.cart_FL, AddressFragment.getInstance());
-              fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-              fragmentTransaction.addToBackStack("cart");
-              fragmentTransaction.commit();
-          }
-      });
-
-
-
         return rootView;
 
 
+
     }
-    public static CartFragment getInstance() {
+    public static WishListFragment getInstance() {
         if (cartFragment == null) {
-            cartFragment = new CartFragment();
+            cartFragment = new WishListFragment();
         }
         return cartFragment;
     }
@@ -224,16 +188,11 @@ getall();
         cartFragment = null;
     }
 
-
-
-
     public void getall() {
 
-
         requestQueue = Volley.newRequestQueue(getActivity());
-
         final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_GET_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.WISHLIST_GET_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -244,17 +203,17 @@ getall();
 
                             JSONObject jsonResponse = new JSONObject(response);
 
-                            //   JSONArray jsonArray=new JSONArray(response);
+                            // JSONArray jsonArray=new JSONArray(response);
 
                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
 
-                                        showCART(response);
-
+                                showWishlist(response);
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
-                              //  Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+
+                                //  Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
 
 
 
@@ -295,8 +254,20 @@ getall();
                                 });
 
 
-                            }
 
+
+
+
+
+
+
+
+
+
+                            } else {
+
+                                Toast.makeText(getActivity(), "Invalid user", Toast.LENGTH_LONG).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -306,8 +277,9 @@ getall();
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loading.dismiss();
-                        //
-                        Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+
+                        Toast.makeText(getActivity(), "error1-getorder", Toast.LENGTH_LONG).show();
+
                     }
                 }) {
             @Override
@@ -315,6 +287,7 @@ getall();
                 Map<String, String> params = new HashMap<>();
                 //Adding the parameters to the request
                 params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
+
                 return params;
             }
         };
@@ -322,12 +295,11 @@ getall();
         //Adding request the the queue
         requestQueue.add(stringRequest);
 
-
     }
 
-    public void showCART(String jsonArray) throws JSONException {
+    public void showWishlist (String jsonArray) throws JSONException {
         JSONObject json = new JSONObject(jsonArray);
-        JSONArray arr = json.getJSONArray("products");
+        JSONArray arr = json.getJSONArray("wish_list");
         for (i = 0; i < arr.length(); i++) {
 
             try {
@@ -335,13 +307,13 @@ getall();
                 JSONObject tt = arr.getJSONObject(i);
 
                 CartItem C_item5 = new CartItem();
-                C_item5.setNAME("default");
+                C_item5.setNAME(tt.getString("wl_prod"));
                 //C_item5.setDESC("default");
-                C_item5.setQUANTITY(Integer.parseInt(tt.getString("cp_qty")));
+            //    C_item5.setQUANTITY(Integer.parseInt(tt.getString("cp_qty")));
                 C_item5.setREALPRICE("default");
                 C_item5.setPRICE("default");
                 C_item5.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
-                C_item5.setPRODUCT_ID(tt.getString("cp_code"));
+               // C_item5.setPRODUCT_ID(tt.getString("cp_code"));
 
                 movieList.add(C_item5);
 
@@ -353,14 +325,11 @@ getall();
             }
         }
 
-        adapter = new CartAdapter(getActivity(), movieList);         //.subList(i-1, i)
+        adapter = new WishListAdapter(getActivity(), movieList);         //.subList(i-1, i)
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
     }
-
-
-
 
 
 

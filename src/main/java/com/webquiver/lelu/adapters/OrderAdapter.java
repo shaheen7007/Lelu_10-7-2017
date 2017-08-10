@@ -5,16 +5,20 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +54,6 @@ import java.util.Map;
 public class OrderAdapter extends BaseAdapter
 
 {
-
     int flag;
 
     private Activity activity;
@@ -65,6 +68,7 @@ public class OrderAdapter extends BaseAdapter
     TextView WriteReview;
     TextView close;
 
+    RatingBar ratingBar;
 
     ListView listView;
     AlertDialog alertDialog;
@@ -119,7 +123,7 @@ public class OrderAdapter extends BaseAdapter
         //..TextView Order_Date = (TextView) convertView.findViewById(R.id.OrderitemDate_id);
 
         WriteReview = (TextView) convertView.findViewById(R.id.writereviewTxt_id);
-        RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ratingbar_id);
+        ratingBar = (RatingBar) convertView.findViewById(R.id.ratingbar_id);
 
         movieList=new ArrayList<CartItem>();
 
@@ -127,7 +131,7 @@ public class OrderAdapter extends BaseAdapter
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
 
             @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+            public void onRatingChanged(final RatingBar ratingBar, float rating, boolean fromUser) {
 
                 final String rateValue = String.valueOf(ratingBar.getRating());
                 System.out.println("Rate for Module is" + rateValue);
@@ -143,7 +147,10 @@ public class OrderAdapter extends BaseAdapter
                                     JSONObject jsonResponse = new JSONObject(response);
                                     if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-                                        Toast.makeText(activity, "Thank you for Rating", Toast.LENGTH_SHORT).show();
+                                    //    Toast.makeText(activity, "Thank you for Rating", Toast.LENGTH_SHORT).show();
+
+                                        cartitems.get(position).setRATING(ratingBar.getRating());
+                                        notifyDataSetChanged();
 
                                     } else {
 
@@ -159,14 +166,13 @@ public class OrderAdapter extends BaseAdapter
                             public void onErrorResponse(VolleyError error) {
 
                                 //
-                                Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity, "error1-setrating", Toast.LENGTH_LONG).show();
                             }
                         }) {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> params = new HashMap<>();
                         //Adding the parameters to the request
-                        params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE, ""));
                         params.put(Config.KEY_ORDER_ID, cartitems.get(position).getODR_ID());
                         params.put(Config.KEY_ORDER_RATING, rateValue);
                         return params;
@@ -178,6 +184,8 @@ public class OrderAdapter extends BaseAdapter
 
             }
         });
+
+
 
         viewdet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,9 +218,7 @@ public class OrderAdapter extends BaseAdapter
                A_DIST=(TextView)confirmDialog.findViewById(R.id.ADDR_district_id);
                A_STATE=(TextView)confirmDialog.findViewById(R.id.ADDR_state_id);
 
-
                 getall(position);
-
 
                  flag=0;
 
@@ -292,6 +298,11 @@ public class OrderAdapter extends BaseAdapter
                                                     alertDialog.dismiss();
                                                     Toast.makeText(activity, "Review submitted", Toast.LENGTH_SHORT).show();
 
+                                                    cartitems.get(position).setFEEDBACK( new_QTY.getText().toString());
+
+
+                                                    notifyDataSetChanged();
+
                                                 } else {
 
                                                     alertDialog.dismiss();
@@ -308,16 +319,16 @@ public class OrderAdapter extends BaseAdapter
                                         public void onErrorResponse(VolleyError error) {
                                             loading.dismiss();
                                             //
-                                            Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(activity, "error1-submitreview", Toast.LENGTH_LONG).show();
                                         }
                                     }) {
                                 @Override
                                 protected Map<String, String> getParams() throws AuthFailureError {
                                     Map<String, String> params = new HashMap<>();
                                     //Adding the parameters to the request
-                                    params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE, ""));
                                     params.put(Config.KEY_ORDER_ID, cartitems.get(position).getODR_ID());
-                                    params.put(Config.KEY_ORDER_REVIEW, new_QTY.getText().toString());
+                                    params.put(Config.KEY_ORDER_RATING,"NULL");
+                                    params.put(Config.KEY_ORDER_REVIEW, new_QTY.getText().toString()); //here qty is review edittext
                                     return params;
                                 }
                             };
@@ -349,7 +360,6 @@ public class OrderAdapter extends BaseAdapter
 
         }
 
-
         // getting ccart data for the row
         ODRItem m = cartitems.get(position);
 
@@ -362,12 +372,61 @@ public class OrderAdapter extends BaseAdapter
             thumbNail.setImageUrl("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg", imageLoader);
 
         } else {
+
             viewdet.setVisibility(View.VISIBLE);
             Order_name.setText(String.valueOf(m.getNumberOfProducts()) + " items");
             thumbNail.setImageUrl("http://www.ajrockguitar.com/images/order.jpg", imageLoader);
+
         }
         Order_ID.setText("Order id #" + m.getODR_ID());
         Order_Status.setText(m.getSTATUS());
+
+
+
+            ratingBar.setRating(m.getRATING());
+           // ratingBar.setIsIndicator(true);
+
+
+        //rating and feedback only once
+        if (!(m.getFEEDBACK().equals("")))
+        {
+            WriteReview.setText("Review Submitted");
+            WriteReview.setTextColor(Color.parseColor("#802e2b2b"));
+            WriteReview.setClickable(false);
+        }
+        else
+        {
+            WriteReview.setText("Write A Review");
+            WriteReview.setTextColor(Color.parseColor("#ab1905"));
+            WriteReview.setClickable(true);
+
+        }
+
+    if ((ratingBar.getRating()==0.0))
+        {
+            /*
+            System.out.print("test ing");
+            ratingBar.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    return true;
+
+                }
+
+            });
+            */
+
+            ratingBar.setIsIndicator(false);
+
+
+        }
+        else
+    {
+        ratingBar.setIsIndicator(true);
+    }
+
+
+     //   ratingBar.setRating(Float.parseFloat(String.valueOf(m.getRATING())));
+
         // Order_Status.setText(m.getDATE());
 
         final View finalConvertView = convertView;
@@ -453,12 +512,13 @@ public class OrderAdapter extends BaseAdapter
 
             }
         });
+
 */
 
-
         return convertView;
-    }
 
+
+    }
 
     public void getall(int pos) {
         final int posi=pos;
@@ -503,7 +563,7 @@ public class OrderAdapter extends BaseAdapter
                     public void onErrorResponse(VolleyError error) {
                 //        loading.dismiss();
 
-                        Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "error1-getorder", Toast.LENGTH_LONG).show();
 
                     }
                 }) {
@@ -580,6 +640,8 @@ public class OrderAdapter extends BaseAdapter
 
 
                 adapter = new ViewDetAdapter(activity, movieList);
+
+
                 listView.setAdapter(adapter);
                 alertDialog.show();
 
@@ -594,6 +656,5 @@ public class OrderAdapter extends BaseAdapter
 
 
     }
-
 
 }

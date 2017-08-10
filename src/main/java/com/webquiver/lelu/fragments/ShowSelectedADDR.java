@@ -236,8 +236,6 @@ public class ShowSelectedADDR extends android.app.Fragment {
                                             JSONObject jsonResponse = new JSONObject(response);
                                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-
-
                                                 Bundle bundle = new Bundle();
                                                 bundle.putString("p","999");
                                                 OrderDetFragment2 showSelectedADDR=new OrderDetFragment2();
