@@ -188,8 +188,6 @@ public class WishListAdapter extends BaseAdapter {
                                                     //Hiding the alert dialog
                                                     alertDialog.dismiss();
 
-                                                    Intent intent=new Intent(activity,HomeActivity.class);
-                                                    activity.startActivity(intent);
                                                     activity.finish();
 
 

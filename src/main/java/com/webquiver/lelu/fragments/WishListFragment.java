@@ -162,10 +162,9 @@ public class WishListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-
-
-
-
+                Intent intent=new Intent(getActivity(),ItemActivity.class);
+                startActivity(intent);
+                getActivity().finish();
 
             }
         });
@@ -210,16 +209,15 @@ public class WishListFragment extends Fragment {
 
                                 showWishlist(response);
 
-                            } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+                            } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("empty")) {
 
 
                                 //  Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
 
 
-
                                 LayoutInflater li = LayoutInflater.from(getActivity());
                                 //Creating a view to get the dialog box
-                                View confirmDialog = li.inflate(R.layout.cartempty_layout, null);
+                                View confirmDialog = li.inflate(R.layout.wishlistempty_layout, null);
 
                                 //Initizliaing confirm button fo dialog box and edittext of dialog box
                                 buttonSHOPNOW = (AppCompatButton) confirmDialog.findViewById(R.id.buttonShop);
@@ -243,24 +241,12 @@ public class WishListFragment extends Fragment {
                                     public void onClick(View v) {
                                         //Hiding the alert dialog
                                         alertDialog.dismiss();
-
-                                        Intent intent=new Intent(getActivity(),HomeActivity.class);
-                                        startActivity(intent);
                                         getActivity().finish();
 
 
                                     }
 
                                 });
-
-
-
-
-
-
-
-
-
 
 
 

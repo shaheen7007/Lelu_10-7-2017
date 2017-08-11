@@ -103,6 +103,14 @@
                     app:fillColor="#ffffff"
                     app:pageColor="#a19b9b"
                     app:snap="false" />
+
+                <SearchView
+                    android:layout_width="match_parent"
+                    android:visibility="invisible"
+                    android:id="@+id/searchview_id"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true" />
             </RelativeLayout>
 
 
@@ -137,16 +145,12 @@
             android:id="@+id/search"
             android:layout_width="50dp"
             app:layout_anchor="@id/app_bar"
+            android:onClick="onclickhandler"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical|right"
             android:layout_alignParentTop="true"
             app:layout_anchorGravity="center_vertical|end"
             app:srcCompat="@drawable/search" />
-
-
-
-
-
 
 
     <android.widget.LinearLayout

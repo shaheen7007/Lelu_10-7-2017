@@ -20,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -472,6 +473,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             Intent intent=new Intent(getApplicationContext(),WishListActivity.class);
             startActivity(intent);
+            finish();
 
         } else if (id == R.id.nav_manage) {
 
@@ -499,6 +501,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
 
         }
+
+
+
+        else if (view == findViewById(R.id.search)) {
+
+
+
+            //change here
+
+
+            android.widget.SearchView searchView=(android.widget.SearchView) findViewById(R.id.searchview_id);
+            searchView.setVisibility(View.VISIBLE);
+            ImageView s=(ImageView)findViewById(R.id.search);
+            s.setVisibility(View.INVISIBLE);
+
+        }
+
+
+
+
+
+
         else  if (view == findViewById(R.id.cartitem)) {
 
 

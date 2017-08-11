@@ -3,6 +3,7 @@ package com.webquiver.lelu;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,31 @@ import com.webquiver.lelu.fragments.OrderFragment;
 import com.webquiver.lelu.fragments.WishListFragment;
 
 public class WishListActivity extends AppCompatActivity {
+
+
+    @Override
+    public void onBackPressed() {
+
+        //   if (getIntent().hasExtra("home")) {
+
+        Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
+      //  openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
+        startActivity(openFragmentBIntent);
+        finish();
+
+        //     } else {
+
+        //    Intent openFragmentBIntent = new Intent(this, ItemActivity.class);
+        //   openFragmentBIntent.putExtra("cart", "cart");
+        //   startActivity(openFragmentBIntent);
+        //   finish();
+
+        //    }
+    }
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

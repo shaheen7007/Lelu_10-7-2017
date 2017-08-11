@@ -86,6 +86,16 @@ public class CartFragment extends android.app.Fragment {
         editor = pref.edit();
 
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                Intent intent=new Intent(getActivity(),ItemActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+
+
+            }
+        });
 
 
 
@@ -160,7 +170,6 @@ public class CartFragment extends android.app.Fragment {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
                             }
                             */
 
