@@ -1,5 +1,6 @@
 package com.webquiver.lelu;
 
+import android.animation.Animator;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
@@ -20,8 +22,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -42,24 +48,30 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.viewpagerindicator.CirclePageIndicator;
+import com.webquiver.lelu.adapters.SearchResultAdapter;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
 import com.webquiver.lelu.adapters.Banner_Adapter;
+import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
+import com.webquiver.lelu.classes.SearchResult;
 import com.webquiver.lelu.classes.SessionManagement;
 import com.webquiver.lelu.fragments.HomeFragment;
 
+import org.cryse.widget.persistentsearch.PersistentSearchView;
+import org.cryse.widget.persistentsearch.SearchItem;
+import org.cryse.widget.persistentsearch.SearchSuggestionsBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
 
 
     public void onBackPressed()
@@ -91,6 +103,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         alertDialog.show();
 
     }
+
+    //search
+    private PersistentSearchView mSearchView;
+    private SearchResultAdapter mResultAdapter;
+
+    private static final int VOICE_RECOGNITION_REQUEST_CODE = 1023;
+
+
+
+
 
 
     ProgressBar progressBar;
@@ -144,6 +166,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+    private SharedPreferences searchhistory;
+    SharedPreferences.Editor search_historyEditor;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,9 +186,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
        sharedPreferences = getSharedPreferences(BANNER_PREFERENCE, MODE_PRIVATE);
         pref_numberss = this.getSharedPreferences(NUM_PREFERENCE, MODE_PRIVATE);
         editor_num_pref=pref_numberss.edit();
-
-
-
 
 
 
@@ -188,6 +213,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         banimages = new ArrayList<>();
 
+
+
+
+        searchhistory = this.getSharedPreferences(Config.SearchPref, Context.MODE_PRIVATE);
+        search_historyEditor=searchhistory.edit();
 
 
 
@@ -323,7 +353,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 */
         getData();
-        }
+
+
+
+    }
 
 
 
@@ -511,16 +544,103 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             //change here
 
 
-            android.widget.SearchView searchView=(android.widget.SearchView) findViewById(R.id.searchview_id);
-            searchView.setVisibility(View.VISIBLE);
-            ImageView s=(ImageView)findViewById(R.id.search);
+            final ImageView s=(ImageView)findViewById(R.id.search);
             s.setVisibility(View.INVISIBLE);
 
-        }
+
+            mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
+            mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL")));
+
+            mSearchView.openSearch();
+
+
+            if (searchhistory.getString(Config.numofhistory, "NULL").equals("NULL")) {
+
+                search_historyEditor.putString(Config.numofhistory,String.valueOf(0));
+                search_historyEditor.commit();
+            }
+            else
+            {
+
+                mSearchView.setSearchListener(new PersistentSearchView.SearchListener() {
+
+
+                    @Override
+                    public boolean onSuggestion(SearchItem searchItem) {
+                        Log.d("onSuggestion", searchItem.getTitle());
+                        mSearchView.setSearchString(searchItem.getTitle(),true);
+                        onSearch(searchItem.getTitle());
+                        return false;
+                    }
+
+                    @Override
+                    public void onSearchCleared() {
+
+                    }
+
+                    @Override
+                    public void onSearchTermChanged(String term) {
+
+                    }
+
+                    @Override
+                    public void onSearchEditClosed() {
+
+                    }
+
+                    @Override
+                    public boolean onSearchEditBackPressed() {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSearchExit() {
+
+                    }
+
+                    @Override
+                    public void onSearch(String string) {
+
+                        Toast.makeText(HomeActivity.this, string +" Searched", Toast.LENGTH_LONG).show();
+
+                        int num=Integer.parseInt(searchhistory.getString(Config.numofhistory,"NULL"));
+
+                        search_historyEditor.putString(Config.third_suggestion,searchhistory.getString(Config.second_suggestion,"NULL"));
+                        search_historyEditor.putString(Config.second_suggestion,searchhistory.getString(Config.first_suggestion,"NULL"));
+                        search_historyEditor.putString(Config.first_suggestion,string);
+                        search_historyEditor.commit();
 
 
 
 
+                    }
+
+
+
+                    private void fillResultToRecyclerView(String query) {
+                        List<SearchResult> newResults = new ArrayList<>();
+                        for(int i =0; i< 10; i++) {
+                            SearchResult result = new SearchResult(query, query + Integer.toString(i), "");
+                            newResults.add(result);
+                        }
+                        mResultAdapter.replaceWith(newResults);
+                    }
+
+
+
+                    @Override
+                    public void onSearchEditOpened() {
+
+                    }
+
+
+                });
+
+            }
+
+
+
+            }
 
 
         else  if (view == findViewById(R.id.cartitem)) {
@@ -624,4 +744,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-}
+
+
+
+
+
+    //search
+
+
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+            ArrayList<String> matches = data
+                    .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            mSearchView.populateEditText(matches);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+
+
+
+
+
+            }

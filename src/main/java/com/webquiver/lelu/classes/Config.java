@@ -120,6 +120,16 @@ public class Config {
 
 
 
+    //search history pref
+
+    public static final String SearchPref= "SearchHistory";
+    public static final String first_suggestion= "first";
+    public static final String second_suggestion= "second";
+    public static final String third_suggestion= "third";
+    public static final String forth_suggestion= "fourth";
+    public static final String fifth_suggestion= "fifth";
+    public static final String numofhistory= "numofhistory";
+
 
 }
 
