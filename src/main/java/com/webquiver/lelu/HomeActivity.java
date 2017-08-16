@@ -56,6 +56,8 @@ import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
 import com.webquiver.lelu.classes.SearchResult;
 import com.webquiver.lelu.classes.SessionManagement;
 import com.webquiver.lelu.fragments.HomeFragment;
+import com.webquiver.lelu.fragments.OrderDetFragment2;
+import com.webquiver.lelu.fragments.SearchResultFragment;
 
 import org.cryse.widget.persistentsearch.PersistentSearchView;
 import org.cryse.widget.persistentsearch.SearchItem;
@@ -112,6 +114,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+    AppBarLayout appBarLayout;
 
 
 
@@ -256,6 +259,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
         cartnum=(TextView)findViewById(R.id.numbercart_home_id) ;
 
         if (isOnline()) {
@@ -286,7 +290,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //show and hide category layout when wxpanded and collapsed
 
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+       appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -601,16 +605,51 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onSearch(String string) {
 
-                        Toast.makeText(HomeActivity.this, string +" Searched", Toast.LENGTH_LONG).show();
+                  //      Toast.makeText(HomeActivity.this, string +" Searched", Toast.LENGTH_LONG).show();
+
+
+                        //fragment
+
+
+                        appBarLayout.setExpanded(false,true);
+
+                        mSearchView.clearSuggestions();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("search_item",string);
+                        SearchResultFragment showSelectedADDR=new SearchResultFragment();
+                        showSelectedADDR.setArguments(bundle);
+                        FragmentManager fm = null;
+                        fm = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                        fragmentTransaction.replace(R.id.frag_container, showSelectedADDR);
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                        fragmentTransaction.commit();
+
+
 
                         int num=Integer.parseInt(searchhistory.getString(Config.numofhistory,"NULL"));
 
-                        search_historyEditor.putString(Config.third_suggestion,searchhistory.getString(Config.second_suggestion,"NULL"));
-                        search_historyEditor.putString(Config.second_suggestion,searchhistory.getString(Config.first_suggestion,"NULL"));
-                        search_historyEditor.putString(Config.first_suggestion,string);
-                        search_historyEditor.commit();
+                        if (string.equals(searchhistory.getString(Config.first_suggestion,"NULL")))
+                        {
+                            //nothing
+                        }
+                        else if (string.equals(searchhistory.getString(Config.second_suggestion,"NULL")))
+                        {
+                            String temp;
+                            temp=searchhistory.getString(Config.second_suggestion,"NULL");
+                            search_historyEditor.putString(Config.second_suggestion,searchhistory.getString(Config.first_suggestion,"NULL"));
+                            search_historyEditor.putString(Config.first_suggestion,temp);
+                            search_historyEditor.commit();
 
+                        }
+                        else {
 
+                            search_historyEditor.putString(Config.third_suggestion, searchhistory.getString(Config.second_suggestion, "NULL"));
+                            search_historyEditor.putString(Config.second_suggestion, searchhistory.getString(Config.first_suggestion, "NULL"));
+                            search_historyEditor.putString(Config.first_suggestion, string);
+                            search_historyEditor.commit();
+                        }
 
 
                     }
