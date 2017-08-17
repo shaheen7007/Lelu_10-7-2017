@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cordlyt"
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context="com.webquiver.lelu.HomeActivity">
+
+
+        <include layout="@layout/activity_search" />
+
+    <TextView
+        android:paddingTop="70dp"
+        android:background="#fff"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:text="Search Results:"
+        android:layout_marginStart="15dp"
+        android:textColor="#0331c4"
+        android:layout_height="wrap_content" />
+
+    <org.cryse.widget.persistentsearch.PersistentSearchView
+        app:srcCompat="@drawable/search"
+        android:id="@+id/searchview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:elevation="4dp"
+        android:visibility="visible"
+        android:background="#f17a65"
+        app:persistentSV_displayMode="toolbar"
+        app:persistentSV_searchTextColor="?android:textColorPrimary"
+        app:persistentSV_editTextColor="?android:textColorPrimary"
+        app:persistentSV_editHintText="Search"
+        app:persistentSV_editHintTextColor="?android:textColorHint"
+        app:persistentSV_homeButtonMode="arrow"
+        app:persistentSV_searchCardElevation="2dp"
+        app:persistentSV_customToolbarHeight="60dp"/>
+
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>
+

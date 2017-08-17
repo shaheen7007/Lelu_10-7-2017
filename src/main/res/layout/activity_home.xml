@@ -262,9 +262,7 @@
 
 
 
-
     <org.cryse.widget.persistentsearch.PersistentSearchView
-
 
         app:srcCompat="@drawable/search"
         android:id="@+id/searchview"
@@ -272,7 +270,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:elevation="4dp"
-
         android:visibility="gone"
         android:background="#f17a65"
         app:persistentSV_displayMode="menuItem"
@@ -285,7 +282,7 @@
         app:persistentSV_customToolbarHeight="60dp"/>
 
 
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nv_navigation_view"
         android:layout_width="wrap_content"

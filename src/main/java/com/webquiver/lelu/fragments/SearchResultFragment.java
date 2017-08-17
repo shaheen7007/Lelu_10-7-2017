@@ -1,9 +1,12 @@
 package com.webquiver.lelu.fragments;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.webquiver.lelu.ItemActivity;
+import com.webquiver.lelu.ItemActivity2;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.adapters.GridViewAdapter;
 import com.webquiver.lelu.classes.Config;
@@ -53,7 +57,7 @@ public class SearchResultFragment extends android.app.Fragment {
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
 
-    public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
+    public static final String DATA_URL = "https://api.myjson.com/bins/rpssx";
 
 
     public static final String TAG_IMAGE_URL = "image";
@@ -90,10 +94,13 @@ public class SearchResultFragment extends android.app.Fragment {
         gridView.setExpanded(true);
 
 
-        TextView search_result_for=(TextView)rootView.findViewById(R.id.searchresultfortxt);
-        Bundle b=getArguments();
-        search_string=b.getString("search_item","");
-        search_result_for.setText("Search result for: "+search_string);
+
+
+
+       // TextView search_result_for=(TextView)rootView.findViewById(R.id.searchresultfortxt);
+      //  Bundle b=getArguments();
+       // search_string=b.getString("search_item","");
+        //search_result_for.setText("Search result for: "+search_string);
 
 
 
@@ -101,14 +108,11 @@ public class SearchResultFragment extends android.app.Fragment {
         names = new ArrayList<>();
         color = new ArrayList<>();
 
-
         //mPager = (ViewPager) rootView.findViewById(R.id.pager);
 
         //CirclePageIndicator indicator = (CirclePageIndicator)rootView.findViewById(R.id.indicator);
 
-
         getData();
-
 
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -116,14 +120,20 @@ public class SearchResultFragment extends android.app.Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
-                Toast.makeText(getActivity(), String.valueOf(names.get(position)), Toast.LENGTH_SHORT).show();
+/*
+                //fragment
+                FragmentManager fm;
+                fm = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.add(R.id.search_frag_container, SearchResultItemFragment.getInstance());
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                   fragmentTransaction.addToBackStack("srchitem");
+                fragmentTransaction.commit();
+*/
 
-                Intent intent=new Intent(getActivity(), ItemActivity.class);
-                intent.putExtra("name",String.valueOf(names.get(position)));
-                intent.putExtra("color",String.valueOf(color.get(position)));
-                intent.putStringArrayListExtra("images",images);
+                Intent intent =new Intent(getActivity(),ItemActivity2.class);
                 startActivity(intent);
-                getActivity().finish();
+
 
 
             }

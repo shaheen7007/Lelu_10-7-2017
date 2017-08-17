@@ -50,6 +50,8 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
     @Override
     public Collection<SearchItem> buildSearchSuggestion(int maxCount, String query) {
         List<SearchItem> items = new ArrayList<SearchItem>();
+
+        /*
         if(query.startsWith("@")) {
             SearchItem peopleSuggestion = new SearchItem(
                     "Search People: " + query.substring(1),
@@ -64,20 +66,24 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
                     SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
             );
             items.add(toppicSuggestion);
-        } else {
+
+        }
+         */
+         //else {
             SearchItem peopleSuggestion = new SearchItem(
-                    "Search People: " + query,
-                    "@" + query,
+                    query,
+                      query,
                     SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
             );
             items.add(peopleSuggestion);
-            SearchItem toppicSuggestion = new SearchItem(
-                    "Search Topic: " + query,
-                    "#" + query,
-                    SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
-            );
-            items.add(toppicSuggestion);
-        }
+           // SearchItem toppicSuggestion = new SearchItem(
+          //          "Search Topic: " + query,
+           //         "#" + query,
+           //         SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
+         //   );
+         //   items.add(toppicSuggestion);
+    //    }
+
         for(SearchItem item : mHistorySuggestions) {
             if(item.getValue().startsWith(query)) {
                 items.add(item);

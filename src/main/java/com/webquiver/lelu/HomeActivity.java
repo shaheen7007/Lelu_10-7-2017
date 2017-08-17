@@ -87,7 +87,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 finish();
                 System.exit(0);
 
-
             }
         });
 
@@ -611,10 +610,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         //fragment
 
 
-                        appBarLayout.setExpanded(false,true);
+                        //appBarLayout.setExpanded(false,true);
 
                         mSearchView.clearSuggestions();
+                        mSearchView.closeSearch();
 
+                     /*
                         Bundle bundle = new Bundle();
                         bundle.putString("search_item",string);
                         SearchResultFragment showSelectedADDR=new SearchResultFragment();
@@ -626,7 +627,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                         fragmentTransaction.commit();
 
+*/
 
+                        Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+                        startActivity(intent);
+                        finish();
 
                         int num=Integer.parseInt(searchhistory.getString(Config.numofhistory,"NULL"));
 
@@ -809,5 +814,4 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-            }
+ }

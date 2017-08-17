@@ -11,37 +11,30 @@
         android:layout_height="match_parent">
 
 
-        <TextView
-            android:layout_marginTop="45dp"
-            android:layout_width="wrap_content"
-            android:id="@+id/searchresultfortxt"
-            android:text="Search results for: "
-            android:layout_marginStart="15dp"
-            android:textColor="#0331c4"
-            android:layout_height="wrap_content" />
+
 
         <com.webquiver.lelu.classes.ExpandableHeightGridView
             android:id="@+id/grid"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingBottom="20dp"
             android:horizontalSpacing="5dp"
             android:isScrollContainer="false"
             android:numColumns="2"
             android:stretchMode="columnWidth"
             android:verticalSpacing="5dp" />
 
-
         <ProgressBar
             android:layout_width="wrap_content"
             android:id="@+id/progbar_id"
-            android:layout_marginTop="40dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content" />
+
 
     </LinearLayout>
 
