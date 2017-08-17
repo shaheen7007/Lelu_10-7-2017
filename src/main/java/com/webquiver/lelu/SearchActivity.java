@@ -6,21 +6,28 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
-import com.webquiver.lelu.fragments.CartFragment;
 import com.webquiver.lelu.fragments.SearchResultFragment;
 
 import org.cryse.widget.persistentsearch.PersistentSearchView;
 import org.cryse.widget.persistentsearch.SearchItem;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -37,19 +44,18 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
+    private ArrayList<String> searchnames;
+
     //search
     private PersistentSearchView mSearchView;
 
     private SharedPreferences searchhistory;
     SharedPreferences.Editor search_historyEditor;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.searchactivitymain);
-
-
 
         //fragment
         Fragment fr = null;
@@ -69,7 +75,10 @@ public class SearchActivity extends AppCompatActivity {
 
 
         mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
-        mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL")));
+       // mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL")));
+        searchnames = new ArrayList<>();
+        getSearchData();
+
 
      //   mSearchView.openSearch();
         mSearchView.clearSuggestions();
@@ -114,16 +123,20 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void onSearchCleared() {
 
+                    mSearchView.clearSuggestions();
                 }
 
                 @Override
                 public void onSearchTermChanged(String term) {
+
+                  //  mSearchView.clearSuggestions();
 
                 }
 
                 @Override
                 public void onSearchEditClosed() {
 
+                    mSearchView.clearSuggestions();
                 }
 
                 @Override
@@ -206,6 +219,75 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
+
+
+    private void getSearchData(){
+        //Showing a progress dialog while our app fetches the data from url
+        //final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
+      //  progressBar.setVisibility(View.VISIBLE);
+
+        //get banner json
+        JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest("https://api.myjson.com/bins/1fgsw9",
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        //Dismissing the progressdialog on response
+                        //                       loading.dismiss();
+
+               //         progressBar.setVisibility(View.INVISIBLE);
+
+                //        SharedPreferences.Editor prefEdit = sharedPreferences.edit();
+                        String jsonstring=response.toString();
+                  //      prefEdit.putString(Config.JSONSTRING,jsonstring);
+                 //       prefEdit.apply();
+                        //Displaying banner
+                        showsearchdata(response);
+                    }
+
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(SearchActivity.this,"No response from api",Toast.LENGTH_LONG).show();
+                        //set from preference
+                        JSONArray jsonArray = null;
+
+                      //  progressBar.setVisibility(View.INVISIBLE);
+                       // showbanner(jsonArray);
+
+                    }
+                }
+        );
+
+
+        //Creating a request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        //Adding our request to the queue
+        requestQueue.add(bannerjsonArrayRequest);
+    }
+
+
+
+    private void showsearchdata(JSONArray jsonArray){
+
+        for(int i = 0; i<jsonArray.length(); i++){
+
+            JSONObject obj = null;
+            try {
+
+                obj = jsonArray.getJSONObject(i);
+                searchnames.add(obj.getString("name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+      //  init();
+
+        mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL"), searchnames));
+
+
+
+    }
 
 
 

@@ -153,6 +153,12 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
         getall();
 
+
+
+
+
+
+
     }
 
     //show image

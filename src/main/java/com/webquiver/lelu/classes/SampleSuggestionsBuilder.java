@@ -7,16 +7,52 @@ import org.cryse.widget.persistentsearch.SearchSuggestionsBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
     private Context mContext;
     private List<SearchItem> mHistorySuggestions = new ArrayList<SearchItem>();;
+    private List<SearchItem> mHistorySuggestions1 = new ArrayList<SearchItem>();;
+    Set<SearchItem> items1 = new HashSet<>();
+
+
+    Set<SearchItem> listsetsug = new HashSet<>();
+
+
+    ArrayList<String> sug = new ArrayList<>();
+
 
     public SampleSuggestionsBuilder(Context context,String f,String s,String t) {
         this.mContext = context;
         createHistorys(f,s,t);
     }
+
+
+
+
+    public SampleSuggestionsBuilder(Context context,String f,String s,String t,ArrayList<String> sugg) {
+        this.mContext = context;
+        sug=sugg;
+        createHistorys(f,s,t);
+
+
+
+        for (int i=0;i<sug.size();i++)
+        {
+            SearchItem itemsug = new SearchItem(
+                    sug.get(i),
+                    sug.get(i),
+                    SearchItem.TYPE_SEARCH_ITEM_HISTORY
+            );
+            listsetsug.add(itemsug);
+        }
+
+
+    }
+
+
 
     private void createHistorys(String f,String s,String t) {
         SearchItem item1 = new SearchItem(
@@ -38,6 +74,8 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
         );
         mHistorySuggestions.add(item3);
 
+
+
     }
 
     @Override
@@ -50,7 +88,6 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
     @Override
     public Collection<SearchItem> buildSearchSuggestion(int maxCount, String query) {
         List<SearchItem> items = new ArrayList<SearchItem>();
-
         /*
         if(query.startsWith("@")) {
             SearchItem peopleSuggestion = new SearchItem(
@@ -66,7 +103,6 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
                     SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
             );
             items.add(toppicSuggestion);
-
         }
          */
          //else {
@@ -84,11 +120,20 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
          //   items.add(toppicSuggestion);
     //    }
 
-        for(SearchItem item : mHistorySuggestions) {
-            if(item.getValue().startsWith(query)) {
-                items.add(item);
-            }
+      for(SearchItem item :listsetsug) {
+
+          if(item.getValue().toLowerCase().contains(query.toLowerCase())) {
+             // items.add(item);
+
+              SearchItem peopleSuggestion1 = new SearchItem(
+                      item.getValue(),
+                      item.getValue(),
+                      SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
+              );
+              items.add(peopleSuggestion1);
+
         }
+    }
         return items;
     }
 

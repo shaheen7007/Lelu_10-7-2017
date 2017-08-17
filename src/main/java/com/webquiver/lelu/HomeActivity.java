@@ -173,6 +173,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+    private ArrayList<String> searchnames;
+
 
 
     @Override
@@ -191,6 +193,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+        searchnames = new ArrayList<>();
+        mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
+
+        getSearchData();
 
 
 
@@ -551,8 +557,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             s.setVisibility(View.INVISIBLE);
 
 
-            mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
-            mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL")));
+           // mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL")));
 
             mSearchView.openSearch();
 
@@ -810,6 +815,75 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
+
+    private void getSearchData(){
+        //Showing a progress dialog while our app fetches the data from url
+        //final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
+        //  progressBar.setVisibility(View.VISIBLE);
+
+        //get banner json
+        JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest("https://api.myjson.com/bins/1fgsw9",
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        //Dismissing the progressdialog on response
+                        //                       loading.dismiss();
+
+                        //         progressBar.setVisibility(View.INVISIBLE);
+
+                        //        SharedPreferences.Editor prefEdit = sharedPreferences.edit();
+                        String jsonstring=response.toString();
+                        //      prefEdit.putString(Config.JSONSTRING,jsonstring);
+                        //       prefEdit.apply();
+                        //Displaying banner
+                        showsearchdata(response);
+                    }
+
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(HomeActivity.this,"No response from api",Toast.LENGTH_LONG).show();
+                        //set from preference
+                        JSONArray jsonArray = null;
+
+                        //  progressBar.setVisibility(View.INVISIBLE);
+                        // showbanner(jsonArray);
+
+                    }
+                }
+        );
+
+
+        //Creating a request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        //Adding our request to the queue
+        requestQueue.add(bannerjsonArrayRequest);
+    }
+
+
+
+    private void showsearchdata(JSONArray jsonArray){
+
+        for(int i = 0; i<jsonArray.length(); i++){
+
+            JSONObject obj = null;
+            try {
+
+                obj = jsonArray.getJSONObject(i);
+                searchnames.add(obj.getString("name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        //  init();
+
+        mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL"), searchnames));
+
+
+
+    }
 
 
 
