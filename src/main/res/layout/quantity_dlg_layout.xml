@@ -9,6 +9,7 @@
     <TextView
         android:textColor="#000000"
         android:text="Enter required quantity"
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -16,6 +17,8 @@
         android:id="@+id/qtyET_DLG"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:inputType="number" />
 
     <LinearLayout
@@ -28,6 +31,8 @@
         android:id="@+id/buttonCancel"
         android:layout_width="0dp"
         android:layout_weight="1"
+
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
@@ -40,6 +45,8 @@
             android:id="@+id/buttonSave"
             android:layout_width="0dp"
             android:layout_weight="1"
+
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"

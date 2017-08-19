@@ -18,9 +18,9 @@
             android:layout_height="match_parent">
             <ImageView android:src="@drawable/back_btn"
                 android:background="?attr/actionBarItemBackground"
-                android:layout_width="23dp"
+                android:layout_width="@dimen/backbtn_width"
                 android:layout_marginLeft="10dp"
-                android:layout_height="22dp"
+                android:layout_height="@dimen/backbtn_height"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
                 android:layout_alignParentLeft="true"
@@ -35,7 +35,7 @@
             android:layout_marginLeft="7dp"
             android:layout_toRightOf="@+id/menuitem"
             android:id="@+id/homeitem"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:gravity="center"
             android:textAlignment="center"
             android:layout_height="match_parent" />
@@ -61,7 +61,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="Order no: 104427"
                 android:textColor="#000"
                 android:textAlignment="center"
@@ -71,7 +71,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_marginTop="5dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:text="Order placed successfully on 24-07-2017"
                 android:textAlignment="center"
                 android:layout_height="wrap_content"
@@ -117,7 +118,8 @@
                 android:layout_width="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:text="Order Placed Successfully"
                 android:textStyle="bold"
                 android:id="@+id/maintxt1"
@@ -130,7 +132,8 @@
                           android:layout_width="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                          android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                            android:text="Order placed successfully On 24-07-2017"
                           android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/img_tick"
@@ -169,7 +172,8 @@
                 android:layout_width="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="Shipment"
                 android:textStyle="bold"
                 android:id="@+id/maintxt2"
@@ -183,7 +187,8 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:id="@+id/txt1"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:text="Order dispatched On 24-07-2017"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/img2"

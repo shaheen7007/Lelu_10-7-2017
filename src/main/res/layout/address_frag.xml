@@ -35,7 +35,7 @@
             android:layout_marginLeft="7dp"
             android:layout_toRightOf="@+id/menuitem"
             android:id="@+id/homeitem"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:gravity="center"
             android:textAlignment="center"
             android:layout_height="match_parent" />
@@ -45,7 +45,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="#fff"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:text="Step: 2/3"
             android:layout_marginRight="10dp"
             android:id="@+id/stepnotxt_id"
@@ -72,7 +72,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="You have 3 addresses saved"
                 android:textAlignment="center"
                 android:id="@+id/show_all_addr_txt_id"
@@ -129,7 +129,7 @@
                 android:text="ORDER SUMMARY"
                 android:textColor="#000"
                 android:id="@+id/change"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
 
@@ -138,7 +138,7 @@
                 android:textAlignment="textEnd"
                 android:text="5 items"
                 android:textColor="@color/colorgreen"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
 
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
@@ -162,7 +162,7 @@
                 android:layout_width="wrap_content"
                 android:textAlignment="textStart"
                 android:text="Order Total"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -171,7 +171,7 @@
                 android:text="(View Detail)"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/colorgreen"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:id="@+id/viewdetails_TXT_ID"
                 android:layout_height="wrap_content" />
 </LinearLayout>
@@ -179,7 +179,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:textAlignment="textEnd"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
 
                 android:text="Rs. 150"
                 android:layout_weight="1"
@@ -204,7 +204,7 @@
                 android:layout_width="0dp"
                 android:textAlignment="textStart"
                 android:text="Delivery"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
 
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
@@ -213,7 +213,7 @@
                 android:layout_width="0dp"
                 android:textAlignment="textEnd"
                 android:text="Free"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
 
                 android:textColor="@color/colorgreen"
                 android:layout_weight="1"
@@ -234,7 +234,7 @@
                 android:layout_width="0dp"
                 android:textAlignment="textStart"
                 android:text="Total Payable"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
 
                 android:textColor="#000"
                 android:layout_weight="1"
@@ -244,7 +244,7 @@
                 android:layout_width="0dp"
                 android:textAlignment="textEnd"
                 android:text="Rs. 10,090.00"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
 
                 android:textStyle="bold"
                 android:textColor="#000"
@@ -262,7 +262,7 @@
             android:textColor="#FFF"
             android:id="@+id/placeorderBTN_id"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            style="@android:style/TextAppearance.DeviceDefault.Large"
             android:layout_width="match_parent"
             android:background="#3c8e3b"
             android:layout_weight=".31"
@@ -297,7 +297,7 @@
             android:layout_marginLeft="7dp"
             android:layout_toRightOf="@+id/menuitem"
             android:id="@+id/homeitem"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@android:style/TextAppearance.DeviceDefault.Small"
             android:gravity="center"
             android:textAlignment="center"
             android:layout_height="match_parent" />
@@ -307,7 +307,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="#fff"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@android:style/TextAppearance.DeviceDefault.Small"
             android:text="Step: 2/3"
             android:layout_marginRight="10dp"
             android:id="@+id/stepnotxt_id"

@@ -29,7 +29,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="Order no: 104427"
                 android:textAlignment="center"
                 android:layout_height="wrap_content"
@@ -68,7 +68,8 @@
                         android:textColor="@color/colorlinkblue"
                         android:id="@+id/ADDR_name_id"
                         android:text="Shaheen Shabib"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_height="wrap_content" />
 
 
@@ -131,7 +132,8 @@
                                 android:layout_width="0dp"
                                 android:layout_weight="1.5"
                                 android:text="afdf sfsfsdf dfdsdf"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+
+                                style="@android:style/TextAppearance.DeviceDefault.Small"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/ADDR_address1_id" />
 
@@ -152,7 +154,7 @@
                                 android:text="Eranjipalam"
                                 android:gravity="top"
                                 android:layout_gravity="top"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                                style="@android:style/TextAppearance.DeviceDefault.Small"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/ADDR_place_id" />
 
@@ -168,7 +170,7 @@
                                 android:layout_width="0dp"
                                 android:layout_weight="1.5"
                                 android:text="Kozhikode"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                                style="@android:style/TextAppearance.DeviceDefault.Small"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/ADDR_district_id" />
 
@@ -184,7 +186,7 @@
                                 android:layout_width="0dp"
                                 android:layout_weight="1.5"
                                 android:text="PIN - 676541"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                                style="@android:style/TextAppearance.DeviceDefault.Small"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/ADDR_pin_id" />
 
@@ -200,7 +202,7 @@
                                 android:layout_width="0dp"
                                 android:layout_weight="1.5"
                                 android:text="Kerala"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                                style="@android:style/TextAppearance.DeviceDefault.Small"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/ADDR_state_id" />
 
@@ -265,7 +267,7 @@
                     android:layout_width="0dp"
                     android:textAlignment="textStart"
                     android:text="Grand Total"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
                     android:textColor="#000"
                     android:layout_weight="1"
                     android:layout_height="wrap_content" />
@@ -274,7 +276,7 @@
                     android:layout_width="0dp"
                     android:textAlignment="textEnd"
                     android:text="Rs. 10,090.00"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
 
                     android:textStyle="bold"
                     android:textColor="#000"

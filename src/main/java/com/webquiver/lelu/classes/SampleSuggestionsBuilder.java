@@ -52,9 +52,8 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
 
     }
 
-
-
     private void createHistorys(String f,String s,String t) {
+
         SearchItem item1 = new SearchItem(
                 f,
                 f,
@@ -73,8 +72,6 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
                 SearchItem.TYPE_SEARCH_ITEM_HISTORY
         );
         mHistorySuggestions.add(item3);
-
-
 
     }
 

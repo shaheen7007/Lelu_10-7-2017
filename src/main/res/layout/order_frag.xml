@@ -18,9 +18,9 @@
             android:layout_height="match_parent">
             <ImageView android:src="@drawable/back_btn"
                 android:background="?attr/actionBarItemBackground"
-                android:layout_width="23dp"
+                android:layout_width="@dimen/backbtn_width"
                 android:layout_marginLeft="10dp"
-                android:layout_height="22dp"
+                android:layout_height="@dimen/backbtn_height"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
                 android:layout_alignParentLeft="true"
@@ -33,7 +33,7 @@
             android:textColor="#fff"
             android:layout_centerHorizontal="true"
             android:id="@+id/homeitem"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:gravity="center"
             android:textAlignment="center"
             android:layout_height="match_parent" />

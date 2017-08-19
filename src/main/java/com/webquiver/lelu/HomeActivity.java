@@ -196,7 +196,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         searchnames = new ArrayList<>();
         mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
 
-        getSearchData();
+
 
 
 
@@ -227,7 +227,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         searchhistory = this.getSharedPreferences(Config.SearchPref, Context.MODE_PRIVATE);
         search_historyEditor=searchhistory.edit();
 
-
+        getSearchData();
 
 
         //

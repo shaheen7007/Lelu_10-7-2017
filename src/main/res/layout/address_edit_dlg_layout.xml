@@ -11,7 +11,7 @@
         android:textAlignment="center"
         android:text="Edit Address"
         android:layout_marginBottom="15dp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

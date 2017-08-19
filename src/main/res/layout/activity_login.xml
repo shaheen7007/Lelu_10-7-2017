@@ -23,7 +23,8 @@
             android:text="Sign In"
             fontPath="fonts/latoregular.ttf"
             android:textColor="#fff"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            style="@android:style/TextAppearance.DeviceDefault.Large"
+
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
@@ -42,7 +43,7 @@
             android:layout_height="wrap_content"
             android:text="Back"
             fontPath="fonts/latoregular.ttf"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:textColor="#fff"
             android:gravity="center"
 
@@ -103,6 +104,8 @@
                 fontPath="fonts/latoregular.ttf"
 
                 android:hint="Phone Number"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="25dp"
@@ -119,6 +122,8 @@
                 fontPath="fonts/latoregular.ttf"
                 android:hint="Password"
                 android:textAlignment="center"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+
                 android:inputType="textPassword"
                 android:cursorVisible="false"
                 android:layout_width="match_parent"
@@ -156,13 +161,14 @@
         android:gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="25dp"
         android:layout_gravity="center_horizontal"
         android:text="Forgot Your Password ?"
         fontPath="fonts/latoregular.ttf"
         android:id="@+id/forgotpassbtn_id"
         android:textColor="#fff"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -184,7 +190,8 @@
         android:textColor="#fff"
         fontPath="fonts/latoregular.ttf"
 
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -198,7 +205,8 @@
         android:layout_marginRight="25dp"
         android:layout_marginLeft="25dp"
         fontPath="fonts/latoregular.ttf"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+
         android:textColor="#fff"
         android:textAlignment="center"
         android:background="@drawable/regnow_shape"

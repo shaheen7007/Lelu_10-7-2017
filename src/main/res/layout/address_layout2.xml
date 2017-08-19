@@ -28,7 +28,7 @@
                 android:textColor="#000"
                 android:id="@+id/ADDR_name_id"
                 android:text="Shaheen Shabib"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_height="wrap_content" />
 
             <LinearLayout
@@ -56,7 +56,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:text="afdf sfsfsdf dfdsdf"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_height="wrap_content"
                 android:id="@+id/ADDR_address1_id" />
 
@@ -77,7 +77,7 @@
                 android:text="Eranjipalam"
                 android:gravity="top"
                 android:layout_gravity="top"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_height="wrap_content"
                 android:id="@+id/ADDR_place_id" />
 
@@ -93,7 +93,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:text="Kozhikode"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_height="wrap_content"
                 android:id="@+id/ADDR_district_id" />
 
@@ -109,7 +109,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:text="PIN - 676541"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_height="wrap_content"
                 android:id="@+id/ADDR_pin_id" />
 
@@ -125,7 +125,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:text="Kerala"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_height="wrap_content"
                 android:id="@+id/ADDR_state_id" />
 
@@ -141,7 +141,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:text="Mobile - 9020707009"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_height="wrap_content"
                 android:id="@+id/ADDR_phone_id" />
 
@@ -179,7 +179,7 @@
                 android:text="Edit"
                 android:textColor="@color/colorgreen"
                 android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -206,7 +206,7 @@
                 android:gravity="center"
                 android:text="Select"
                 android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"

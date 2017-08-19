@@ -18,9 +18,9 @@
             android:layout_height="match_parent">
             <ImageView android:src="@drawable/back_btn"
                 android:background="?attr/actionBarItemBackground"
-                android:layout_width="23dp"
+                android:layout_width="@dimen/backbtn_width"
                 android:layout_marginLeft="10dp"
-                android:layout_height="22dp"
+                android:layout_height="@dimen/backbtn_height"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
                 android:layout_alignParentLeft="true"
@@ -35,7 +35,7 @@
             android:layout_marginLeft="7dp"
             android:layout_toRightOf="@+id/menuitem"
             android:id="@+id/homeitem"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:gravity="center"
             android:textAlignment="center"
             android:layout_height="match_parent" />
@@ -45,7 +45,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="#fff"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:text="Step: 1/3"
             android:layout_marginRight="10dp"
             android:id="@+id/stepnotxt_id"
@@ -95,7 +95,7 @@
                     android:layout_width="0dp"
                     android:textAlignment="textStart"
                     android:text="Big Total"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
                     android:layout_weight="1"
                     android:layout_height="wrap_content" />
 
@@ -103,7 +103,7 @@
                     android:layout_width="0dp"
                     android:textAlignment="textEnd"
                     android:text="Rs. 10,200.00"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
 
                     android:layout_weight="1"
                     android:layout_height="wrap_content" />
@@ -123,7 +123,7 @@
                     android:layout_width="0dp"
                     android:textAlignment="textStart"
                     android:text="Bag Discount"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
 
                     android:layout_weight="1"
                     android:layout_height="wrap_content" />
@@ -131,7 +131,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:textAlignment="textEnd"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
 
                     android:text="-Rs. 150"
                     android:textColor="@color/colorgreen"
@@ -157,7 +157,7 @@
                     android:layout_width="0dp"
                     android:textAlignment="textStart"
                     android:text="Delivery"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
 
                     android:layout_weight="1"
                     android:layout_height="wrap_content" />
@@ -166,7 +166,7 @@
                     android:layout_width="0dp"
                     android:textAlignment="textEnd"
                     android:text="Free"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
 
                     android:textColor="@color/colorgreen"
                     android:layout_weight="1"
@@ -187,7 +187,7 @@
                     android:layout_width="0dp"
                     android:textAlignment="textStart"
                     android:text="Total Payable"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
 
                     android:textColor="#000"
                     android:layout_weight="1"
@@ -197,7 +197,7 @@
                     android:layout_width="0dp"
                     android:textAlignment="textEnd"
                     android:text="Rs. 10,090.00"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
 
                     android:textStyle="bold"
                     android:textColor="#000"
@@ -215,7 +215,7 @@
             android:text="CONTINUE"
             android:textColor="#FFF"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            style="@android:style/TextAppearance.DeviceDefault.Large"
             android:layout_width="match_parent"
             android:background="#3c8e3b"
             android:layout_weight=".4"

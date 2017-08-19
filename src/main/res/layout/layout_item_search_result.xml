@@ -22,7 +22,8 @@
             android:id="@+id/textview_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"/>
+            style="@android:style/TextAppearance.DeviceDefault.Small"
+            />
 
         <TextView
             android:id="@+id/textview_description"

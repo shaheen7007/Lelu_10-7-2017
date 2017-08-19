@@ -11,6 +11,8 @@
         android:id="@+id/forg_editextotp_id"
         android:layout_width="match_parent"
         android:hint="OTP"
+
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:textAlignment="center"
         android:layout_height="wrap_content"
         android:inputType="number" />
@@ -18,6 +20,8 @@
         android:id="@+id/forg_editTextpass_id"
         android:layout_width="match_parent"
         android:hint="New Password"
+
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:textAlignment="center"
         android:layout_height="wrap_content"
         android:inputType="textPassword" />
@@ -25,6 +29,8 @@
         android:id="@+id/forg_editTextconfpass_id"
         android:layout_width="match_parent"
         android:hint="Confirm Password"
+
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:textAlignment="center"
         android:layout_height="wrap_content"
         android:inputType="textPassword" />
@@ -34,6 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:layout_marginTop="24dp"
+
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:background="@color/colorPrimary"
         android:padding="12dp"
         android:id="@+id/resetbtn2_id"

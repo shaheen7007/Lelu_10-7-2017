@@ -17,6 +17,8 @@
         android:background="#fff"
         android:paddingBottom="10dp"
         android:layout_width="match_parent"
+
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:text="Search Results:"
         android:layout_marginStart="15dp"
         android:textColor="#0331c4"

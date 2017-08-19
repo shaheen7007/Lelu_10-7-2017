@@ -23,7 +23,7 @@
             android:text="Sign Up"
             fontPath="fonts/latoregular.ttf"
             android:textColor="#fff"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            style="@android:style/TextAppearance.DeviceDefault.Large"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
@@ -45,7 +45,8 @@
             android:onClick="onclickhandler"
             android:id="@+id/backtext_id"
             fontPath="fonts/latoregular.ttf"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+
             android:textColor="#fff"
             android:gravity="center"
 
@@ -54,22 +55,16 @@
 
     <View
         android:layout_width="1dp"
-        android:layout_height="10dp"
+        android:layout_height="5dp"
         >
     </View>
 
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:src="@drawable/logo"
-        />
+
 
     <View
         android:layout_width="1dp"
-        android:layout_height="10dp"
+        android:layout_height="0dp"
         >
     </View>
 
@@ -83,12 +78,27 @@
             android:orientation="vertical"
             android:id="@+id/hh"
 
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="10dp"
+                android:layout_height="5dp"
+                >
+            </View>
+
+            <ImageView
+                android:layout_width="68dp"
+                android:layout_height="68dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:src="@drawable/logo"
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="5dp"
                 >
             </View>
 
@@ -98,13 +108,15 @@
                 fontPath="fonts/latoregular.ttf"
                 android:hint="Name"
                 android:layout_marginLeft="25dp"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="25dp"
                 android:inputType="text"
                 android:background="@drawable/regedittext_shape_rounded"
                 android:id="@+id/nameET_id"
                 android:cursorVisible="false"
-                android:layout_height="35dp" />
+                android:layout_height="38dp" />
 
 
             <EditText
@@ -112,6 +124,8 @@
                 android:textAlignment="center"
                 fontPath="fonts/latoregular.ttf"
                 android:hint="Password"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="25dp"
@@ -119,7 +133,7 @@
                 android:background="@drawable/regedittext_shape_rounded"
                 android:id="@+id/passworET_id"
                 android:cursorVisible="false"
-                android:layout_height="35dp" />
+                android:layout_height="38dp" />
 
 
 
@@ -132,17 +146,20 @@
 
                 android:textAlignment="center"
                 android:inputType="number"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+
                 android:hint="Phone Number"
                 android:cursorVisible="false"
                 android:layout_width="match_parent"
                 android:id="@+id/phoneET_id"
                 android:background="@drawable/regedittext_shape_rounded"
-                android:layout_height="35dp" />
+                android:layout_height="38dp" />
             <EditText
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
                 fontPath="fonts/latoregular.ttf"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
 
                 android:textAlignment="center"
                 android:inputType="textEmailAddress"
@@ -151,7 +168,7 @@
                 android:layout_width="match_parent"
                 android:id="@+id/emailET_id"
                 android:background="@drawable/regedittext_shape_rounded"
-                android:layout_height="35dp" />
+                android:layout_height="38dp" />
 
 
             <EditText
@@ -159,6 +176,8 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
                 fontPath="fonts/latoregular.ttf"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+
                 android:textAlignment="center"
                 android:inputType="text"
                 android:hint="Company Name"
@@ -166,11 +185,11 @@
                 android:layout_width="match_parent"
                 android:id="@+id/companyET_id"
                 android:background="@drawable/regedittext_shape_rounded"
-                android:layout_height="35dp" />
+                android:layout_height="38dp" />
 
             <com.webquiver.lelu.place.CustomAutoCompleteTextView
                 android:id="@+id/placeET_id"
-                android:layout_height="35dp"
+                android:layout_height="38dp"
                 android:cursorVisible="false"
                 style="@style/Base.Widget.AppCompat.AutoCompleteTextView"
                 android:layout_width="match_parent"
@@ -208,21 +227,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-    <TextView
-        android:gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/loginbtn2_id"
-        android:layout_marginTop="5dp"
-        android:visibility="invisible"
-        android:onClick="onclickhandler"
-        android:text="Already Have an Account ? \n Login Here"
-        android:textColor="#fff"
-        fontPath="fonts/latoregular.ttf"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
 
 </LinearLayout>
