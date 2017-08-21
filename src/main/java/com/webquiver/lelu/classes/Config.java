@@ -131,6 +131,10 @@ public class Config {
     public static final String numofhistory= "numofhistory";
 
 
+    public static final String SearchJsonString="searchjsonstring";
+
+
+
 }
 
 

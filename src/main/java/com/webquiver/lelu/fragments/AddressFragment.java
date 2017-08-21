@@ -49,15 +49,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 /**
  * Created by WebQuiver 04 on 7/25/2017.
  */
-
 public class AddressFragment extends android.app.Fragment {
 
     private static AddressFragment addressFragment = null;
-
     private RequestQueue requestQueue;
     private RequestQueue requestQueue2;
     private RequestQueue requestQueue_editADDR;
@@ -98,7 +95,6 @@ public class AddressFragment extends android.app.Fragment {
 
         queue=Volley.newRequestQueue(getActivity());
 
-
         listView = (ListView) rootView.findViewById(R.id.addressList_id);
         showALL_TXT_id=(TextView)rootView.findViewById(R.id.show_all_addr_txt_id);
         viewdeatails_TXT=(TextView)rootView.findViewById(R.id.viewdetails_TXT_ID);
@@ -138,6 +134,7 @@ public class AddressFragment extends android.app.Fragment {
 
 
        getall();
+
 
 /*
         AddressItem C_item = new AddressItem();
@@ -332,8 +329,29 @@ public class AddressFragment extends android.app.Fragment {
             @Override
             public void onClick(View v) {
 
-              //  Intent intent=new Intent(CartActivity.this)
+                try {
 
+                  /*
+                   //fragment
+                    Fragment fr = null;
+                    FragmentManager fm = null;
+                    View selectedView = null;
+
+                    //fragment
+                    fm = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.replace(R.id.cart_FL, CartFragment.getInstance());
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    fragmentTransaction.commit();
+                    */
+
+                    getActivity().getFragmentManager().popBackStack();
+
+                }
+                catch (Exception e)
+                {
+                    //
+                }
 
             }
         });

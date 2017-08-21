@@ -28,7 +28,16 @@ public class CartActivity extends AppCompatActivity {
             Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
             openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
             startActivity(openFragmentBIntent);
+
+        try {
+            SearchActivity.fa.finish();
+        }
+        catch (Exception e)
+        {
+            //
+        }
             finish();
+
 
    //     } else {
 

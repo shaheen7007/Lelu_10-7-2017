@@ -548,11 +548,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         else if (view == findViewById(R.id.search)) {
 
-
-
-            //change here
-
-
             final ImageView s=(ImageView)findViewById(R.id.search);
             s.setVisibility(View.INVISIBLE);
 
@@ -686,8 +681,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 });
 
             }
-
-
 
             }
 
@@ -833,10 +826,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         //         progressBar.setVisibility(View.INVISIBLE);
 
                         //        SharedPreferences.Editor prefEdit = sharedPreferences.edit();
-                        String jsonstring=response.toString();
-                        //      prefEdit.putString(Config.JSONSTRING,jsonstring);
-                        //       prefEdit.apply();
                         //Displaying banner
+                        String searchnamesjsonstring=response.toString();
+                        search_historyEditor.putString(Config.SearchJsonString,searchnamesjsonstring);
+                        search_historyEditor.apply();
+
                         showsearchdata(response);
                     }
 

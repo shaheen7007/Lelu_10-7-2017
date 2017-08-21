@@ -39,6 +39,6 @@ dependencies {
     compile 'com.pkmmte.view:circularimageview:1.1'
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
     compile 'com.github.crysehillmes:PersistentSearchView:4da778cd90'
-
+    compile 'com.github.Kennyc1012:BottomSheet:2.3.4'
 
 }

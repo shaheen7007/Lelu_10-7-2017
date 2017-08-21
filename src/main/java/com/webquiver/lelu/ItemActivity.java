@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.MenuItem;
@@ -35,15 +36,21 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.adapters.Banner_Adapter;
+import com.webquiver.lelu.adapters.SearchResultAdapter;
 import com.webquiver.lelu.classes.Config;
+import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
+import com.webquiver.lelu.classes.SearchResult;
 import com.webquiver.lelu.classes.SessionManagement;
 
+import org.cryse.widget.persistentsearch.PersistentSearchView;
+import org.cryse.widget.persistentsearch.SearchItem;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -59,6 +66,20 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         startActivity(openFragmentBIntent);
         finish();
     }
+
+
+
+    //search
+    private PersistentSearchView mSearchView;
+    private SearchResultAdapter mResultAdapter;
+
+    private static final int VOICE_RECOGNITION_REQUEST_CODE = 1023;
+    private SharedPreferences searchhistory;
+    SharedPreferences.Editor search_historyEditor;
+    private ArrayList<String> searchnames;
+
+
+
 
 
 
@@ -103,7 +124,20 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
 
-       qty=(TextView)findViewById(R.id.qtytxt_id);
+
+        //search history
+        searchhistory = this.getSharedPreferences(Config.SearchPref, Context.MODE_PRIVATE);
+        search_historyEditor=searchhistory.edit();
+        searchnames = new ArrayList<>();
+        mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
+
+
+
+
+
+
+
+        qty=(TextView)findViewById(R.id.qtytxt_id);
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.dl_drawer_layout);
 
@@ -128,6 +162,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         realprice.setText(realprice.getText().toString()+" "+"14,500.00");
         price.setText(price.getText().toString()+" "+"10,500.00");
         realprice.setPaintFlags(realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
 
 
 
@@ -316,6 +351,157 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
             startActivity(openFragmentBIntent);
             finish();
         }
+
+        else if (view == findViewById(R.id.search_itemactivity_id))
+        {
+
+            String searchjson=searchhistory.getString(Config.SearchJsonString,"NULL");
+
+
+
+
+            mSearchView.openSearch();
+            try {
+                showsearchdata(searchjson);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            if (searchhistory.getString(Config.numofhistory, "NULL").equals("NULL")) {
+
+                search_historyEditor.putString(Config.numofhistory,String.valueOf(0));
+                search_historyEditor.commit();
+            }
+            else
+            {
+
+                mSearchView.setSearchListener(new PersistentSearchView.SearchListener() {
+
+
+                    @Override
+                    public boolean onSuggestion(SearchItem searchItem) {
+                        Log.d("onSuggestion", searchItem.getTitle());
+                        mSearchView.setSearchString(searchItem.getTitle(),true);
+                        onSearch(searchItem.getTitle());
+                        return false;
+                    }
+
+                    @Override
+                    public void onSearchCleared() {
+
+                    }
+
+                    @Override
+                    public void onSearchTermChanged(String term) {
+
+                    }
+
+                    @Override
+                    public void onSearchEditClosed() {
+
+                    }
+
+                    @Override
+                    public boolean onSearchEditBackPressed() {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSearchExit() {
+
+                    }
+
+                    @Override
+                    public void onSearch(String string) {
+
+                        //      Toast.makeText(HomeActivity.this, string +" Searched", Toast.LENGTH_LONG).show();
+
+
+                        //fragment
+
+
+                        //appBarLayout.setExpanded(false,true);
+
+                        mSearchView.clearSuggestions();
+                        mSearchView.closeSearch();
+
+                     /*
+                        Bundle bundle = new Bundle();
+                        bundle.putString("search_item",string);
+                        SearchResultFragment showSelectedADDR=new SearchResultFragment();
+                        showSelectedADDR.setArguments(bundle);
+                        FragmentManager fm = null;
+                        fm = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                        fragmentTransaction.replace(R.id.frag_container, showSelectedADDR);
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                        fragmentTransaction.commit();
+
+*/
+
+                        Intent intent=new Intent(ItemActivity.this,SearchActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                        int num=Integer.parseInt(searchhistory.getString(Config.numofhistory,"NULL"));
+
+                        if (string.equals(searchhistory.getString(Config.first_suggestion,"NULL")))
+                        {
+                            //nothing
+                        }
+                        else if (string.equals(searchhistory.getString(Config.second_suggestion,"NULL")))
+                        {
+                            String temp;
+                            temp=searchhistory.getString(Config.second_suggestion,"NULL");
+                            search_historyEditor.putString(Config.second_suggestion,searchhistory.getString(Config.first_suggestion,"NULL"));
+                            search_historyEditor.putString(Config.first_suggestion,temp);
+                            search_historyEditor.commit();
+
+                        }
+                        else {
+
+                            search_historyEditor.putString(Config.third_suggestion, searchhistory.getString(Config.second_suggestion, "NULL"));
+                            search_historyEditor.putString(Config.second_suggestion, searchhistory.getString(Config.first_suggestion, "NULL"));
+                            search_historyEditor.putString(Config.first_suggestion, string);
+                            search_historyEditor.commit();
+                        }
+
+
+                    }
+
+
+
+                    private void fillResultToRecyclerView(String query) {
+                        List<SearchResult> newResults = new ArrayList<>();
+                        for(int i =0; i< 10; i++) {
+                            SearchResult result = new SearchResult(query, query + Integer.toString(i), "");
+                            newResults.add(result);
+                        }
+                        mResultAdapter.replaceWith(newResults);
+                    }
+
+
+
+                    @Override
+                    public void onSearchEditOpened() {
+
+                    }
+
+
+                });
+
+            }
+
+
+
+
+
+
+
+        }
+
+
 
         else if (view == findViewById(R.id.cartplus_id))
         {
@@ -555,6 +741,28 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    private void showsearchdata(String jsonstring) throws JSONException {
+
+        JSONArray jsonArray=new JSONArray(jsonstring);
+
+        for(int i = 0; i<jsonArray.length(); i++){
+
+            JSONObject obj = null;
+            try {
+
+                obj = jsonArray.getJSONObject(i);
+                searchnames.add(obj.getString("name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        //  init();
+
+        mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL"), searchnames));
+
+
+
+    }
 
 
 

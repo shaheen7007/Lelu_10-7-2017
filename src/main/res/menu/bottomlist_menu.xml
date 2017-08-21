@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item1"
+        android:icon="@android:drawable/ic_search_category_default"
+        android:title="\u20B9 100   -   \u20B9 200" />
+
+    <item
+        android:id="@+id/item2"
+        android:icon="@android:drawable/ic_search_category_default"
+        android:title="\u20B9 200   -   \u20B9 500" />
+    <item
+        android:id="@+id/item3"
+        android:icon="@android:drawable/ic_search_category_default"
+        android:title="\u20B9 500   -   \u20B9 1000" />
+
+    <item
+        android:id="@+id/item4"
+        android:icon="@android:drawable/ic_search_category_default"
+        android:title="\u20B9 1000   -   \u20B9 5000" />
+
+    <item
+        android:id="@+id/item4"
+        android:icon="@android:drawable/ic_search_category_default"
+        android:title="Above   \u20B9 5000" />
+
+</menu>

@@ -59,26 +59,20 @@ import java.util.regex.Pattern;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class RegisterActivity extends AppCompatActivity {
-
     EditText name,phone,email,companyname,pass;
     AutoCompleteTextView placeET;
     PlacesTask placesTask;
     ParserTask parserTask;
     ImageView regbtn;
     private AppCompatButton buttonConfirm;
-
     private RequestQueue requestQueue;
     private EditText editTextConfirmOtp;
-
     private String username;
     private String password;
     private String phonestring,emailstring,companynamestring,placestring;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
 
         requestQueue = Volley.newRequestQueue(this);
 

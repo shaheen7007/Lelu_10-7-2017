@@ -79,16 +79,40 @@
 
 
         <ImageView
-            android:id="@+id/search"
+            android:id="@+id/search_itemactivity_id"
             android:layout_width="50dp"
             app:layout_anchor="@id/app_bar"
             android:layout_height="50dp"
+            android:onClick="onclickhandler_itemactivity"
             android:layout_gravity="center_vertical|right"
             android:layout_alignParentTop="true"
             app:layout_anchorGravity="center_vertical|end"
             app:srcCompat="@drawable/search" />
 
         <include layout="@layout/content_item" />
+
+
+        <org.cryse.widget.persistentsearch.PersistentSearchView
+
+            app:srcCompat="@drawable/search"
+            android:id="@+id/searchview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:elevation="4dp"
+            android:visibility="gone"
+            android:background="#f17a65"
+            app:persistentSV_displayMode="menuItem"
+            app:persistentSV_searchTextColor="?android:textColorPrimary"
+            app:persistentSV_editTextColor="?android:textColorPrimary"
+            app:persistentSV_editHintText="Search"
+            app:persistentSV_editHintTextColor="?android:textColorHint"
+            app:persistentSV_homeButtonMode="burger"
+            app:persistentSV_searchCardElevation="2dp"
+            app:persistentSV_customToolbarHeight="60dp"/>
+
+
+
     </android.support.design.widget.CoordinatorLayout>
 
 </android.support.v4.widget.DrawerLayout>

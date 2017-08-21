@@ -5,9 +5,11 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,6 +22,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.kennyc.bottomsheet.BottomSheet;
+import com.kennyc.bottomsheet.BottomSheetListener;
 import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.ItemActivity2;
 import com.webquiver.lelu.R;
@@ -53,6 +57,8 @@ public class SearchResultFragment extends android.app.Fragment {
 
     ProgressBar progressBar;
 
+
+
     private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
@@ -75,8 +81,10 @@ public class SearchResultFragment extends android.app.Fragment {
 
     private RequestQueue requestQueue_cart;
 
-    TextView cartnum;
+    TextView cartnum,filterbtn;
     String search_string;
+
+    BottomSheetListener bottomSheetListener;
 
 
 
@@ -91,6 +99,8 @@ public class SearchResultFragment extends android.app.Fragment {
 
 
         gridView = (ExpandableHeightGridView) rootView.findViewById(R.id.grid);
+        filterbtn=(TextView)rootView.findViewById(R.id.filterBT_id);
+
         gridView.setExpanded(true);
 
 
@@ -101,7 +111,6 @@ public class SearchResultFragment extends android.app.Fragment {
       //  Bundle b=getArguments();
        // search_string=b.getString("search_item","");
         //search_result_for.setText("Search result for: "+search_string);
-
 
 
         images = new ArrayList<>();
@@ -232,6 +241,16 @@ public class SearchResultFragment extends android.app.Fragment {
 
 
     //functions for getting and displaying number of items in cart(green circle)
+
+
+
+
+
+    public interface MyListener {
+        // you can define any parameter as per your requirement
+        public void callback(View view, String result);
+    }
+
 
 
 

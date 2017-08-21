@@ -1,15 +1,24 @@
 package com.webquiver.lelu;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -17,6 +26,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.kennyc.bottomsheet.BottomSheet;
+import com.kennyc.bottomsheet.BottomSheetListener;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
 import com.webquiver.lelu.fragments.SearchResultFragment;
@@ -32,7 +43,7 @@ import java.util.ArrayList;
 public class SearchActivity extends AppCompatActivity {
 
 
-
+    public static Activity fa;
     @Override
     public void onBackPressed()
     {
@@ -52,10 +63,83 @@ public class SearchActivity extends AppCompatActivity {
     private SharedPreferences searchhistory;
     SharedPreferences.Editor search_historyEditor;
 
+    TextView filterbtn,sortbtn;
+    LinearLayout sortfilter;
+
+    BottomSheetListener bottomSheetListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.searchactivitymain);
+        filterbtn=(TextView)findViewById(R.id.filterBT_id);
+        sortbtn=(TextView)findViewById(R.id.SortBT_id);
+        sortfilter=(LinearLayout)findViewById(R.id.sortfil_lyt_id);
+
+//to finish activity
+        fa = this;
+
+
+
+
+        //bottom sheet
+        bottomSheetListener=new BottomSheetListener() {
+            @Override
+            public void onSheetShown(@NonNull BottomSheet bottomSheet) {
+
+              //  sortfilter.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onSheetItemSelected(@NonNull BottomSheet bottomSheet, MenuItem menuItem) {
+
+                Toast.makeText(SearchActivity.this,menuItem.getTitle(),Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onSheetDismissed(@NonNull BottomSheet bottomSheet, @DismissEvent int i) {
+
+             //   sortfilter.setVisibility(View.VISIBLE);
+            }
+        };
+
+
+
+        filterbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                new BottomSheet.Builder(SearchActivity.this)
+                        .setSheet(R.menu.bottomlist_menu)
+                        .setTitle("Filter by Price")
+                        .setListener(bottomSheetListener)
+                        .show();
+
+
+            }
+        });
+
+        sortbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                new BottomSheet.Builder(SearchActivity.this)
+
+                        .setSheet(R.menu.bottomlist_menu)
+                        .setTitle("Sort")
+                        .setListener(bottomSheetListener)
+                        .show();
+
+            }
+        });
+
+
 
         //fragment
         Fragment fr = null;
@@ -75,12 +159,12 @@ public class SearchActivity extends AppCompatActivity {
 
 
         mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
-       // mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL")));
+        // mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL")));
         searchnames = new ArrayList<>();
         getSearchData();
 
 
-     //   mSearchView.openSearch();
+        //   mSearchView.openSearch();
         mSearchView.clearSuggestions();
 
         mSearchView.setHomeButtonListener(new PersistentSearchView.HomeButtonListener() {
@@ -88,7 +172,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onHomeButtonClick() {
                 //Hamburger has been clicked
-               mSearchView.setVisibility(View.GONE);
+                mSearchView.setVisibility(View.GONE);
                 Intent intent=new Intent(SearchActivity.this,HomeActivity.class);
                 startActivity(intent);
                 finish();
@@ -129,7 +213,7 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void onSearchTermChanged(String term) {
 
-                  //  mSearchView.clearSuggestions();
+                    //  mSearchView.clearSuggestions();
 
                 }
 
@@ -207,7 +291,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
-   public void searchhide()
+    public void searchhide()
     {
         mSearchView.setVisibility(View.GONE);
     }
@@ -224,7 +308,7 @@ public class SearchActivity extends AppCompatActivity {
     private void getSearchData(){
         //Showing a progress dialog while our app fetches the data from url
         //final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
-      //  progressBar.setVisibility(View.VISIBLE);
+        //  progressBar.setVisibility(View.VISIBLE);
 
         //get banner json
         JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest("https://api.myjson.com/bins/1fgsw9",
@@ -234,12 +318,12 @@ public class SearchActivity extends AppCompatActivity {
                         //Dismissing the progressdialog on response
                         //                       loading.dismiss();
 
-               //         progressBar.setVisibility(View.INVISIBLE);
+                        //         progressBar.setVisibility(View.INVISIBLE);
 
-                //        SharedPreferences.Editor prefEdit = sharedPreferences.edit();
+                        //        SharedPreferences.Editor prefEdit = sharedPreferences.edit();
                         String jsonstring=response.toString();
-                  //      prefEdit.putString(Config.JSONSTRING,jsonstring);
-                 //       prefEdit.apply();
+                        //      prefEdit.putString(Config.JSONSTRING,jsonstring);
+                        //       prefEdit.apply();
                         //Displaying banner
                         showsearchdata(response);
                     }
@@ -252,8 +336,8 @@ public class SearchActivity extends AppCompatActivity {
                         //set from preference
                         JSONArray jsonArray = null;
 
-                      //  progressBar.setVisibility(View.INVISIBLE);
-                       // showbanner(jsonArray);
+                        //  progressBar.setVisibility(View.INVISIBLE);
+                        // showbanner(jsonArray);
 
                     }
                 }
@@ -281,7 +365,7 @@ public class SearchActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-      //  init();
+        //  init();
 
         mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL"), searchnames));
 
