@@ -119,7 +119,6 @@ public class SearchActivity extends AppCompatActivity {
                         .setListener(bottomSheetListener)
                         .show();
 
-
             }
         });
 
@@ -127,19 +126,15 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
                 new BottomSheet.Builder(SearchActivity.this)
 
-                        .setSheet(R.menu.bottomlist_menu)
+                        .setSheet(R.menu.bottomlist_sort_menu)
                         .setTitle("Sort")
                         .setListener(bottomSheetListener)
                         .show();
 
             }
         });
-
-
 
         //fragment
         Fragment fr = null;

@@ -1,6 +1,7 @@
 package com.webquiver.lelu.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -8,14 +9,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +32,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.geniusforapp.fancydialog.FancyAlertDialog;
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.webquiver.lelu.CartActivity;
 import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.ItemActivity;
@@ -65,7 +73,22 @@ public class CartFragment extends android.app.Fragment {
     SharedPreferences.Editor editor;
     AppCompatButton buttonSHOPNOW;
 
+    LinearLayout lyt;
+
+    TextView continu;
+
+
+    TextView BIGTOTAL,BAGDISCOUNT,TOTALPAYABLE;
+
     int i;
+
+    double bigtotal=0,total=0,bagdiscount;
+
+
+
+    AlertDialog.Builder alert;
+    AlertDialog alertDialog;
+
 
 
     @Override
@@ -81,9 +104,13 @@ public class CartFragment extends android.app.Fragment {
         listView = (ListView) rootView.findViewById(R.id.cartlist);
         adapter = new CartAdapter(getActivity(), movieList);
         listView.setAdapter(adapter);
-
+lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
         pref = this.getActivity().getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
         editor = pref.edit();
+
+        BAGDISCOUNT=(TextView)rootView.findViewById(R.id.bagdicount_id);
+        BIGTOTAL=(TextView)rootView.findViewById(R.id.bigtotaltxt_id);
+        TOTALPAYABLE=(TextView)rootView.findViewById(R.id.totalpayable_id);
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -188,13 +215,15 @@ public class CartFragment extends android.app.Fragment {
             }
         });
 
+        continu=(TextView)rootView.findViewById(R.id.continueBTN_id);
+        continu.setVisibility(View.INVISIBLE);
 
 
 
-getall();
+
+
     //    adapter.notifyDataSetChanged();
 
-        TextView continu=(TextView)rootView.findViewById(R.id.continueBTN_id);
 
       continu.setOnClickListener(new View.OnClickListener() {
           @Override
@@ -213,6 +242,37 @@ getall();
               fragmentTransaction.commit();
           }
       });
+
+
+
+
+
+        LayoutInflater li = LayoutInflater.from(getActivity());
+
+        //Creating a view to get the dialog box
+        View confirmDialog = li.inflate(R.layout.something_went_wrong, null);
+        alert = new AlertDialog.Builder(getActivity());
+        alert.setView(confirmDialog);
+        alert.setCancelable(false);
+        Button buttonSave = (Button) confirmDialog.findViewById(R.id.buttonretry);
+        alertDialog = alert.create();
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimationSHAKE;
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getall();
+
+            }
+        });
+
+
+
+
+
+        getall();
+
 
 
 
@@ -239,14 +299,29 @@ getall();
     public void getall() {
 
 
+
         requestQueue = Volley.newRequestQueue(getActivity());
 
-        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+    //    final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+        final Dialog loading = new Dialog(getActivity());
+        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.setCancelable(false);
+        TextView t=(TextView)loading.findViewById(R.id.txt);
+        t.setText("Loading");
+        loading.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_GET_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        lyt.setVisibility(View.VISIBLE);
+                        continu.setVisibility(View.VISIBLE);
                         loading.dismiss();
+                        alertDialog.dismiss();
+
+
                         Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                         try {
@@ -264,8 +339,6 @@ getall();
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
                               //  Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
-
-
 
                                 LayoutInflater li = LayoutInflater.from(getActivity());
                                 //Creating a view to get the dialog box
@@ -285,6 +358,7 @@ getall();
                                 final AlertDialog alertDialog = alert.create();
 
                                 //Displaying the alert dialog
+                                alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                                 alertDialog.show();
 
                                 //On the click of the confirm button from alert dialog
@@ -293,15 +367,14 @@ getall();
                                     public void onClick(View v) {
                                         //Hiding the alert dialog
                                         alertDialog.dismiss();
-
                                         Intent intent=new Intent(getActivity(),HomeActivity.class);
                                         startActivity(intent);
                                         getActivity().finish();
 
-
                                     }
 
                                 });
+
 
 
                             }
@@ -310,13 +383,16 @@ getall();
                             e.printStackTrace();
                         }
                     }
+
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loading.dismiss();
-                        //
+                        alertDialog.show();
+
                         Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+
                     }
                 }) {
             @Override
@@ -352,7 +428,13 @@ getall();
                 C_item5.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
                 C_item5.setPRODUCT_ID(tt.getString("cp_code"));
 
+                bigtotal=bigtotal + Double.parseDouble(tt.getString("cp_qty"));             //change
+                total=total + Double.parseDouble(tt.getString("cp_qty"));
+
+
                 movieList.add(C_item5);
+
+
 
             } catch (JSONException e) {
 
@@ -362,15 +444,18 @@ getall();
             }
         }
 
+        bagdiscount = bigtotal - total;
+
+        BIGTOTAL.setText("\u20B9 "+String.valueOf(bigtotal));
+        BAGDISCOUNT.setText("\u20B9 "+String.valueOf(bagdiscount));
+        TOTALPAYABLE.setText("\u20B9 "+String.valueOf(total));
+
+
         adapter = new CartAdapter(getActivity(), movieList);         //.subList(i-1, i)
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
     }
-
-
-
-
 
 
 }

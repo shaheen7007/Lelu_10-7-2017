@@ -1,11 +1,14 @@
 package com.webquiver.lelu;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
@@ -15,6 +18,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SessionManagement;
 
@@ -62,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
         session = new SessionManagement(getApplicationContext());
         requestQueue = Volley.newRequestQueue(this);
+
 
 
         //rediret if logged in
@@ -104,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                 AppCompatButton buttonConfirm = (AppCompatButton) confirmDialog.findViewById(R.id.buttonreset1);
                 forgot_phonenumberET = (EditText) confirmDialog.findViewById(R.id.forg_editTextphone_id);
                 final AlertDialog alertDialog = alert.create();
+                alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                 alertDialog.show();
 
                 buttonConfirm.setOnClickListener(new View.OnClickListener() {
@@ -172,13 +179,20 @@ public class LoginActivity extends AppCompatActivity {
                 if (phone.length() == 10 & password.length() >= 8) {
 
 
-                    final ProgressDialog loading = ProgressDialog.show(LoginActivity.this, "Logging In", "Please wait...", false, false);
+                    final Dialog progressDialog = new Dialog(LoginActivity.this);
+                    progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    progressDialog.setContentView(R.layout.custom_dialog_progress_loggingin);
+                    progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
+
+                //   final ProgressDialog loading = ProgressDialog.show(LoginActivity.this, "Logging In", "Please wait...", false, false);
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.LOGIN_URL,
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    loading.dismiss();
-
+                        //           loading.dismiss();
+                                  progressDialog.dismiss();
 
                                     try {
 
@@ -218,7 +232,8 @@ public class LoginActivity extends AppCompatActivity {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    loading.dismiss();
+                                  // loading.dismiss();
+                                    progressDialog.dismiss();
                                     //
                                     Toast.makeText(LoginActivity.this, "error1", Toast.LENGTH_LONG).show();
                                 }
@@ -367,6 +382,7 @@ public class LoginActivity extends AppCompatActivity {
         alert.setCancelable(true);
         AppCompatButton buttonConfirm = (AppCompatButton) confirmDialog.findViewById(R.id.resetbtn2_id);
         final AlertDialog alertDialog = alert.create();
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         alertDialog.show();
 
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
@@ -476,6 +492,7 @@ public class LoginActivity extends AppCompatActivity {
         final AlertDialog alertDialog = alert.create();
 
         //Displaying the alert dialog
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         alertDialog.show();
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override

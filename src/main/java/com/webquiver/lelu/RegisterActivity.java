@@ -1,8 +1,10 @@
 package com.webquiver.lelu;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -572,11 +575,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
     private void confirmOtp() throws JSONException {
         //Creating a LayoutInflater object for the dialog box
         LayoutInflater li = LayoutInflater.from(this);
@@ -601,6 +599,7 @@ public class RegisterActivity extends AppCompatActivity {
         final AlertDialog alertDialog = alert.create();
 
         //Displaying the alert dialog
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         alertDialog.show();
 
         //On the click of the confirm button from alert dialog
@@ -611,7 +610,16 @@ public class RegisterActivity extends AppCompatActivity {
                 alertDialog.dismiss();
 
                 //Displaying a progressbar
-                final ProgressDialog loading = ProgressDialog.show(RegisterActivity.this, "Authenticating", "Please wait while we check the entered code", false, false);
+            //    final ProgressDialog loading = ProgressDialog.show(RegisterActivity.this, "Authenticating", "Please wait while we check the entered code", false, false);
+
+
+                final Dialog progressDialog = new Dialog(RegisterActivity.this);
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                progressDialog.setContentView(R.layout.custom_dialog_progress_register);
+                progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
 
                 //Getting the user entered otp from edittext
                 final String otp = editTextConfirmOtp.getText().toString().trim();
@@ -638,7 +646,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                loading.dismiss();
+                                progressDialog.dismiss();
 
                                 //if the server response is success
                            //     if (response.equalsIgnoreCase("success")) {
@@ -655,7 +663,7 @@ public class RegisterActivity extends AppCompatActivity {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                alertDialog.dismiss();
+                                progressDialog.dismiss();
                                 Toast.makeText(RegisterActivity.this, "error2", Toast.LENGTH_LONG).show();
                             }
                         }) {
@@ -703,12 +711,22 @@ public class RegisterActivity extends AppCompatActivity {
                   if(companyvalidation(companynamestring))
                   {
 
-                      final ProgressDialog loading = ProgressDialog.show(this, "Registering", "Please wait...", false, false);
+              //        final ProgressDialog loading = ProgressDialog.show(this, "Registering", "Please wait...", false, false);
+
+                      final Dialog progressDialog = new Dialog(RegisterActivity.this);
+                      progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                      progressDialog.setContentView(R.layout.custom_dialog_progress_register);
+                      progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                      progressDialog.setCancelable(false);
+                      progressDialog.show();
+
+
+
                       StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.REGISTER_URL,
                               new Response.Listener<String>() {
                                   @Override
                                   public void onResponse(String response) {
-                                      loading.dismiss();
+                            //          loading.dismiss();
 
 
 
@@ -733,7 +751,7 @@ public class RegisterActivity extends AppCompatActivity {
                               new Response.ErrorListener() {
                                   @Override
                                   public void onErrorResponse(VolleyError error) {
-                                      loading.dismiss();
+                                   //   loading.dismiss();
                                       //
                                       Toast.makeText(RegisterActivity.this,"error1",Toast.LENGTH_LONG).show();
                                   }

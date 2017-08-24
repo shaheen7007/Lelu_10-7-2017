@@ -1,11 +1,13 @@
 package com.webquiver.lelu;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -22,6 +24,7 @@ import android.view.LayoutInflater;
 
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,8 +68,8 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
         startActivity(openFragmentBIntent);
         finish();
-    }
 
+    }
 
 
     //search
@@ -77,11 +80,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences searchhistory;
     SharedPreferences.Editor search_historyEditor;
     private ArrayList<String> searchnames;
-
-
-
-
-
 
 
     //sharedpref
@@ -115,6 +113,13 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
     TextView qty;
 
+    String pro_id;
+
+    TextView name,price,realprice,description;
+    public static final String TAG_IMAGE_URL = "i_image";
+    public static final String TAG_NAME = "i_name";
+    public static final String TAG_COLOR = "categ_name";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,11 +137,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
 
 
-
-
-
-
-
         qty=(TextView)findViewById(R.id.qtytxt_id);
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.dl_drawer_layout);
@@ -149,25 +149,19 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         requestQueue_cart=Volley.newRequestQueue(this);
 
 
-
         //check if logged in or not
         sessionManagement=new SessionManagement(getApplicationContext());
         sessionManagement.checkLogin();
 
 
-
         //price text strike and ruppee symbol
-        TextView realprice = (TextView) findViewById(R.id.realprice_id);
-        TextView price = (TextView) findViewById(R.id.pricetxt_id);
-        realprice.setText(realprice.getText().toString()+" "+"14,500.00");
-        price.setText(price.getText().toString()+" "+"10,500.00");
-        realprice.setPaintFlags(realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-
-
-
-
-
+        realprice = (TextView) findViewById(R.id.realprice_id);
+        description = (TextView) findViewById(R.id.realprice_id);
+        price = (TextView) findViewById(R.id.pricetxt_id);
+        name = (TextView) findViewById(R.id.pricetxt_id);
+       /// realprice.setText(realprice.getText().toString()+" "+"14,500.00");
+      //  price.setText(price.getText().toString()+" "+"10,500.00");
+      //  realprice.setPaintFlags(realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
 
         //initialisation
@@ -184,9 +178,9 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         Bundle b = iin.getExtras();
         if (b != null) {
 
-            Toast.makeText(this, String.valueOf(b.get("name")), Toast.LENGTH_LONG).show();
+            pro_id=String.valueOf(b.get("id"));
+            Toast.makeText(ItemActivity.this,pro_id,Toast.LENGTH_SHORT).show();
         }
-
 
         //custom toolbar
         ActionBar ab = getSupportActionBar();
@@ -200,12 +194,9 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         //image slider
         getimgs();
 
+        getall();               //cart number
 
-        getall();
-
-
-
-
+        getprodet();
 
     }
 
@@ -283,6 +274,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                         showimg(response);
                     }
                 },
+
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -306,7 +298,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         requestQueue.add(jsonArrayRequest);
     }
 
-//create arraylist of image urls
+    //create arraylist of image urls
     private void showimg(JSONArray jsonArray) {
         for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -314,7 +306,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
             try {
 
                 obj = jsonArray.getJSONObject(i);
-
                 images.add(obj.getString("image1"));
                 images.add(obj.getString("image2"));
                 images.add(obj.getString("image3"));
@@ -357,9 +348,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
             String searchjson=searchhistory.getString(Config.SearchJsonString,"NULL");
 
-
-
-
             mSearchView.openSearch();
             try {
                 showsearchdata(searchjson);
@@ -372,6 +360,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
                 search_historyEditor.putString(Config.numofhistory,String.valueOf(0));
                 search_historyEditor.commit();
+
             }
             else
             {
@@ -505,15 +494,23 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
         else if (view == findViewById(R.id.cartplus_id))
         {
-
             qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString())+1));
-
         }
 
 
         else if (view == findViewById(R.id.addtowishlist_id))
         {
-            final ProgressDialog loading = ProgressDialog.show(ItemActivity.this, "Adding to wish list", "Please wait...", false, false);
+
+            final Dialog loading = new Dialog(ItemActivity.this);
+            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            loading.setCancelable(false);
+            TextView t=(TextView)loading.findViewById(R.id.txt);
+            t.setText("Adding item to your Wishlist");
+            loading.show();
+
+          //  final ProgressDialog loading = ProgressDialog.show(ItemActivity.this, "Adding to wish list", "Please wait...", false, false);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.WISHLIST_ADD_URL,
                     new Response.Listener<String>() {
                         @Override
@@ -572,7 +569,16 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         else if (view == findViewById(R.id.addtocartbtn_id))
         {
 
-            final ProgressDialog loading = ProgressDialog.show(ItemActivity.this, "Adding to cart", "Please wait...", false, false);
+            final Dialog loading = new Dialog(ItemActivity.this);
+            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            loading.setCancelable(false);
+            TextView t=(TextView)loading.findViewById(R.id.txt);
+            t.setText("Adding item to your Cart");
+            loading.show();
+
+          //  final ProgressDialog loading = ProgressDialog.show(ItemActivity.this, "Adding to cart", "Please wait...", false, false);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
                     new Response.Listener<String>() {
                         @Override
@@ -661,9 +667,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-
-
     public void getall() {
 
         requestQueue_cart = Volley.newRequestQueue(getApplicationContext());
@@ -741,6 +744,77 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    public void getprodet() {
+
+        requestQueue_cart = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SINGLE_PROD_GET_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
+
+                        try {
+
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            //   JSONArray jsonArray=new JSONArray(response);
+
+                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+
+                                showPRO(response);
+
+
+                            } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+
+                                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+
+                            } else {
+
+                                Toast.makeText(getApplicationContext(), "Invalid user", Toast.LENGTH_LONG).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        //
+                        Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Adding the parameters to the request
+                params.put(Config.KEY_CART_ProdId,pro_id);
+                return params;
+            }
+        };
+
+        //Adding request the the queue
+        requestQueue_cart.add(stringRequest);
+
+    }
+
+    public void showPRO(String jsonArray) throws JSONException {
+
+        JSONObject json = new JSONObject(jsonArray);
+      //  JSONArray arr = json.getJSONArray("products");
+
+        name.setText(json.getString(TAG_NAME));
+     //   price.setText(json.getString(TAG_PRICE));
+ //      realprice.setText(json.getString(TAG_REALPRICE));
+  //     description.setText(json.getString(TAG_DESCRIPTION));
+
+    }
+
+
     private void showsearchdata(String jsonstring) throws JSONException {
 
         JSONArray jsonArray=new JSONArray(jsonstring);
@@ -752,22 +826,18 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
                 obj = jsonArray.getJSONObject(i);
                 searchnames.add(obj.getString("name"));
+
             } catch (JSONException e) {
-                e.printStackTrace();
+
+               e.printStackTrace();
+
             }
         }
         //  init();
 
         mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL"), searchnames));
 
-
-
     }
-
-
-
-
-
 
 }
 

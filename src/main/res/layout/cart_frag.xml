@@ -78,6 +78,8 @@
             android:layout_width="match_parent"
             android:layout_weight="1.2"
             android:weightSum="4"
+            android:id="@+id/lyt"
+            android:visibility="invisible"
             android:orientation="vertical"
             android:background="#fff"
             android:layout_height="0dp">
@@ -106,7 +108,8 @@
                     style="@android:style/TextAppearance.DeviceDefault.Small"
 
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:id="@+id/bigtotaltxt_id" />
 
             </LinearLayout>
 
@@ -136,7 +139,8 @@
                     android:text="-Rs. 150"
                     android:textColor="@color/colorgreen"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:id="@+id/bagdicount_id" />
 
             </LinearLayout>
 
@@ -202,7 +206,8 @@
                     android:textStyle="bold"
                     android:textColor="#000"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:id="@+id/totalpayable_id" />
 
             </LinearLayout>
 

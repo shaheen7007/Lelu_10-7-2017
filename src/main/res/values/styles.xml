@@ -1,5 +1,26 @@
 <resources>
 
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/up</item>
+        <item name="android:windowExitAnimation">@anim/down</item>
+    </style>
+
+
+    <style name="DialogAnimationSHAKE">
+        <item name="android:windowEnterAnimation">@anim/shake</item>
+
+    </style>
+
+
+
+
+
+
+
+
+
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->

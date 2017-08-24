@@ -69,12 +69,13 @@ public class HomeFragment extends android.app.Fragment {
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
 
-    public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
+    public static final String DATA_URL = "http://192.168.1.9:8000/get-inventory";
 
 
-    public static final String TAG_IMAGE_URL = "image";
-    public static final String TAG_NAME = "name";
-    public static final String TAG_COLOR = "color";
+    public static final String TAG_IMAGE_URL = "i_image";
+    public static final String TAG_NAME = "i_name";
+    public static final String TAG_COLOR = "categ_name";
+    public static final String TAG_ID = "inv_id";
 
     //GridView Object
     private ExpandableHeightGridView gridView;
@@ -84,6 +85,7 @@ public class HomeFragment extends android.app.Fragment {
     private ArrayList<String> names;
 
     private ArrayList<String> color;
+    private ArrayList<String> ids;
 
     private RequestQueue requestQueue_cart;
 
@@ -110,6 +112,7 @@ public class HomeFragment extends android.app.Fragment {
         images = new ArrayList<>();
         names = new ArrayList<>();
         color = new ArrayList<>();
+        ids = new ArrayList<>();
 
 
         //mPager = (ViewPager) rootView.findViewById(R.id.pager);
@@ -129,26 +132,20 @@ public class HomeFragment extends android.app.Fragment {
                 Toast.makeText(getActivity(), String.valueOf(names.get(position)), Toast.LENGTH_SHORT).show();
 
                 Intent intent=new Intent(getActivity(), ItemActivity.class);
-                intent.putExtra("name",String.valueOf(names.get(position)));
-                intent.putExtra("color",String.valueOf(color.get(position)));
-                intent.putStringArrayListExtra("images",images);
+              //  intent.putExtra("name",String.valueOf(names.get(position)));
+                intent.putExtra("id",String.valueOf(ids.get(position)));
+               // intent.putStringArrayListExtra("images",images);
                 startActivity(intent);
                 getActivity().finish();
-
-
             }
         });
 
-
         return rootView;
-
-
     }
 
     private void getData() {
         //Showing a progress dialog while our app fetches the data from url
         //   final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
-
         progressBar.setVisibility(View.VISIBLE);
 
         //Creating a json array request to get the json from our api
@@ -204,18 +201,17 @@ public class HomeFragment extends android.app.Fragment {
 
                 images.add(obj.getString(TAG_IMAGE_URL));
                 names.add(obj.getString(TAG_NAME));
-                color.add(obj.getString(TAG_COLOR));
+                ids.add(obj.getString(TAG_ID));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         //Creating GridViewAdapter Object
-        GridViewAdapter gridViewAdapter = new GridViewAdapter(getActivity(), images, names, color);
+        GridViewAdapter gridViewAdapter = new GridViewAdapter(getActivity(), images, names, ids);
 
         //Adding adapter to gridview
         gridView.setAdapter(gridViewAdapter);
     }
-
 
     public static HomeFragment getInstance() {
         if (homeFragment == null) {
@@ -230,9 +226,6 @@ public class HomeFragment extends android.app.Fragment {
         homeFragment = null;
     }
 
-
     //functions for getting and displaying number of items in cart(green circle)
-
-
 
 }

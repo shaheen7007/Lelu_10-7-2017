@@ -33,6 +33,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.R;
+import com.webquiver.lelu.WishListActivity;
 import com.webquiver.lelu.classes.AppController;
 import com.webquiver.lelu.classes.CartItem;
 import com.webquiver.lelu.classes.Config;
@@ -187,9 +188,9 @@ public class WishListAdapter extends BaseAdapter {
                                                 public void onClick(View v) {
                                                     //Hiding the alert dialog
                                                     alertDialog.dismiss();
-
+                                                    Intent intent=new Intent(activity,HomeActivity.class);
+                                                    activity.startActivity(intent);
                                                     activity.finish();
-
 
                                                 }
 

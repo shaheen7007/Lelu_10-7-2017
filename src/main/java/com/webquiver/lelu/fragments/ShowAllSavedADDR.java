@@ -492,6 +492,7 @@ public class ShowAllSavedADDR extends android.app.Fragment {
                     Toast.makeText(getActivity(),selectedID,Toast.LENGTH_LONG).show();
 
                     final AlertDialog alertDialog = alert.create();
+                    alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     alertDialog.show();
 
                     buttonSave.setOnClickListener(new View.OnClickListener() {

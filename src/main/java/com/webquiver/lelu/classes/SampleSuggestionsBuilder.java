@@ -35,6 +35,8 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
     public SampleSuggestionsBuilder(Context context,String f,String s,String t,ArrayList<String> sugg) {
         this.mContext = context;
         sug=sugg;
+
+
         createHistorys(f,s,t);
 
 
@@ -54,25 +56,31 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
 
     private void createHistorys(String f,String s,String t) {
 
-        SearchItem item1 = new SearchItem(
-                f,
-                f,
-                SearchItem.TYPE_SEARCH_ITEM_HISTORY
-        );
-        mHistorySuggestions.add(item1);
-        SearchItem item2 = new SearchItem(
-                s,
-                s,
-                SearchItem.TYPE_SEARCH_ITEM_HISTORY
-        );
-        mHistorySuggestions.add(item2);
-        SearchItem item3 = new SearchItem(
-                t,
-                t,
-                SearchItem.TYPE_SEARCH_ITEM_HISTORY
-        );
-        mHistorySuggestions.add(item3);
+        if (!f.equals("NULL")) {
+            SearchItem item1 = new SearchItem(
+                    f,
+                    f,
+                    SearchItem.TYPE_SEARCH_ITEM_HISTORY
+            );
+            mHistorySuggestions.add(item1);
+        }
 
+        if (!s.equals("NULL")) {
+            SearchItem item2 = new SearchItem(
+                    s,
+                    s,
+                    SearchItem.TYPE_SEARCH_ITEM_HISTORY
+            );
+            mHistorySuggestions.add(item2);
+        }
+        if (!t.equals("NULL")) {
+            SearchItem item3 = new SearchItem(
+                    t,
+                    t,
+                    SearchItem.TYPE_SEARCH_ITEM_HISTORY
+            );
+            mHistorySuggestions.add(item3);
+        }
     }
 
     @Override

@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +48,6 @@ import java.util.Map;
 /**
  * Created by WebQuiver 04 on 7/25/2017.
  */
-
 
 //This fragment is used to show the selected address (selected from all address)
 
@@ -81,7 +83,6 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
     String selectedID;             //ca_id of selected address
 
-
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +91,6 @@ public class ShowSelectedADDR extends android.app.Fragment {
                 R.layout.address_frag, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.addressList_id);
-
 
         pref = this.getActivity().getSharedPreferences(SessionManagement.PREF_NAME,Context.MODE_PRIVATE);
         pref_cid = this.getActivity().getSharedPreferences(PREF_CAID,Context.MODE_PRIVATE);
@@ -102,13 +102,42 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
 
         Bundle b=getArguments();
-
-
-        String pos =  b.getString("p");
+       String pos =  b.getString("p");
         position=Integer.parseInt(pos);
 
 
     //    Toast.makeText(getActivity(),pos,Toast.LENGTH_LONG).show();
+
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+        rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.i("test", "keyCode: " + keyCode);
+                if( keyCode == KeyEvent.KEYCODE_BACK ) {
+                    Log.i("test", "onKey Back listener is working!!!");
+                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+
+        ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bckBTN_id);
+        bckBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            }
+        });
+
+
+
+
 
 
 
@@ -727,6 +756,7 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
 
                     final AlertDialog alertDialog = alert.create();
+                    alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     alertDialog.show();
 
 
@@ -868,6 +898,7 @@ public class ShowSelectedADDR extends android.app.Fragment {
                     final EditText state=(EditText)confirmDialog.findViewById(R.id.ADR_StateET);
                     final EditText phone=(EditText)confirmDialog.findViewById(R.id.ADR_PhoneET);
                     final AlertDialog alertDialog = alert.create();
+                    alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     alertDialog.show();
 
                     buttonSave.setOnClickListener(new View.OnClickListener() {
@@ -967,9 +998,7 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
                                                     Toast.makeText((v.getRootView().getContext()),"Failed",Toast.LENGTH_LONG).show();
 
-
                                                 }
-
 
                                                 else {
 
@@ -1109,7 +1138,6 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
 
 */
-
 
 
 

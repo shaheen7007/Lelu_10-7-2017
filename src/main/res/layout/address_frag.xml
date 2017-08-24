@@ -99,11 +99,10 @@
             android:layout_height="0dp"
             android:paddingTop="15dp"
             android:divider="@null"
-            android:background="@color/colorgrey2"
             android:fadeScrollbars="true"
             android:scrollbars="none"
             android:dividerHeight="0dp"
-            android:id="@+id/addressList_id"></ListView>
+            android:id="@+id/addressList_id"/>
 
 
     <LinearLayout
@@ -112,7 +111,8 @@
         android:weightSum="4"
         android:orientation="vertical"
         android:background="@color/colorgrey2"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:id="@+id/lyt">
 
         <LinearLayout
             android:weightSum="2"

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -47,6 +48,11 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
+import com.tuyenmonkey.mkloader.MKLoader;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.adapters.SearchResultAdapter;
 import com.webquiver.lelu.classes.Config;
@@ -75,9 +81,11 @@ import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
+/*
     public void onBackPressed()
     {
+
+
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
         alertDialog.setTitle("Exit ?");
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -102,6 +110,41 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
 
         alertDialog.show();
+        }
+*/
+
+        boolean doubleBackToExitPressedOnce = false;
+        @Override
+        public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        //Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            SuperActivityToast.create(this, new Style(), Style.TYPE_STANDARD)
+               //     .setButtonText("Please click BACK again to exit")
+               //     .setButtonIconResource(R.drawable.ic_undo)
+              //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+               //     .setProgressBarColor(Color.WHITE)
+                    .setText("click BACK again to exit")
+                    .setDuration(Style.DURATION_LONG)
+                    .setFrame(Style.FRAME_STANDARD)
+                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                    .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
 
     }
 
@@ -109,22 +152,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private PersistentSearchView mSearchView;
     private SearchResultAdapter mResultAdapter;
 
+    MKLoader mkLoader;
+
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1023;
-
-
 
     AppBarLayout appBarLayout;
 
+   // ProgressBar progressBar;
 
-
-    ProgressBar progressBar;
 
 //fragment
     Fragment fr = null;
     FragmentManager fm = null;
     View selectedView = null;
-
-
 
 
 // banners
@@ -140,7 +180,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ExpandableHeightGridView gridView;
 
     private ArrayList<String> banimages;
-
 
     LinearLayout categorylayout;
     DrawerLayout mDrawerLayout;
@@ -185,12 +224,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
-
        sharedPreferences = getSharedPreferences(BANNER_PREFERENCE, MODE_PRIVATE);
         pref_numberss = this.getSharedPreferences(NUM_PREFERENCE, MODE_PRIVATE);
         editor_num_pref=pref_numberss.edit();
-
 
 
         searchnames = new ArrayList<>();
@@ -200,16 +236,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
         pref_numberss = this.getSharedPreferences(NUM_PREFERENCE, MODE_PRIVATE);
-
-
 
 
         //check if logged in or not
         sessionManagement=new SessionManagement(getApplicationContext());
         sessionManagement.checkLogin();
-
-
 
         requestQueue_cart=Volley.newRequestQueue(getApplicationContext());
         pref = this.getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
@@ -217,12 +250,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         final ImageView search = (ImageView) findViewById(R.id.search);
 
-        progressBar=(ProgressBar)findViewById(R.id.prog_id);
+      //  progressBar=(ProgressBar)findViewById(R.id.prog_id);
 
         banimages = new ArrayList<>();
-
-
-
 
         searchhistory = this.getSharedPreferences(Config.SearchPref, Context.MODE_PRIVATE);
         search_historyEditor=searchhistory.edit();
@@ -237,8 +267,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragment).commit();
         }
-
-
 
 
         //fragment
@@ -261,8 +289,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         View customView = li.inflate(R.layout.custombar, null);
         ab.setCustomView(customView);
         ab.setDisplayShowCustomEnabled(true);
-
-
 
 
         cartnum=(TextView)findViewById(R.id.numbercart_home_id) ;
@@ -372,7 +398,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         private void getData(){
             //Showing a progress dialog while our app fetches the data from url
            //final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
-            progressBar.setVisibility(View.VISIBLE);
+    //        progressBar.setVisibility(View.VISIBLE);
 
             //get banner json
             JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest(BANNER_URL,
@@ -382,7 +408,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             //Dismissing the progressdialog on response
              //                       loading.dismiss();
 
-                            progressBar.setVisibility(View.INVISIBLE);
+          //                  progressBar.setVisibility(View.INVISIBLE);
 
                            SharedPreferences.Editor prefEdit = sharedPreferences.edit();
                             String jsonstring=response.toString();
@@ -404,7 +430,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             } catch (JSONException e) {
                                 e.printStackTrace();
                            }
-                            progressBar.setVisibility(View.INVISIBLE);
+                //            progressBar.setVisibility(View.INVISIBLE);
                             showbanner(jsonArray);
 
                         }
@@ -548,72 +574,94 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         else if (view == findViewById(R.id.search)) {
 
-            final ImageView s=(ImageView)findViewById(R.id.search);
-            s.setVisibility(View.INVISIBLE);
+            fun();
+            fun();
 
-
-           // mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL")));
-
-            mSearchView.openSearch();
-
-
-            if (searchhistory.getString(Config.numofhistory, "NULL").equals("NULL")) {
-
-                search_historyEditor.putString(Config.numofhistory,String.valueOf(0));
-                search_historyEditor.commit();
             }
-            else
-            {
 
-                mSearchView.setSearchListener(new PersistentSearchView.SearchListener() {
+        else  if (view == findViewById(R.id.cartitem)) {
 
 
-                    @Override
-                    public boolean onSuggestion(SearchItem searchItem) {
-                        Log.d("onSuggestion", searchItem.getTitle());
-                        mSearchView.setSearchString(searchItem.getTitle(),true);
-                        onSearch(searchItem.getTitle());
-                        return false;
-                    }
+          Intent intent = new Intent(HomeActivity.this, CartActivity.class);
 
-                    @Override
-                    public void onSearchCleared() {
-
-                    }
-
-                    @Override
-                    public void onSearchTermChanged(String term) {
-
-                    }
-
-                    @Override
-                    public void onSearchEditClosed() {
-
-                    }
-
-                    @Override
-                    public boolean onSearchEditBackPressed() {
-                        return false;
-                    }
-
-                    @Override
-                    public void onSearchExit() {
-
-                    }
-
-                    @Override
-                    public void onSearch(String string) {
-
-                  //      Toast.makeText(HomeActivity.this, string +" Searched", Toast.LENGTH_LONG).show();
+            intent.putExtra("home","home");
+            startActivity(intent);
+            finish();
+        }
+    }
 
 
-                        //fragment
+
+    public void fun()
+    {
+        final ImageView s=(ImageView)findViewById(R.id.search);
+        s.setVisibility(View.INVISIBLE);
 
 
-                        //appBarLayout.setExpanded(false,true);
+        // mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL")));
 
-                        mSearchView.clearSuggestions();
-                        mSearchView.closeSearch();
+        mSearchView.openSearch();
+
+
+
+        if (searchhistory.getString(Config.numofhistory, "NULL").equals("NULL")) {
+
+            search_historyEditor.putString(Config.numofhistory,String.valueOf(0));
+            search_historyEditor.commit();
+
+        }
+        else
+        {
+
+            mSearchView.setSearchListener(new PersistentSearchView.SearchListener() {
+
+
+                @Override
+                public boolean onSuggestion(SearchItem searchItem) {
+                    Log.d("onSuggestion", searchItem.getTitle());
+                    mSearchView.setSearchString(searchItem.getTitle(),true);
+                    onSearch(searchItem.getTitle());
+                    return false;
+                }
+
+                @Override
+                public void onSearchCleared() {
+
+                }
+
+                @Override
+                public void onSearchTermChanged(String term) {
+
+                }
+
+                @Override
+                public void onSearchEditClosed() {
+
+                }
+
+                @Override
+                public boolean onSearchEditBackPressed() {
+                    return false;
+                }
+
+                @Override
+                public void onSearchExit() {
+
+                }
+
+                @Override
+                public void onSearch(String string) {
+
+                    //      Toast.makeText(HomeActivity.this, string +" Searched", Toast.LENGTH_LONG).show();
+
+
+                    //fragment
+
+
+                    //appBarLayout.setExpanded(false,true);
+
+                    mSearchView.clearSuggestions();
+                    mSearchView.closeSearch();
 
                      /*
                         Bundle bundle = new Bundle();
@@ -629,76 +677,59 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 */
 
-                        Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
-                        startActivity(intent);
-                        finish();
+                    Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+                    startActivity(intent);
+                    finish();
 
-                        int num=Integer.parseInt(searchhistory.getString(Config.numofhistory,"NULL"));
+                    int num=Integer.parseInt(searchhistory.getString(Config.numofhistory,"NULL"));
 
-                        if (string.equals(searchhistory.getString(Config.first_suggestion,"NULL")))
-                        {
-                            //nothing
-                        }
-                        else if (string.equals(searchhistory.getString(Config.second_suggestion,"NULL")))
-                        {
-                            String temp;
-                            temp=searchhistory.getString(Config.second_suggestion,"NULL");
-                            search_historyEditor.putString(Config.second_suggestion,searchhistory.getString(Config.first_suggestion,"NULL"));
-                            search_historyEditor.putString(Config.first_suggestion,temp);
-                            search_historyEditor.commit();
+                    if (string.equals(searchhistory.getString(Config.first_suggestion,"NULL")))
+                    {
+                        //nothing
+                    }
+                    else if (string.equals(searchhistory.getString(Config.second_suggestion,"NULL")))
+                    {
+                        String temp;
+                        temp=searchhistory.getString(Config.second_suggestion,"NULL");
+                        search_historyEditor.putString(Config.second_suggestion,searchhistory.getString(Config.first_suggestion,"NULL"));
+                        search_historyEditor.putString(Config.first_suggestion,temp);
+                        search_historyEditor.commit();
 
-                        }
-                        else {
-
-                            search_historyEditor.putString(Config.third_suggestion, searchhistory.getString(Config.second_suggestion, "NULL"));
-                            search_historyEditor.putString(Config.second_suggestion, searchhistory.getString(Config.first_suggestion, "NULL"));
-                            search_historyEditor.putString(Config.first_suggestion, string);
-                            search_historyEditor.commit();
-                        }
-
-
+                    }
+                    else {
+                        search_historyEditor.putString(Config.third_suggestion, searchhistory.getString(Config.second_suggestion, "NULL"));
+                        search_historyEditor.putString(Config.second_suggestion, searchhistory.getString(Config.first_suggestion, "NULL"));
+                        search_historyEditor.putString(Config.first_suggestion, string);
+                        search_historyEditor.commit();
                     }
 
 
+                }
 
-                    private void fillResultToRecyclerView(String query) {
-                        List<SearchResult> newResults = new ArrayList<>();
-                        for(int i =0; i< 10; i++) {
-                            SearchResult result = new SearchResult(query, query + Integer.toString(i), "");
-                            newResults.add(result);
-                        }
-                        mResultAdapter.replaceWith(newResults);
+
+
+                private void fillResultToRecyclerView(String query) {
+                    List<SearchResult> newResults = new ArrayList<>();
+                    for(int i =0; i< 10; i++) {
+                        SearchResult result = new SearchResult(query, query + Integer.toString(i), "");
+                        newResults.add(result);
                     }
+                    mResultAdapter.replaceWith(newResults);
+                }
 
 
 
-                    @Override
-                    public void onSearchEditOpened() {
+                @Override
+                public void onSearchEditOpened() {
 
-                    }
-
-
-                });
-
-            }
-
-            }
+                }
 
 
-        else  if (view == findViewById(R.id.cartitem)) {
-
-
-          Intent intent = new Intent(HomeActivity.this, CartActivity.class);
-
-            intent.putExtra("home","home");
-            startActivity(intent);
-            finish();
+            });
 
         }
+
     }
-
-
-
 
     public void getall() {
 
@@ -837,11 +868,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 },
                 new Response.ErrorListener() {
                     @Override
+
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(HomeActivity.this,"No response from api",Toast.LENGTH_LONG).show();
                         //set from preference
                         JSONArray jsonArray = null;
-
                         //  progressBar.setVisibility(View.INVISIBLE);
                         // showbanner(jsonArray);
 

@@ -1,6 +1,7 @@
 package com.webquiver.lelu.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -8,11 +9,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -190,7 +193,17 @@ public class WishListFragment extends Fragment {
     public void getall() {
 
         requestQueue = Volley.newRequestQueue(getActivity());
-        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+      //  final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+        final Dialog loading = new Dialog(getActivity());
+        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.setCancelable(false);
+        TextView t=(TextView)loading.findViewById(R.id.txt);
+        t.setText("Loading");
+        loading.show();
+
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.WISHLIST_GET_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -229,10 +242,12 @@ public class WishListFragment extends Fragment {
                                 alert.setView(confirmDialog);
                                 alert.setCancelable(false);
 
+
                                 //Creating an alert dialog
                                 final AlertDialog alertDialog = alert.create();
 
                                 //Displaying the alert dialog
+                                alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                                 alertDialog.show();
 
                                 //On the click of the confirm button from alert dialog
@@ -241,14 +256,15 @@ public class WishListFragment extends Fragment {
                                     public void onClick(View v) {
                                         //Hiding the alert dialog
                                         alertDialog.dismiss();
+                                        Intent intent=new Intent(getActivity(),HomeActivity.class);
+                                        startActivity(intent);
+
                                         getActivity().finish();
 
 
                                     }
 
                                 });
-
-
 
                             } else {
 

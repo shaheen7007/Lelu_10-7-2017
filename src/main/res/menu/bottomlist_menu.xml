@@ -22,7 +22,7 @@
         android:title="\u20B9 1000   -   \u20B9 5000" />
 
     <item
-        android:id="@+id/item4"
+        android:id="@+id/item5"
         android:icon="@android:drawable/ic_search_category_default"
         android:title="Above   \u20B9 5000" />
 

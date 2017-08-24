@@ -14,7 +14,7 @@ android {
         aaptOptions.cruncherEnabled = false
         aaptOptions.useNewCruncher = false
 
-
+0000000
     }
     buildTypes {
         release {
@@ -40,5 +40,11 @@ dependencies {
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
     compile 'com.github.crysehillmes:PersistentSearchView:4da778cd90'
     compile 'com.github.Kennyc1012:BottomSheet:2.3.4'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'
+    compile project(':powerrefresh')       //loading
+    compile 'com.tuyenmonkey:mkloader:1.4.0'
+    compile 'com.github.johnpersano:supertoasts:2.0'
+    compile 'com.geniusforapp.fancydialog:FancyDialog:0.1.0'
 
 }

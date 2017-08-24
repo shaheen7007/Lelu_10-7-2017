@@ -14,7 +14,7 @@ public class Config {
 
 
     //BASE URL
-    public static final String BASE_URL = "http://192.168.1.8:1111/";
+    public static final String BASE_URL = "http://192.168.1.9:8000/";
 
 
 
@@ -132,6 +132,16 @@ public class Config {
 
 
     public static final String SearchJsonString="searchjsonstring";
+
+
+
+
+
+    //url item
+
+    public static final String SINGLE_PROD_GET_URL="";
+
+
 
 
 

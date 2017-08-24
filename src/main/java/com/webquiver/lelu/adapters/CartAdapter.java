@@ -5,18 +5,21 @@ package com.webquiver.lelu.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +35,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.geniusforapp.fancydialog.FancyAlertDialog;
 import com.webquiver.lelu.CartActivity;
 import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.ItemActivity;
@@ -136,8 +140,15 @@ public class CartAdapter extends BaseAdapter {
 
                 Toast.makeText(activity, cartitems.get(position).getPRODUCT_ID(), Toast.LENGTH_LONG).show();
 
-
-                final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
+                final Dialog loading = new Dialog(activity);
+                loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                loading.setCancelable(false);
+                TextView t=(TextView)loading.findViewById(R.id.txt);
+                t.setText("Updating Quantity");
+                loading.show();
+            //    final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
                         new Response.Listener<String>() {
                             @Override
@@ -194,7 +205,15 @@ public class CartAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
+                final Dialog loading = new Dialog(activity);
+                loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                loading.setCancelable(false);
+                TextView t=(TextView)loading.findViewById(R.id.txt);
+                t.setText("Updating Quantity");
+                loading.show();
+               // final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
                         new Response.Listener<String>() {
                             @Override
@@ -251,17 +270,25 @@ public class CartAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
+/*
+
                 final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 
                 alertDialog.setTitle("Remove item ?");
-
 
                 alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO Add your code for the button here.
 
-
-                        final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
+                        final Dialog loading = new Dialog(activity);
+                        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        loading.setCancelable(false);
+                        TextView t=(TextView)loading.findViewById(R.id.txt);
+                        t.setText("Removing item from your Cart");
+                        loading.show();
+                     //   final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
                         new Response.Listener<String>() {
                             @Override
@@ -385,6 +412,157 @@ public class CartAdapter extends BaseAdapter {
                 });
 
                 alertDialog.show();
+
+                 */
+
+
+
+                FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(activity)
+                     //   .setImageRecourse(R.drawable.banner2)
+                        .setTextSubTitle("Remove item")
+                        .setBody("Are you sure you want to remove \n this item ?")
+                        .setNegativeColor(R.color.colorgreen)
+                        .setNegativeButtonText("Cancel")
+                        .setButtonsGravity(FancyAlertDialog.PanelGravity.CENTER)
+                        .setOnNegativeClicked(new FancyAlertDialog.OnNegativeClicked() {
+                            @Override
+                            public void OnClick(View view, Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButtonText("Remove")
+                        .setPositiveColor(R.color.colorred)
+                        .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
+                            @Override
+                            public void OnClick(View view, Dialog dialog) {
+
+                                dialog.dismiss();
+
+                                final Dialog loading = new Dialog(activity);
+                                loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                                loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                loading.setCancelable(false);
+                                TextView t=(TextView)loading.findViewById(R.id.txt);
+                                t.setText("Removing item from your Cart");
+                                loading.show();
+                                //   final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                loading.dismiss();
+
+                                                try {
+
+                                                    JSONObject jsonResponse = new JSONObject(response);
+                                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                                        //change
+                                                        Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
+
+
+                                                        //cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
+
+                                                        //   cartitems.remove(position-1);             //
+
+
+                                                        cartitems.remove(position);
+                                                        notifyDataSetChanged();
+                                                        //     getView(position, finalConvertView,parent); //
+
+                                                        if (cartitems.size()==0)
+                                                        {
+
+                                                            LayoutInflater li = LayoutInflater.from(activity);
+                                                            //Creating a view to get the dialog box
+                                                            View confirmDialog = li.inflate(R.layout.cartempty_layout, null);
+
+                                                            //Initizliaing confirm button fo dialog box and edittext of dialog box
+                                                            buttonSHOPNOW = (AppCompatButton) confirmDialog.findViewById(R.id.buttonShop);
+
+                                                            //Creating an alertdialog builder
+                                                            AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+
+                                                            //Adding our dialog box to the view of alert dialog
+                                                            alert.setView(confirmDialog);
+                                                            alert.setCancelable(false);
+
+                                                            //Creating an alert dialog
+                                                            final AlertDialog alertDialog = alert.create();
+
+                                                            //Displaying the alert dialog
+                                                            alertDialog.show();
+
+                                                            //On the click of the confirm button from alert dialog
+                                                            buttonSHOPNOW.setOnClickListener(new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
+                                                                    //Hiding the alert dialog
+                                                                    alertDialog.dismiss();
+
+                                                                    Intent intent=new Intent(activity,HomeActivity.class);
+                                                                    activity.startActivity(intent);
+                                                                    activity.finish();
+
+
+                                                                }
+
+                                                            });
+
+
+
+
+                                                        }
+
+
+
+                                                        // Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+
+                                                    }
+
+                                                    else {
+
+                                                        Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                    loading.dismiss();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                loading.dismiss();
+                                                //
+                                                Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
+                                            }
+                                        }) {
+
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<>();
+                                        //Adding the parameters to the request
+                                        params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
+                                        params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
+                                        params.put(Config.KEY_CART_ProdQty, String.valueOf(0));
+                                        return params;
+                                    }
+                                };
+
+                                //Adding request the the queue
+                                requestQueue.add(stringRequest);
+
+
+                            }
+                        })
+                       /* .setAutoHide(true)*/
+                        .build();
+                alert.show();
+
+
+
 
 
 

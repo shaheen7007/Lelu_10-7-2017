@@ -5,6 +5,7 @@ package com.webquiver.lelu.adapters;
  */
 
 import android.content.Context;
+import android.graphics.Movie;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.CustomVolleyRequest;
 
@@ -67,15 +69,24 @@ public class GridViewAdapter extends BaseAdapter {
 
         View grid;
         if (convertView == null) {
-
+Movie m;
             grid = new View(context);
             grid = inflater.inflate(R.layout.grid_single, null);
             TextView name = (TextView) grid.findViewById(R.id.grid_text1);
             TextView clr = (TextView) grid.findViewById(R.id.grid_text2);
-            NetworkImageView imageView = (NetworkImageView) grid.findViewById(R.id.grid_image);
-            imageLoader = CustomVolleyRequest.getInstance(context).getImageLoader();
-            imageLoader.get(images.get(position), ImageLoader.getImageListener(imageView, R.drawable.blank_image,R.drawable.blank_image));
-            imageView.setImageUrl(images.get(position),imageLoader);
+            ImageView imageView = (ImageView) grid.findViewById(R.id.grid_image);
+
+            Picasso.with(context).load("http://192.168.1.9:8000"+images.get(position))
+                    .into(imageView);
+
+
+         //   imageLoader = CustomVolleyRequest.getInstance(context).getImageLoader();
+         //   imageLoader.get("http://192.168.1.9:8000"+images.get(position), ImageLoader.getImageListener(imageView, R.drawable.blank_image,R.drawable.loading2));
+        //    imageView.setImageUrl(images.get(position),imageLoader);
+
+
+
+
             name.setText(names.get(position));
             clr.setText(color.get(position));
         } else {

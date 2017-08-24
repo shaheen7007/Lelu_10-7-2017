@@ -37,6 +37,7 @@
                 android:textColor="#000"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:textStyle="bold"
+                android:id="@+id/pronametxt_id"
                 android:layout_height="wrap_content" />
             <LinearLayout
                 android:layout_width="wrap_content"

@@ -89,8 +89,6 @@
             app:layout_anchorGravity="center_vertical|end"
             app:srcCompat="@drawable/search" />
 
-        <include layout="@layout/content_item" />
-
 
         <org.cryse.widget.persistentsearch.PersistentSearchView
 
@@ -111,6 +109,7 @@
             app:persistentSV_searchCardElevation="2dp"
             app:persistentSV_customToolbarHeight="60dp"/>
 
+        <include layout="@layout/content_item" />
 
 
     </android.support.design.widget.CoordinatorLayout>

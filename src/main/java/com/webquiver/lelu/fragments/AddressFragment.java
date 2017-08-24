@@ -2,6 +2,7 @@ package com.webquiver.lelu.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,10 +21,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +39,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.geniusforapp.fancydialog.FancyAlertDialog;
 import com.webquiver.lelu.CartActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.AddressItem;
@@ -58,7 +63,6 @@ public class AddressFragment extends android.app.Fragment {
     private RequestQueue requestQueue;
     private RequestQueue requestQueue2;
     private RequestQueue requestQueue_editADDR;
-
     //private ProgressDialog pDialog;
     private List<AddressItem> movieList = new ArrayList<AddressItem>();
     private ListView listView;
@@ -69,6 +73,9 @@ public class AddressFragment extends android.app.Fragment {
 
     EditText district,state;
 
+    LinearLayout lyt;
+
+    TextView PlaceOrderBTN;
 
     //sharedpref
     SharedPreferences pref;
@@ -97,15 +104,24 @@ public class AddressFragment extends android.app.Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.addressList_id);
         showALL_TXT_id=(TextView)rootView.findViewById(R.id.show_all_addr_txt_id);
+        showALL_TXT_id.setVisibility(View.INVISIBLE);
         viewdeatails_TXT=(TextView)rootView.findViewById(R.id.viewdetails_TXT_ID);
         pref = this.getActivity().getSharedPreferences(SessionManagement.PREF_NAME,Context.MODE_PRIVATE);
         pref_cid = this.getActivity().getSharedPreferences(PREF_CAID,Context.MODE_PRIVATE);
         editor = pref.edit();
         editorcaid = pref_cid.edit();
 
+
+        lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
+        lyt.setVisibility(View.INVISIBLE);
+
+        PlaceOrderBTN=(TextView)rootView.findViewById(R.id.placeorderBTN_id);
+        PlaceOrderBTN.setVisibility(View.INVISIBLE);
+
+
         rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
-       rootView.setOnKeyListener(new View.OnKeyListener() {
+        rootView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 Log.i("test", "keyCode: " + keyCode);
@@ -127,13 +143,14 @@ public class AddressFragment extends android.app.Fragment {
             @Override
             public void onClick(View v) {
 
-                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
             }
         });
 
 
-       getall();
+
+        getall();
 
 
 /*
@@ -221,15 +238,14 @@ public class AddressFragment extends android.app.Fragment {
             }
         });
 
-        TextView PlaceOrderBTN=(TextView)rootView.findViewById(R.id.placeorderBTN_id);
 
         PlaceOrderBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                                             @Override
+                                             public void onClick(View v) {
 
-                // Toast.makeText(getActivity(),SessionManagement.KEY_ADDR_ID,Toast.LENGTH_LONG).show();
+                                                 // Toast.makeText(getActivity(),SessionManagement.KEY_ADDR_ID,Toast.LENGTH_LONG).show();
 
-
+/*
                 final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
 
                 alertDialog.setTitle("Place Order ?");
@@ -242,7 +258,17 @@ public class AddressFragment extends android.app.Fragment {
 
                         final String ca_id = pref_cid.getString("caid", "def");
 
-                        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
+                        final Dialog loading = new Dialog(getActivity());
+                        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        loading.setCancelable(false);
+                        TextView t=(TextView)loading.findViewById(R.id.txt);
+                        t.setText("Placing your order");
+                        loading.show();
+
+
+                        //   final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
                         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_PLACE_URL,
                                 new Response.Listener<String>() {
                                     @Override
@@ -314,15 +340,106 @@ public class AddressFragment extends android.app.Fragment {
                     }
                 });
 
+
                 alertDialog.show();
+*/
+
+                                                 FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(getActivity())
+                                                         //   .setImageRecourse(R.drawable.banner2)
+                                                         .setTextSubTitle("Place order")
+                                                         .setBody("Are you sure you want to place \n this order ?")
+                                                         .setNegativeColor(R.color.colorred)
+                                                         .setNegativeButtonText("No")
+                                                         .setButtonsGravity(FancyAlertDialog.PanelGravity.CENTER)
+                                                         .setOnNegativeClicked(new FancyAlertDialog.OnNegativeClicked() {
+                                                             @Override
+                                                             public void OnClick(View view, Dialog dialog) {
+                                                                 dialog.dismiss();
+                                                             }
+                                                         })
+                                                         .setPositiveButtonText("Yes")
+                                                         .setPositiveColor(R.color.colorgreen)
+                                                         .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
+                                                             @Override
+                                                             public void OnClick(View view, Dialog dialog) {
+
+                                                                 dialog.dismiss();
+                                                                 final String ca_id = pref_cid.getString("caid", "def");
+
+                                                                 final Dialog loading = new Dialog(getActivity());
+                                                                 loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                 loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                                                                 loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                                                 loading.setCancelable(false);
+                                                                 TextView t = (TextView) loading.findViewById(R.id.txt);
+                                                                 t.setText("Placing your order");
+                                                                 loading.show();
 
 
+                                                                 //   final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
+                                                                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_PLACE_URL,
+                                                                         new Response.Listener<String>() {
+                                                                             @Override
+                                                                             public void onResponse(String response) {
+                                                                                 loading.dismiss();
+
+                                                                                 try {
+
+                                                                                     JSONObject jsonResponse = new JSONObject(response);
+                                                                                     if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                                                                         Bundle bundle = new Bundle();
+                                                                                         bundle.putString("p", "999");
+                                                                                         OrderDetFragment2 showSelectedADDR = new OrderDetFragment2();
+                                                                                         showSelectedADDR.setArguments(bundle);
+                                                                                         FragmentManager fm = null;
+                                                                                         fm = getFragmentManager();
+                                                                                         FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                                                                                         fragmentTransaction.replace(R.id.cart_FL, showSelectedADDR);
+                                                                                         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                                                                                         fragmentTransaction.addToBackStack("ord");
+                                                                                         fragmentTransaction.commit();
 
 
+                                                                                     } else {
 
-            }
-                });
+                                                                                         Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                                                                     }
+                                                                                 } catch (JSONException e) {
+                                                                                     e.printStackTrace();
 
+                                                                                 }
+                                                                             }
+                                                                         },
+                                                                         new Response.ErrorListener() {
+                                                                             @Override
+                                                                             public void onErrorResponse(VolleyError error) {
+                                                                                 loading.dismiss();
+                                                                                 //
+                                                                                 Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+                                                                             }
+                                                                         }) {
+                                                                     @Override
+                                                                     protected Map<String, String> getParams() throws AuthFailureError {
+                                                                         Map<String, String> params = new HashMap<>();
+                                                                         //Adding the parameters to the request
+                                                                         params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE, ""));
+                                                                         params.put(Config.KEY_CA_ID, ca_id);
+                                                                         return params;
+                                                                     }
+                                                                 };
+
+                                                                 //Adding request the the queue
+                                                                 requestQueue.add(stringRequest);
+
+
+                                                             }
+                                                         });
+
+
+                                                 alert.show();
+                                             }
+                                         });
 
 
         viewdeatails_TXT.setOnClickListener(new View.OnClickListener() {
@@ -375,13 +492,21 @@ public class AddressFragment extends android.app.Fragment {
         addressFragment = null;
     }
 
-
     public void getall() {
-
 
         requestQueue = Volley.newRequestQueue(getActivity());
 
-        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+        //    final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+
+        final Dialog loading = new Dialog(getActivity());
+        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.setCancelable(false);
+        TextView t=(TextView)loading.findViewById(R.id.txt);
+        t.setText("Loading");
+        loading.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_GET_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -389,8 +514,11 @@ public class AddressFragment extends android.app.Fragment {
                         loading.dismiss();
                         Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
-                        try {
+                        lyt.setVisibility(View.VISIBLE);
+                        PlaceOrderBTN.setVisibility(View.VISIBLE);
+                        showALL_TXT_id.setVisibility(View.VISIBLE);
 
+                        try {
 
                             JSONObject jsonResponse = new JSONObject(response);
 
@@ -439,17 +567,24 @@ public class AddressFragment extends android.app.Fragment {
         //Adding request the the queue
         requestQueue.add(stringRequest);
 
-
     }
 
-
     public void getall2() {
-
         //fuction when new address is saved
 
         requestQueue2 = Volley.newRequestQueue(getActivity());
 
-        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+        //  final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+        final Dialog loading = new Dialog(getActivity());
+        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.setCancelable(false);
+        TextView t=(TextView)loading.findViewById(R.id.txt);
+        t.setText("Loading");
+        loading.show();
+
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_GET_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -476,7 +611,6 @@ public class AddressFragment extends android.app.Fragment {
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
                                 Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
-
 
                             } else {
 
@@ -517,38 +651,38 @@ public class AddressFragment extends android.app.Fragment {
         JSONObject json = new JSONObject(jsonArray);
         JSONArray arr = json.getJSONArray("addr");
 
-       showALL_TXT_id.setText("You have "+arr.length()+" addresses saved");
+        showALL_TXT_id.setText("You have "+arr.length()+" addresses saved");
 
 
-             for (i = 0; i < arr.length(); i++) {
+        for (i = 0; i < arr.length(); i++) {
 
-                try {
+            try {
 
-                    JSONObject tt= arr.getJSONObject(i);
+                JSONObject tt= arr.getJSONObject(i);
 
-                    AddressItem C_item5 = new AddressItem();
-                    C_item5.setNAME(tt.getString("ca_name"));
-                    C_item5.setADDRESS1(tt.getString("ca_house"));
-                    C_item5.setPINCODE(tt.getString("ca_pin"));
-                    C_item5.setPHONE(tt.getString("ca_phone"));
-                    C_item5.setDISTRICT(tt.getString("ca_dist"));
-                    C_item5.setSTATE(tt.getString("ca_state"));
-                    C_item5.setPLACE(tt.getString("ca_street"));
-                    C_item5.setID(Integer.parseInt(tt.getString("ca_id")));
+                AddressItem C_item5 = new AddressItem();
+                C_item5.setNAME(tt.getString("ca_name"));
+                C_item5.setADDRESS1(tt.getString("ca_house"));
+                C_item5.setPINCODE(tt.getString("ca_pin"));
+                C_item5.setPHONE(tt.getString("ca_phone"));
+                C_item5.setDISTRICT(tt.getString("ca_dist"));
+                C_item5.setSTATE(tt.getString("ca_state"));
+                C_item5.setPLACE(tt.getString("ca_street"));
+                C_item5.setID(Integer.parseInt(tt.getString("ca_id")));
 
-                    caidstring=tt.getString("ca_id");
+                caidstring=tt.getString("ca_id");
 
-                    movieList.add(C_item5);
+                movieList.add(C_item5);
 
-                } catch (JSONException e) {
+            } catch (JSONException e) {
 
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(),"json catch",Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                Toast.makeText(getActivity(),"json catch",Toast.LENGTH_LONG).show();
 
-                }
             }
+        }
 
-       editorcaid.putString("caid",caidstring);
+        editorcaid.putString("caid",caidstring);
         editorcaid.commit();
         adapter = new AddressAdapter(getActivity(), movieList.subList(i-1,i));         //.subList(i-1, i)
         listView.setAdapter(adapter);
@@ -698,7 +832,6 @@ public class AddressFragment extends android.app.Fragment {
 
                     //Creating a view to get the dialog box
                     final View confirmDialog = li.inflate(R.layout.address_edit_dlg_layout, null);
-
                     AlertDialog.Builder alert = new AlertDialog.Builder(v.getRootView().getContext());
                     alert.setView(confirmDialog);
                     alert.setCancelable(true);
@@ -730,9 +863,8 @@ public class AddressFragment extends android.app.Fragment {
 
 
 
-
-
                     final AlertDialog alertDialog = alert.create();
+                    alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     alertDialog.show();
 
                     buttonSave.setOnClickListener(new View.OnClickListener() {
@@ -742,7 +874,18 @@ public class AddressFragment extends android.app.Fragment {
                             requestQueue_editADDR = Volley.newRequestQueue(getActivity());
 
 
-                            final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+                            //  final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+                            final Dialog loading = new Dialog(getActivity());
+                            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            loading.setCancelable(false);
+                            TextView t=(TextView)loading.findViewById(R.id.txt);
+                            t.setText("Saving");
+                            loading.show();
+
+
+
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_EDIT_URL,
                                     new Response.Listener<String>() {
                                         @Override
@@ -798,10 +941,10 @@ public class AddressFragment extends android.app.Fragment {
                                 protected Map<String, String> getParams() throws AuthFailureError {
                                     Map<String, String> params = new HashMap<>();
                                     //Adding the parameters to the request
-                                   // params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
+                                    // params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
                                     params.put("ca_id", pref_cid.getString("caid",""));
                                     params.put(Config.KEY_ADDR_NAME, name.getText().toString());
-                                  //  params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));             //change
+                                    //  params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));             //change
                                     params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
                                     params.put(Config.KEY_ADDR_STREET, place.getText().toString());
                                     params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());
@@ -836,7 +979,7 @@ public class AddressFragment extends android.app.Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            //   EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
+                            //EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
                             alertDialog.dismiss();
                         }
                     });
@@ -871,6 +1014,7 @@ public class AddressFragment extends android.app.Fragment {
                     state=(EditText)confirmDialog.findViewById(R.id.ADR_StateET);
                     final EditText phone=(EditText)confirmDialog.findViewById(R.id.ADR_PhoneET);
                     final AlertDialog alertDialog = alert.create();
+                    alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     alertDialog.show();
 
 
@@ -923,7 +1067,6 @@ public class AddressFragment extends android.app.Fragment {
 
                         }
 
-
                         public void afterTextChanged(Editable s) {
                         }
 
@@ -937,11 +1080,19 @@ public class AddressFragment extends android.app.Fragment {
                         @Override
                         public void onClick(final View v) {
 
-
                             requestQueue = Volley.newRequestQueue((v.getRootView().getContext()));
 
+                            final Dialog loading = new Dialog(getActivity());
+                            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            loading.setCancelable(false);
+                            TextView t=(TextView)loading.findViewById(R.id.txt);
+                            t.setText("Saving");
+                            loading.show();
 
-                            final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
+
+                            //   final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_SEND_URL,
                                     new Response.Listener<String>() {
                                         @Override
@@ -1056,7 +1207,7 @@ public class AddressFragment extends android.app.Fragment {
                                     Map<String, String> params = new HashMap<>();
                                     //Adding the parameters to the request
                                     params.put(Config.KEY_ADDR_NAME, name.getText().toString());
-                                    params.put(Config.KEY_ADDR_MOBILE, pref.getString(SessionManagement.KEY_PHONE,""));             //change
+                                    params.put(Config.KEY_ADDR_MOBILE, "9020707009");             //change
                                     params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
                                     params.put(Config.KEY_ADDR_STREET, place.getText().toString());
                                     params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());
@@ -1176,8 +1327,6 @@ public class AddressFragment extends android.app.Fragment {
 
 
     }
-
-
 
 
 
