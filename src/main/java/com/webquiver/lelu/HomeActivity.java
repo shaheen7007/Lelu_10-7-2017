@@ -422,7 +422,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(HomeActivity.this,"No response from api",Toast.LENGTH_LONG).show();
+                      //      Toast.makeText(HomeActivity.this,"No response from api",Toast.LENGTH_LONG).show();
                             //set from preference
                             JSONArray jsonArray = null;
                             try {
@@ -678,6 +678,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 */
 
                     Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+                    intent.putExtra("searchterm",string);
                     startActivity(intent);
                     finish();
 
@@ -768,7 +769,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     public void onErrorResponse(VolleyError error) {
 
                         //
-                        Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
+                 //       Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
@@ -811,7 +812,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
 
         if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
-            Toast.makeText(HomeActivity.this, "No Internet Connection!", Toast.LENGTH_LONG).show();
+          //  Toast.makeText(HomeActivity.this, "No Internet Connection!", Toast.LENGTH_LONG).show();
+
+            SuperActivityToast.create(HomeActivity.this, new Style(), Style.TYPE_STANDARD)
+                    //     .setButtonText("Please click BACK again to exit")
+                    //     .setButtonIconResource(R.drawable.ic_undo)
+                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                    //     .setProgressBarColor(Color.WHITE)
+                    .setText("No Internet connection available")
+                    .setDuration(Style.DURATION_LONG)
+                    .setFrame(Style.FRAME_STANDARD)
+                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                    .setAnimations(Style.ANIMATIONS_FADE).show();
+
+
+
+
+
+
+
+
             return false;
         }
         return true;
@@ -870,7 +890,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     @Override
 
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(HomeActivity.this,"No response from api",Toast.LENGTH_LONG).show();
+                    //    Toast.makeText(HomeActivity.this,"No response from api",Toast.LENGTH_LONG).show();
                         //set from preference
                         JSONArray jsonArray = null;
                         //  progressBar.setVisibility(View.INVISIBLE);

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
@@ -27,6 +29,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.R;
@@ -129,14 +134,21 @@ public class HomeFragment extends android.app.Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
-                Toast.makeText(getActivity(), String.valueOf(names.get(position)), Toast.LENGTH_SHORT).show();
 
-                Intent intent=new Intent(getActivity(), ItemActivity.class);
-              //  intent.putExtra("name",String.valueOf(names.get(position)));
-                intent.putExtra("id",String.valueOf(ids.get(position)));
-               // intent.putStringArrayListExtra("images",images);
-                startActivity(intent);
-                getActivity().finish();
+                if (isOnline()) {
+                    Toast.makeText(getActivity(), String.valueOf(names.get(position)), Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getActivity(), ItemActivity.class);
+                    //  intent.putExtra("name",String.valueOf(names.get(position)));
+                    intent.putExtra("id", String.valueOf(ids.get(position)));
+                    // intent.putStringArrayListExtra("images",images);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+                else
+                {
+
+                }
             }
         });
 
@@ -227,5 +239,43 @@ public class HomeFragment extends android.app.Fragment {
     }
 
     //functions for getting and displaying number of items in cart(green circle)
+
+
+
+
+    public boolean isOnline() {
+        ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
+            //  Toast.makeText(HomeActivity.this, "No Internet Connection!", Toast.LENGTH_LONG).show();
+
+            SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_STANDARD)
+                    //     .setButtonText("Please click BACK again to exit")
+                    //     .setButtonIconResource(R.drawable.ic_undo)
+                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                    //     .setProgressBarColor(Color.WHITE)
+                    .setText("No Internet connection available")
+                    .setDuration(Style.DURATION_LONG)
+                    .setFrame(Style.FRAME_STANDARD)
+                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                    .setAnimations(Style.ANIMATIONS_FADE).show();
+
+
+
+
+
+
+
+
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+
 
 }

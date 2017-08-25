@@ -37,6 +37,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.adapters.Banner_Adapter;
 import com.webquiver.lelu.adapters.SearchResultAdapter;
@@ -265,8 +268,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                          progressBar.setVisibility(View.INVISIBLE);
                         //ismissing the progressdialog on response
                                 //loading.dismiss();
-
-
                         SharedPreferences.Editor prefEdit = sharedPreferences.edit();
                          String jsonstring=response.toString();
                         prefEdit.putString(Config.JSONSTRING1,jsonstring);
@@ -521,7 +522,21 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                                 JSONObject jsonResponse = new JSONObject(response);
                                 if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-                                    Toast.makeText(ItemActivity.this,"Item added to your Wish List",Toast.LENGTH_SHORT).show();
+                               //     Toast.makeText(ItemActivity.this,"Item added to your Wish List",Toast.LENGTH_SHORT).show();
+
+
+                                    SuperActivityToast.create(ItemActivity.this, new Style(), Style.TYPE_STANDARD)
+                                            //     .setButtonText("Please click BACK again to exit")
+                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                            //     .setProgressBarColor(Color.WHITE)
+                                            .setText("Item added to your wishlist")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_STANDARD)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
+
+
 
                                     getall();
 
@@ -529,13 +544,39 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
                                 else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("exist"))
                                 {
-                                    Toast.makeText(ItemActivity.this,"Item is already in your wish list ",Toast.LENGTH_SHORT).show();
+
+
+                                    SuperActivityToast.create(ItemActivity.this, new Style(), Style.TYPE_STANDARD)
+                                            //     .setButtonText("Please click BACK again to exit")
+                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                            //     .setProgressBarColor(Color.WHITE)
+                                            .setText("Item is already in your wishlist")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_STANDARD)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+                                  //  Toast.makeText(ItemActivity.this,"Item is already in your wish list ",Toast.LENGTH_SHORT).show();
 
                                 }
 
                                 else {
 
-                                    Toast.makeText(ItemActivity.this, "Failed \nPlease Retry", Toast.LENGTH_SHORT).show();
+                                    SuperActivityToast.create(ItemActivity.this, new Style(), Style.TYPE_STANDARD)
+                                            //     .setButtonText("Please click BACK again to exit")
+                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                            //     .setProgressBarColor(Color.WHITE)
+                                            .setText("Adding item to your wishlist failed\nPlease retry")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_STANDARD)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
+
+                               //     Toast.makeText(ItemActivity.this, "Failed \nPlease Retry", Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -547,7 +588,19 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                         public void onErrorResponse(VolleyError error) {
                             loading.dismiss();
                             //
-                            Toast.makeText(ItemActivity.this, "error1", Toast.LENGTH_LONG).show();
+                       //     Toast.makeText(ItemActivity.this, "error1", Toast.LENGTH_LONG).show();
+
+                            SuperActivityToast.create(ItemActivity.this, new Style(), Style.TYPE_STANDARD)
+                                    //     .setButtonText("Please click BACK again to exit")
+                                    //     .setButtonIconResource(R.drawable.ic_undo)
+                                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                    //     .setProgressBarColor(Color.WHITE)
+                                    .setText("Adding item to your wishlist failed\nPlease retry")
+                                    .setDuration(Style.DURATION_LONG)
+                                    .setFrame(Style.FRAME_STANDARD)
+                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                    .setAnimations(Style.ANIMATIONS_POP).show();
+
                         }
                     }) {
                 @Override
@@ -589,7 +642,19 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                                 JSONObject jsonResponse = new JSONObject(response);
                                 if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-                                    Toast.makeText(ItemActivity.this,"Item added to cart",Toast.LENGTH_SHORT).show();
+                              //      Toast.makeText(ItemActivity.this,"Item added to cart",Toast.LENGTH_SHORT).show();
+
+                                    SuperActivityToast.create(ItemActivity.this, new Style(), Style.TYPE_STANDARD)
+                                            //     .setButtonText("Please click BACK again to exit")
+                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                            //     .setProgressBarColor(Color.WHITE)
+                                            .setText("Item added to your cart")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_STANDARD)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
+
 
 
                                     getall();
@@ -598,7 +663,23 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
                                 else {
 
-                                    Toast.makeText(ItemActivity.this, "Failed to add", Toast.LENGTH_SHORT).show();
+                                 //   Toast.makeText(ItemActivity.this, "Failed to add", Toast.LENGTH_SHORT).show();
+
+                                    SuperActivityToast.create(ItemActivity.this, new Style(), Style.TYPE_STANDARD)
+                                            //     .setButtonText("Please click BACK again to exit")
+                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                            //     .setProgressBarColor(Color.WHITE)
+                                            .setText("Adding item to your cart failed \nPlease retry")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_STANDARD)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -610,7 +691,21 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                         public void onErrorResponse(VolleyError error) {
                             loading.dismiss();
                             //
-                            Toast.makeText(ItemActivity.this, "error1", Toast.LENGTH_LONG).show();
+                         //   Toast.makeText(ItemActivity.this, "error1", Toast.LENGTH_LONG).show();
+
+                            SuperActivityToast.create(ItemActivity.this, new Style(), Style.TYPE_STANDARD)
+                                    //     .setButtonText("Please click BACK again to exit")
+                                    //     .setButtonIconResource(R.drawable.ic_undo)
+                                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                    //     .setProgressBarColor(Color.WHITE)
+                                    .setText("Adding item to your cart failed \nPlease retry")
+                                    .setDuration(Style.DURATION_LONG)
+                                    .setFrame(Style.FRAME_STANDARD)
+                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                    .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
                         }
                     }) {
                 @Override
@@ -666,7 +761,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     public void getall() {
 
         requestQueue_cart = Volley.newRequestQueue(getApplicationContext());
@@ -674,7 +768,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
 
                         try {
 
@@ -706,7 +800,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                     public void onErrorResponse(VolleyError error) {
 
                         //
-                        Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
+                    //    Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
@@ -751,7 +845,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
+                    //    Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
 
                         try {
 
@@ -840,5 +934,3 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     }
 
 }
-
-

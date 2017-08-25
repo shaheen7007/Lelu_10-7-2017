@@ -32,7 +32,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.geniusforapp.fancydialog.FancyAlertDialog;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.webquiver.lelu.CartActivity;
@@ -55,6 +54,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by WebQuiver 04 on 7/24/2017.
@@ -97,6 +98,16 @@ public class CartFragment extends android.app.Fragment {
 
         container.removeAllViews();
 
+        EventBus.getDefault().register(this);
+
+
+
+
+
+
+
+
+
         View rootView = inflater.inflate(
                 R.layout.cart_frag, container, false);
 
@@ -111,6 +122,8 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
         BAGDISCOUNT=(TextView)rootView.findViewById(R.id.bagdicount_id);
         BIGTOTAL=(TextView)rootView.findViewById(R.id.bigtotaltxt_id);
         TOTALPAYABLE=(TextView)rootView.findViewById(R.id.totalpayable_id);
+
+
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -218,14 +231,9 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
         continu=(TextView)rootView.findViewById(R.id.continueBTN_id);
         continu.setVisibility(View.INVISIBLE);
 
-
-
-
-
     //    adapter.notifyDataSetChanged();
 
-
-      continu.setOnClickListener(new View.OnClickListener() {
+              continu.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
               //fragment
@@ -242,9 +250,6 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
               fragmentTransaction.commit();
           }
       });
-
-
-
 
 
         LayoutInflater li = LayoutInflater.from(getActivity());
@@ -268,16 +273,9 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
         });
 
 
-
-
-
         getall();
 
-
-
-
         return rootView;
-
 
     }
     public static CartFragment getInstance() {
@@ -296,9 +294,8 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
 
 
 
+
     public void getall() {
-
-
 
         requestQueue = Volley.newRequestQueue(getActivity());
 
@@ -320,8 +317,6 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
                         continu.setVisibility(View.VISIBLE);
                         loading.dismiss();
                         alertDialog.dismiss();
-
-
                         Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                         try {
@@ -332,13 +327,13 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
 
                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-
                                         showCART(response);
-
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
-                              //  Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                              // Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+
+                                lyt.setVisibility(View.INVISIBLE);
 
                                 LayoutInflater li = LayoutInflater.from(getActivity());
                                 //Creating a view to get the dialog box
@@ -358,7 +353,7 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
                                 final AlertDialog alertDialog = alert.create();
 
                                 //Displaying the alert dialog
-                                alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimationSHAKE;
                                 alertDialog.show();
 
                                 //On the click of the confirm button from alert dialog
@@ -370,12 +365,9 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
                                         Intent intent=new Intent(getActivity(),HomeActivity.class);
                                         startActivity(intent);
                                         getActivity().finish();
-
                                     }
 
                                 });
-
-
 
                             }
 
@@ -407,12 +399,14 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
         //Adding request the the queue
         requestQueue.add(stringRequest);
 
-
     }
 
     public void showCART(String jsonArray) throws JSONException {
         JSONObject json = new JSONObject(jsonArray);
         JSONArray arr = json.getJSONArray("products");
+        movieList= new ArrayList<CartItem>();
+        bigtotal=0;total=0;bagdiscount=0;
+
         for (i = 0; i < arr.length(); i++) {
 
             try {
@@ -450,12 +444,25 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
         BAGDISCOUNT.setText("\u20B9 "+String.valueOf(bagdiscount));
         TOTALPAYABLE.setText("\u20B9 "+String.valueOf(total));
 
-
         adapter = new CartAdapter(getActivity(), movieList);         //.subList(i-1, i)
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
     }
+
+
+
+
+    public void onEvent(CartAdapter.HelloWorldEvent event){
+
+
+        getall();
+
+
+    }
+
+
+
 
 
 }

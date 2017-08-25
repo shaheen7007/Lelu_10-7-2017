@@ -6,6 +6,9 @@ package com.webquiver.lelu.adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,7 +38,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.geniusforapp.fancydialog.FancyAlertDialog;
 import com.webquiver.lelu.CartActivity;
 import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.ItemActivity;
@@ -44,6 +46,8 @@ import com.webquiver.lelu.classes.AppController;
 import com.webquiver.lelu.classes.CartItem;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SessionManagement;
+import com.webquiver.lelu.fragments.AddressFragment;
+import com.webquiver.lelu.fragments.CartFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +55,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.greenrobot.event.EventBus;
 
 public class CartAdapter extends BaseAdapter {
 
@@ -62,6 +68,8 @@ public class CartAdapter extends BaseAdapter {
     TextView item_qty;
     private LayoutInflater inflater;
     private List<CartItem> cartitems;
+    AlertDialog.Builder alert;
+    AlertDialog alertDialog;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
     public CartAdapter(Activity activity, List<CartItem> cartitems) {
@@ -162,6 +170,9 @@ public class CartAdapter extends BaseAdapter {
 
                                         cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()+1);
                                         getView(position, finalConvertView,parent);
+
+                                        EventBus.getDefault().post(new HelloWorldEvent(String.valueOf(cartitems.get(position).getQUANTITY()+1)));
+
                                 //        Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
 
                                     }
@@ -227,7 +238,15 @@ public class CartAdapter extends BaseAdapter {
 
                                         cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
                                         getView(position, finalConvertView,parent);
-                                        //        Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+                                        EventBus.getDefault().post(new HelloWorldEvent(String.valueOf(cartitems.get(position).getQUANTITY()+1)));
+
+
+
+
+
+
+
+//     Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
 
                                     }
 
@@ -270,15 +289,21 @@ public class CartAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-/*
+                LayoutInflater li = LayoutInflater.from(activity);
 
-                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+                //Creating a view to get the dialog box
+                View confirmDialog = li.inflate(R.layout.rmovefromcart, null);
+                alert = new AlertDialog.Builder(activity);
+                alert.setView(confirmDialog);
+                alert.setCancelable(true);
+                Button buttonSave = (Button) confirmDialog.findViewById(R.id.buttonSave);
+                Button buttonNO = (Button) confirmDialog.findViewById(R.id.buttonCancel);
+                alertDialog = alert.create();
+                alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimationSHAKE;
 
-                alertDialog.setTitle("Remove item ?");
-
-                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Add your code for the button here.
+                buttonSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
                         final Dialog loading = new Dialog(activity);
                         loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -288,287 +313,141 @@ public class CartAdapter extends BaseAdapter {
                         TextView t=(TextView)loading.findViewById(R.id.txt);
                         t.setText("Removing item from your Cart");
                         loading.show();
-                     //   final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                loading.dismiss();
+                        //   final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        loading.dismiss();
+                                        alertDialog.dismiss();
 
-                                try {
+                                        try {
 
-                                    JSONObject jsonResponse = new JSONObject(response);
-                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+                                            JSONObject jsonResponse = new JSONObject(response);
+                                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-                                        //change
-                                        Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
+                                                //change
+                                                Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
 
 
-                                        //cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
+                                                //cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
 
-                                     //   cartitems.remove(position-1);             //
+                                                //   cartitems.remove(position-1);             //
 
 
-                                        cartitems.remove(position);
-                                        notifyDataSetChanged();
-                                  //     getView(position, finalConvertView,parent); //
+                                                cartitems.remove(position);
+                                                notifyDataSetChanged();
+                                                //     getView(position, finalConvertView,parent); //
 
-                                        if (cartitems.size()==0)
-                                        {
+                                                if (cartitems.size()==0)
+                                                {
 
-                                            LayoutInflater li = LayoutInflater.from(activity);
-                                            //Creating a view to get the dialog box
-                                            View confirmDialog = li.inflate(R.layout.cartempty_layout, null);
+                                                    LayoutInflater li = LayoutInflater.from(activity);
+                                                    //Creating a view to get the dialog box
+                                                    View confirmDialog = li.inflate(R.layout.cartempty_layout, null);
 
-                                            //Initizliaing confirm button fo dialog box and edittext of dialog box
-                                            buttonSHOPNOW = (AppCompatButton) confirmDialog.findViewById(R.id.buttonShop);
+                                                    //Initizliaing confirm button fo dialog box and edittext of dialog box
+                                                    buttonSHOPNOW = (AppCompatButton) confirmDialog.findViewById(R.id.buttonShop);
 
-                                            //Creating an alertdialog builder
-                                            AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                                                    //Creating an alertdialog builder
+                                                    AlertDialog.Builder alert = new AlertDialog.Builder(activity);
 
-                                            //Adding our dialog box to the view of alert dialog
-                                            alert.setView(confirmDialog);
-                                            alert.setCancelable(false);
+                                                    //Adding our dialog box to the view of alert dialog
+                                                    alert.setView(confirmDialog);
+                                                    alert.setCancelable(false);
 
-                                            //Creating an alert dialog
-                                            final AlertDialog alertDialog = alert.create();
+                                                    //Creating an alert dialog
+                                                    final AlertDialog alertDialog = alert.create();
 
-                                            //Displaying the alert dialog
-                                            alertDialog.show();
+                                                    //Displaying the alert dialog
+                                                    alertDialog.show();
 
-                                            //On the click of the confirm button from alert dialog
-                                            buttonSHOPNOW.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    //Hiding the alert dialog
-                                                    alertDialog.dismiss();
+                                                    //On the click of the confirm button from alert dialog
+                                                    buttonSHOPNOW.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            //Hiding the alert dialog
+                                                            alertDialog.dismiss();
 
-                                                    Intent intent=new Intent(activity,HomeActivity.class);
-                                                    activity.startActivity(intent);
-                                                    activity.finish();
-
-
-                                                }
-
-                                            });
-
-
-
-
-                                        }
-
-
-
-                                        // Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
-
-                                    }
-
-                                    else {
-
-                                        Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    loading.dismiss();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                loading.dismiss();
-                                //
-                                Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
-                            }
-                        }) {
-
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<>();
-                        //Adding the parameters to the request
-                        params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
-                        params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
-                        params.put(Config.KEY_CART_ProdQty, String.valueOf(0));
-                        return params;
-                    }
-                };
-
-                //Adding request the the queue
-                requestQueue.add(stringRequest);
-
-
-            }
-        });
-
-                alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
-
-                        dialog.dismiss();
-
-                    }
-                });
-
-                alertDialog.show();
-
-                 */
-
-
-
-                FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(activity)
-                     //   .setImageRecourse(R.drawable.banner2)
-                        .setTextSubTitle("Remove item")
-                        .setBody("Are you sure you want to remove \n this item ?")
-                        .setNegativeColor(R.color.colorgreen)
-                        .setNegativeButtonText("Cancel")
-                        .setButtonsGravity(FancyAlertDialog.PanelGravity.CENTER)
-                        .setOnNegativeClicked(new FancyAlertDialog.OnNegativeClicked() {
-                            @Override
-                            public void OnClick(View view, Dialog dialog) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .setPositiveButtonText("Remove")
-                        .setPositiveColor(R.color.colorred)
-                        .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
-                            @Override
-                            public void OnClick(View view, Dialog dialog) {
-
-                                dialog.dismiss();
-
-                                final Dialog loading = new Dialog(activity);
-                                loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                loading.setContentView(R.layout.custom_dialog_progress_loggingin);
-                                loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                                loading.setCancelable(false);
-                                TextView t=(TextView)loading.findViewById(R.id.txt);
-                                t.setText("Removing item from your Cart");
-                                loading.show();
-                                //   final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
-                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
-                                        new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                loading.dismiss();
-
-                                                try {
-
-                                                    JSONObject jsonResponse = new JSONObject(response);
-                                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
-
-                                                        //change
-                                                        Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
-
-
-                                                        //cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
-
-                                                        //   cartitems.remove(position-1);             //
-
-
-                                                        cartitems.remove(position);
-                                                        notifyDataSetChanged();
-                                                        //     getView(position, finalConvertView,parent); //
-
-                                                        if (cartitems.size()==0)
-                                                        {
-
-                                                            LayoutInflater li = LayoutInflater.from(activity);
-                                                            //Creating a view to get the dialog box
-                                                            View confirmDialog = li.inflate(R.layout.cartempty_layout, null);
-
-                                                            //Initizliaing confirm button fo dialog box and edittext of dialog box
-                                                            buttonSHOPNOW = (AppCompatButton) confirmDialog.findViewById(R.id.buttonShop);
-
-                                                            //Creating an alertdialog builder
-                                                            AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-
-                                                            //Adding our dialog box to the view of alert dialog
-                                                            alert.setView(confirmDialog);
-                                                            alert.setCancelable(false);
-
-                                                            //Creating an alert dialog
-                                                            final AlertDialog alertDialog = alert.create();
-
-                                                            //Displaying the alert dialog
-                                                            alertDialog.show();
-
-                                                            //On the click of the confirm button from alert dialog
-                                                            buttonSHOPNOW.setOnClickListener(new View.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(View v) {
-                                                                    //Hiding the alert dialog
-                                                                    alertDialog.dismiss();
-
-                                                                    Intent intent=new Intent(activity,HomeActivity.class);
-                                                                    activity.startActivity(intent);
-                                                                    activity.finish();
-
-
-                                                                }
-
-                                                            });
-
-
+                                                            Intent intent=new Intent(activity,HomeActivity.class);
+                                                            activity.startActivity(intent);
+                                                            activity.finish();
 
 
                                                         }
 
+                                                    });
 
 
-                                                        // Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
 
-                                                    }
 
-                                                    else {
-
-                                                        Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                    loading.dismiss();
                                                 }
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-                                                loading.dismiss();
-                                                //
-                                                Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
-                                            }
-                                        }) {
 
-                                    @Override
-                                    protected Map<String, String> getParams() throws AuthFailureError {
-                                        Map<String, String> params = new HashMap<>();
-                                        //Adding the parameters to the request
-                                        params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
-                                        params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
-                                        params.put(Config.KEY_CART_ProdQty, String.valueOf(0));
-                                        return params;
+
+
+                                                // Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+
+                                            }
+
+                                            else {
+
+                                                Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            loading.dismiss();
+                                        }
                                     }
-                                };
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        loading.dismiss();
+                                        alertDialog.dismiss();
+                                        //
+                                        Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
+                                    }
+                                }) {
 
-                                //Adding request the the queue
-                                requestQueue.add(stringRequest);
-
-
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> params = new HashMap<>();
+                                //Adding the parameters to the request
+                                params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
+                                params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
+                                params.put(Config.KEY_CART_ProdQty, String.valueOf(0));
+                                return params;
                             }
-                        })
-                       /* .setAutoHide(true)*/
-                        .build();
-                alert.show();
+                        };
+
+                        //Adding request the the queue
+                        requestQueue.add(stringRequest);
+
+
+
+
+                    }
+                });
+
+
+
+
+                buttonNO.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        alertDialog.dismiss();
+
+
+                    }
+                });
 
 
 
 
 
-
-
-
-
+                alertDialog.show();
 
 
 
@@ -636,8 +515,19 @@ public class CartAdapter extends BaseAdapter {
 
                                                     cartitems.get(position).setQUANTITY(Integer.parseInt(new_QTY.getText().toString()));
                                                     getView(position, finalConvertView,parent);
+                                                    EventBus.getDefault().post(new HelloWorldEvent(String.valueOf(cartitems.get(position).getQUANTITY()+1)));
                                                     alertDialog.dismiss();
                                                     Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+
+
+
+
+
+
+
+
+
+
 
                                                 }
 
@@ -720,5 +610,26 @@ public class CartAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+
+    public class HelloWorldEvent {             //event to update total,bigtotal in the cart fragment
+        public final String message;
+
+        public HelloWorldEvent(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
+
+
+
+
+
+
+
 
 }

@@ -39,7 +39,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.geniusforapp.fancydialog.FancyAlertDialog;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.webquiver.lelu.CartActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.AddressItem;
@@ -90,6 +92,8 @@ public class AddressFragment extends android.app.Fragment {
 
     RequestQueue queue; //for pincode api
 
+    AlertDialog.Builder alert;
+    AlertDialog alertDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -243,203 +247,126 @@ public class AddressFragment extends android.app.Fragment {
                                              @Override
                                              public void onClick(View v) {
 
-                                                 // Toast.makeText(getActivity(),SessionManagement.KEY_ADDR_ID,Toast.LENGTH_LONG).show();
+                                                 LayoutInflater li = LayoutInflater.from(getActivity());
+                                                 //Creating a view to get the dialog box
+                                                 View confirmDialog = li.inflate(R.layout.rmovefromcart, null);
+                                                 alert = new AlertDialog.Builder(getActivity());
+                                                 alert.setView(confirmDialog);
+                                                 alert.setCancelable(true);
+                                                 Button buttonSave = (Button) confirmDialog.findViewById(R.id.buttonSave);
+                                                 Button buttonNO = (Button) confirmDialog.findViewById(R.id.buttonCancel);
+                                                 TextView textView=(TextView)confirmDialog.findViewById(R.id.msgtx);
+                                                 textView.setText("Place order ?");
+                                                 alertDialog = alert.create();
+                                                 alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimationSHAKE;
 
-/*
-                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                                                 buttonSave.setOnClickListener(new View.OnClickListener() {
+                                                     @Override
+                                                     public void onClick(View v) {
 
-                alertDialog.setTitle("Place Order ?");
+                                                         // TODO Add your code for the button here.
 
+                                                         final String ca_id = pref_cid.getString("caid", "def");
 
-                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Add your code for the button here.
-
-
-                        final String ca_id = pref_cid.getString("caid", "def");
-
-                        final Dialog loading = new Dialog(getActivity());
-                        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
-                        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                        loading.setCancelable(false);
-                        TextView t=(TextView)loading.findViewById(R.id.txt);
-                        t.setText("Placing your order");
-                        loading.show();
-
-
-                        //   final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_PLACE_URL,
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        loading.dismiss();
-
-                                        try {
-
-                                            JSONObject jsonResponse = new JSONObject(response);
-                                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
-
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString("p","999");
-                                                OrderDetFragment2 showSelectedADDR=new OrderDetFragment2();
-                                                showSelectedADDR.setArguments(bundle);
-                                                FragmentManager fm = null;
-                                                fm = getFragmentManager();
-                                                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                                                fragmentTransaction.replace(R.id.cart_FL, showSelectedADDR);
-                                                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                                                fragmentTransaction.addToBackStack("ord");
-                                                fragmentTransaction.commit();
+                                                         final Dialog loading = new Dialog(getActivity());
+                                                         loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                         loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                                                         loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                                         loading.setCancelable(false);
+                                                         TextView t = (TextView) loading.findViewById(R.id.txt);
+                                                         t.setText("Placing your order");
+                                                         loading.show();
 
 
-
-                                            } else {
-
-                                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-
-                                        }
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        loading.dismiss();
-                                        //
-                                        Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
-                                    }
-                                }) {
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                Map<String, String> params = new HashMap<>();
-                                //Adding the parameters to the request
-                                params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE, ""));
-                                params.put(Config.KEY_CA_ID, ca_id);
-                                return params;
-                            }
-                        };
-
-                        //Adding request the the queue
-                        requestQueue.add(stringRequest);
-
-
-                    }
-                });
-
-                alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
-
-                        dialog.dismiss();
-
-                    }
-                });
-
-
-                alertDialog.show();
-*/
-
-                                                 FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(getActivity())
-                                                         //   .setImageRecourse(R.drawable.banner2)
-                                                         .setTextSubTitle("Place order")
-                                                         .setBody("Are you sure you want to place \n this order ?")
-                                                         .setNegativeColor(R.color.colorred)
-                                                         .setNegativeButtonText("No")
-                                                         .setButtonsGravity(FancyAlertDialog.PanelGravity.CENTER)
-                                                         .setOnNegativeClicked(new FancyAlertDialog.OnNegativeClicked() {
-                                                             @Override
-                                                             public void OnClick(View view, Dialog dialog) {
-                                                                 dialog.dismiss();
-                                                             }
-                                                         })
-                                                         .setPositiveButtonText("Yes")
-                                                         .setPositiveColor(R.color.colorgreen)
-                                                         .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
-                                                             @Override
-                                                             public void OnClick(View view, Dialog dialog) {
-
-                                                                 dialog.dismiss();
-                                                                 final String ca_id = pref_cid.getString("caid", "def");
-
-                                                                 final Dialog loading = new Dialog(getActivity());
-                                                                 loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                                                 loading.setContentView(R.layout.custom_dialog_progress_loggingin);
-                                                                 loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                                                                 loading.setCancelable(false);
-                                                                 TextView t = (TextView) loading.findViewById(R.id.txt);
-                                                                 t.setText("Placing your order");
-                                                                 loading.show();
-
-
-                                                                 //   final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
-                                                                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_PLACE_URL,
-                                                                         new Response.Listener<String>() {
-                                                                             @Override
-                                                                             public void onResponse(String response) {
-                                                                                 loading.dismiss();
-
-                                                                                 try {
-
-                                                                                     JSONObject jsonResponse = new JSONObject(response);
-                                                                                     if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
-
-                                                                                         Bundle bundle = new Bundle();
-                                                                                         bundle.putString("p", "999");
-                                                                                         OrderDetFragment2 showSelectedADDR = new OrderDetFragment2();
-                                                                                         showSelectedADDR.setArguments(bundle);
-                                                                                         FragmentManager fm = null;
-                                                                                         fm = getFragmentManager();
-                                                                                         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                                                                                         fragmentTransaction.replace(R.id.cart_FL, showSelectedADDR);
-                                                                                         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                                                                                         fragmentTransaction.addToBackStack("ord");
-                                                                                         fragmentTransaction.commit();
-
-
-                                                                                     } else {
-
-                                                                                         Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
-                                                                                     }
-                                                                                 } catch (JSONException e) {
-                                                                                     e.printStackTrace();
-
-                                                                                 }
-                                                                             }
-                                                                         },
-                                                                         new Response.ErrorListener() {
-                                                                             @Override
-                                                                             public void onErrorResponse(VolleyError error) {
-                                                                                 loading.dismiss();
-                                                                                 //
-                                                                                 Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
-                                                                             }
-                                                                         }) {
+                                                         //   final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
+                                                         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_PLACE_URL,
+                                                                 new Response.Listener<String>() {
                                                                      @Override
-                                                                     protected Map<String, String> getParams() throws AuthFailureError {
-                                                                         Map<String, String> params = new HashMap<>();
-                                                                         //Adding the parameters to the request
-                                                                         params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE, ""));
-                                                                         params.put(Config.KEY_CA_ID, ca_id);
-                                                                         return params;
+                                                                     public void onResponse(String response) {
+                                                                         loading.dismiss();
+                                                                         alertDialog.dismiss();
+
+                                                                         try {
+
+                                                                             JSONObject jsonResponse = new JSONObject(response);
+                                                                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                                                                 Bundle bundle = new Bundle();
+                                                                                 bundle.putString("p", "999");
+                                                                                 OrderDetFragment2 showSelectedADDR = new OrderDetFragment2();
+                                                                                 showSelectedADDR.setArguments(bundle);
+                                                                                 FragmentManager fm = null;
+                                                                                 fm = getFragmentManager();
+                                                                                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                                                                                 fragmentTransaction.replace(R.id.cart_FL, showSelectedADDR);
+                                                                                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                                                                                 fragmentTransaction.addToBackStack("ord");
+                                                                                 fragmentTransaction.commit();
+
+
+                                                                             } else {
+
+                                                                                 Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                                                             }
+                                                                         } catch (JSONException e) {
+                                                                             e.printStackTrace();
+
+                                                                         }
                                                                      }
-                                                                 };
+                                                                 },
+                                                                 new Response.ErrorListener() {
+                                                                     @Override
+                                                                     public void onErrorResponse(VolleyError error) {
+                                                                         loading.dismiss();
+                                                                         alertDialog.dismiss();
 
-                                                                 //Adding request the the queue
-                                                                 requestQueue.add(stringRequest);
+
+                                                                         SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_STANDARD)
+                                                                                 //     .setButtonText("Please click BACK again to exit")
+                                                                                 //     .setButtonIconResource(R.drawable.ic_undo)
+                                                                                 //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                                                 //     .setProgressBarColor(Color.WHITE)
+                                                                                 .setText("Something went wrong\nPlease retry")
+                                                                                 .setDuration(Style.DURATION_LONG)
+                                                                                 .setFrame(Style.FRAME_STANDARD)
+                                                                                 .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                                                 .setAnimations(Style.ANIMATIONS_SCALE).show();
 
 
+
+
+                                                                         //
+                                                                    //     Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+                                                                     }
+                                                                 }) {
+                                                             @Override
+                                                             protected Map<String, String> getParams() throws AuthFailureError {
+                                                                 Map<String, String> params = new HashMap<>();
+                                                                 //Adding the parameters to the request
+                                                                 params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE, ""));
+                                                                 params.put(Config.KEY_CA_ID, ca_id);
+                                                                 return params;
                                                              }
-                                                         });
+                                                         };
+
+                                                         //Adding request the the queue
+                                                         requestQueue.add(stringRequest);
 
 
-                                                 alert.show();
-                                             }
-                                         });
+                                                     }
+                                                 });
+
+                              buttonNO.setOnClickListener(new View.OnClickListener() {
+                                                     @Override
+                                                     public void onClick(View v) {
+                                                         alertDialog.dismiss();
+                                                     }
+                                                 });
+
+                                                 alertDialog.show();
+                                                     }
+                                                 });
+
 
 
         viewdeatails_TXT.setOnClickListener(new View.OnClickListener() {
@@ -472,6 +399,34 @@ public class AddressFragment extends android.app.Fragment {
 
             }
         });
+
+
+        LayoutInflater li = LayoutInflater.from(getActivity());
+
+        //Creating a view to get the dialog box
+        View confirmDialog = li.inflate(R.layout.something_went_wrong, null);
+        alert = new AlertDialog.Builder(getActivity());
+        alert.setView(confirmDialog);
+        alert.setCancelable(false);
+        Button buttonSave = (Button) confirmDialog.findViewById(R.id.buttonretry);
+        alertDialog = alert.create();
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimationSHAKE;
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getall();
+
+            }
+        });
+
+
+
+
+
+
+
 
 
         return rootView;
@@ -512,7 +467,8 @@ public class AddressFragment extends android.app.Fragment {
                     @Override
                     public void onResponse(String response) {
                         loading.dismiss();
-                        Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+                        alertDialog.dismiss();
+                      //  Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                         lyt.setVisibility(View.VISIBLE);
                         PlaceOrderBTN.setVisibility(View.VISIBLE);
@@ -551,6 +507,7 @@ public class AddressFragment extends android.app.Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loading.dismiss();
+                        alertDialog.show();
                         //
                         Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
                     }
@@ -934,7 +891,7 @@ public class AddressFragment extends android.app.Fragment {
                                         public void onErrorResponse(VolleyError error) {
                                             loading.dismiss();
                                             //
-                                            Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+                                      //      Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
                                         }
                                     }) {
                                 @Override

@@ -2,6 +2,7 @@ package com.webquiver.lelu.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -9,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +34,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.AddressItem;
 import com.webquiver.lelu.classes.Config;
@@ -66,6 +72,8 @@ public class ShowSelectedADDR extends android.app.Fragment {
     private List<AddressItem> movieList = new ArrayList<AddressItem>();
     private ListView listView;
     private AddressAdapter adapter;
+    AlertDialog.Builder alert;
+    AlertDialog alertDialog;
 
     int i;
     TextView showALL_TXT_id;
@@ -236,29 +244,44 @@ public class ShowSelectedADDR extends android.app.Fragment {
             @Override
             public void onClick(View v) {
 
-                // Toast.makeText(getActivity(),SessionManagement.KEY_ADDR_ID,Toast.LENGTH_LONG).show();
+                LayoutInflater li = LayoutInflater.from(getActivity());
+                //Creating a view to get the dialog box
+                View confirmDialog = li.inflate(R.layout.rmovefromcart, null);
+                alert = new AlertDialog.Builder(getActivity());
+                alert.setView(confirmDialog);
+                alert.setCancelable(true);
+                Button buttonSave = (Button) confirmDialog.findViewById(R.id.buttonSave);
+                Button buttonNO = (Button) confirmDialog.findViewById(R.id.buttonCancel);
+                TextView textView=(TextView)confirmDialog.findViewById(R.id.msgtx);
+                textView.setText("Place order ?");
+                alertDialog = alert.create();
+                alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimationSHAKE;
 
+                buttonSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-
-                alertDialog.setTitle("Place Order ?");
-
-
-                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
                         // TODO Add your code for the button here.
-
 
                         final String ca_id = pref_cid.getString("caid", "def");
 
-                        // Toast.makeText(getActivity(),SessionManagement.KEY_ADDR_ID,Toast.LENGTH_LONG).show();
+                        final Dialog loading = new Dialog(getActivity());
+                        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        loading.setCancelable(false);
+                        TextView t = (TextView) loading.findViewById(R.id.txt);
+                        t.setText("Placing your order");
+                        loading.show();
 
-                        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
+
+                        //   final ProgressDialog loading = ProgressDialog.show(getActivity(), "Placing Order", "Please wait...", false, false);
                         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_PLACE_URL,
                                 new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
                                         loading.dismiss();
+                                        alertDialog.dismiss();
 
                                         try {
 
@@ -266,8 +289,8 @@ public class ShowSelectedADDR extends android.app.Fragment {
                                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
                                                 Bundle bundle = new Bundle();
-                                                bundle.putString("p","999");
-                                                OrderDetFragment2 showSelectedADDR=new OrderDetFragment2();
+                                                bundle.putString("p", "999");
+                                                OrderDetFragment2 showSelectedADDR = new OrderDetFragment2();
                                                 showSelectedADDR.setArguments(bundle);
                                                 FragmentManager fm = null;
                                                 fm = getFragmentManager();
@@ -276,6 +299,7 @@ public class ShowSelectedADDR extends android.app.Fragment {
                                                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                                                 fragmentTransaction.addToBackStack("ord");
                                                 fragmentTransaction.commit();
+
 
                                             } else {
 
@@ -291,8 +315,25 @@ public class ShowSelectedADDR extends android.app.Fragment {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         loading.dismiss();
+                                        alertDialog.dismiss();
+
+
+                                        SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Something went wrong\nPlease retry")
+                                                .setDuration(Style.DURATION_LONG)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                .setAnimations(Style.ANIMATIONS_SCALE).show();
+
+
+
+
                                         //
-                                        Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+                                        //     Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
                                     }
                                 }) {
                             @Override
@@ -312,22 +353,18 @@ public class ShowSelectedADDR extends android.app.Fragment {
                     }
                 });
 
-
-                alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener() {
-
+                buttonNO.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
-
-                        dialog.dismiss();
-
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
                     }
                 });
 
                 alertDialog.show();
-
             }
         });
+
+
 
 
 

@@ -80,6 +80,8 @@ public class SearchActivity extends AppCompatActivity {
         fa = this;
 
 
+        Bundle b=getIntent().getExtras();
+
 
 
         //bottom sheet
@@ -159,8 +161,12 @@ public class SearchActivity extends AppCompatActivity {
         getSearchData();
 
 
+        mSearchView.populateEditText(String.valueOf(b.getString("searchterm")));
+
+
         //   mSearchView.openSearch();
         mSearchView.clearSuggestions();
+
 
         mSearchView.setHomeButtonListener(new PersistentSearchView.HomeButtonListener() {
 
