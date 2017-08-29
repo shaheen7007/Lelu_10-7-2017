@@ -2,17 +2,24 @@ package com.webquiver.lelu.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,9 +31,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.AddressItem;
 import com.webquiver.lelu.classes.Config;
+import com.webquiver.lelu.classes.SessionManagement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,6 +68,8 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
     TextView showALL_TXT_id;
 
+    SharedPreferences prefmob;
+
     int i;
 
 
@@ -71,6 +82,42 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.addressListall_id);
         showALL_TXT_id=(TextView)rootView.findViewById(R.id.numaddrTXT_id);
+
+        prefmob = this.getActivity().getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
+
+
+
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+        rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.i("test", "keyCode: " + keyCode);
+                if( keyCode == KeyEvent.KEYCODE_BACK ) {
+                    Log.i("test", "onKey Back listener is working!!!");
+                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+
+
+        ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bck_id);
+        bckBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            }
+        });
+
+
+
+
 
 
         getall();
@@ -212,7 +259,7 @@ public class ShowAllSavedADDR extends android.app.Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 //Adding the parameters to the request
-                params.put(Config.KEY_ADDR_MOBILE, "9020707009");             //change
+                params.put(Config.KEY_ADDR_MOBILE,  prefmob.getString(SessionManagement.KEY_PHONE,""));             //change
                 return params;
             }
         };
@@ -444,8 +491,8 @@ public class ShowAllSavedADDR extends android.app.Fragment {
             addr_place.setText(m.getPLACE());
             addr_district.setText(m.getDISTRICT());
             addr_state.setText(m.getSTATE());
-            addr_pincode.setText(m.getPINCODE());
-            addr_phone.setText(m.getPHONE());
+            addr_pincode.setText("PIN - "+m.getPINCODE());
+            addr_phone.setText("mobile: "+m.getPHONE());
 
 
             final View finalConvertView = convertView;
@@ -502,7 +549,21 @@ public class ShowAllSavedADDR extends android.app.Fragment {
                             requestQueue_editADDR = Volley.newRequestQueue(getActivity());
 
 
-                            final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+
+                            final Dialog loading = new Dialog(getActivity());
+                            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            loading.setCancelable(false);
+                            TextView t=(TextView)loading.findViewById(R.id.txt);
+                            t.setText("Loading");
+                            loading.show();
+
+
+
+
+
+                        //    final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_EDIT_URL,
                                     new Response.Listener<String>() {
                                         @Override

@@ -27,7 +27,6 @@ public class MyOrdersActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.Order_FL, OrderFragment.getInstance());
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         //change
-
         fragmentTransaction.commit();
 
     }

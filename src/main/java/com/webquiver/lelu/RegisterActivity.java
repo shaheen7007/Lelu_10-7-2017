@@ -32,6 +32,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -560,6 +563,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (view == findViewById(R.id.loginbtn2_id)) {
 
             Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
 
         } else if (view == findViewById(R.id.indoorIMG_iid)) {
@@ -634,12 +638,50 @@ public class RegisterActivity extends AppCompatActivity {
                                     JSONObject jsonResponse = new JSONObject(response);
                                     if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
                                         //Asking user to confirm otp
-                                        Toast.makeText(RegisterActivity.this, "Registration Successfull", Toast.LENGTH_LONG).show();
+                                      //  Toast.makeText(RegisterActivity.this, "Registration Successfull", Toast.LENGTH_LONG).show();
+
+                                        SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Registration Successful")
+                                                .setDuration(Style.DURATION_LONG)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
+
+
+
+
+
+
                                         Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                                         startActivity(intent);
                                         finish();
                                     } else {
-                                        Toast.makeText(RegisterActivity.this, "Wrong OTP", Toast.LENGTH_LONG).show();
+                                      //  Toast.makeText(RegisterActivity.this, "Wrong OTP", Toast.LENGTH_LONG).show();
+
+                                        SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Wrong OTP")
+                                                .setDuration(Style.DURATION_LONG)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
+
                                         confirmOtp();
                                     }
 
@@ -741,7 +783,25 @@ public class RegisterActivity extends AppCompatActivity {
                                               confirmOtp();
                                           }else{
                                               //If not successful user may already have registered
-                                              Toast.makeText(RegisterActivity.this, "Username or Phone number already registered", Toast.LENGTH_LONG).show();
+                                          //    Toast.makeText(RegisterActivity.this, "Username or Phone number already registered", Toast.LENGTH_LONG).show();
+
+                                              SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                      //     .setButtonText("Please click BACK again to exit")
+                                                      //     .setButtonIconResource(R.drawable.ic_undo)
+                                                      //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                      //     .setProgressBarColor(Color.WHITE)
+                                                      .setText("Mobile number already registered")
+                                                      .setDuration(Style.DURATION_LONG)
+                                                      .setFrame(Style.FRAME_STANDARD)
+                                                      .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                                      .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
+
+
+
                                           }
                                       } catch (JSONException e) {
                                           e.printStackTrace();
@@ -781,7 +841,20 @@ public class RegisterActivity extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(this, "Please fill all fields and retry", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "Please fill all fields and retry", Toast.LENGTH_SHORT).show();
+
+            SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_STANDARD)
+                    //     .setButtonText("Please click BACK again to exit")
+                    //     .setButtonIconResource(R.drawable.ic_undo)
+                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                    //     .setProgressBarColor(Color.WHITE)
+                    .setText("Please fill all details and retry")
+                    .setDuration(Style.DURATION_LONG)
+                    .setFrame(Style.FRAME_STANDARD)
+                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                    .setAnimations(Style.ANIMATIONS_POP).show();
+
+
         }
 
 

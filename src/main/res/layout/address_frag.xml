@@ -75,6 +75,7 @@
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="You have 3 addresses saved"
                 android:textAlignment="center"
+                android:textColor="@color/colorlinkblue"
                 android:id="@+id/show_all_addr_txt_id"
                 android:layout_height="match_parent" />
 
@@ -104,6 +105,31 @@
             android:dividerHeight="0dp"
             android:id="@+id/addressList_id"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1.9"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:id="@+id/lyt_adnewbtn_id"
+            android:layout_height="0dp">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/buttonaddnew_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_marginBottom="24dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:background="@color/colorPrimary"
+            android:padding="12dp"
+            android:visibility="gone"
+            android:text="Add New"
+            android:textColor="#fff" />
+        </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

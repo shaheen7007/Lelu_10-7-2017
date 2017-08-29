@@ -38,6 +38,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.webquiver.lelu.CartActivity;
 import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.ItemActivity;
@@ -124,7 +127,20 @@ public class CartAdapter extends BaseAdapter {
 
         if (getCount()==0) {
 
-            Toast.makeText(activity, "CART IS EMPTY", Toast.LENGTH_LONG).show();
+          //  Toast.makeText(activity, "CART IS EMPTY", Toast.LENGTH_LONG).show();
+
+
+            SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                    //     .setButtonText("Please click BACK again to exit")
+                    //     .setButtonIconResource(R.drawable.ic_undo)
+                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                    //     .setProgressBarColor(Color.WHITE)
+                    .setText("Yur cart is empty")
+                    .setDuration(Style.DURATION_SHORT)
+                    .setFrame(Style.FRAME_STANDARD)
+                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                    .setAnimations(Style.ANIMATIONS_FADE).show();
+
 
         }
 
@@ -175,10 +191,37 @@ public class CartAdapter extends BaseAdapter {
 
                                 //        Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
 
+                                        SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Quantity updated")
+                                                .setDuration(Style.DURATION_SHORT)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
                                     }
 
                                     else {
-                                        Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+
+                                        SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Failed to update quantity\nPlease retry")
+                                                .setDuration(Style.DURATION_LONG)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
+
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -251,7 +294,20 @@ public class CartAdapter extends BaseAdapter {
                                     }
 
                                     else {
-                                        Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+
+                                        SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Failed to update quantity\nPlease retry")
+                                                .setDuration(Style.DURATION_LONG)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
+
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -327,7 +383,20 @@ public class CartAdapter extends BaseAdapter {
                                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
                                                 //change
-                                                Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
+                                             //   Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
+
+
+                                                SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                        //     .setButtonText("Please click BACK again to exit")
+                                                        //     .setButtonIconResource(R.drawable.ic_undo)
+                                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                        //     .setProgressBarColor(Color.WHITE)
+                                                        .setText("Item removed")
+                                                        .setDuration(Style.DURATION_LONG)
+                                                        .setFrame(Style.FRAME_STANDARD)
+                                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                                        .setAnimations(Style.ANIMATIONS_POP).show();
+
 
 
                                                 //cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
@@ -391,7 +460,22 @@ public class CartAdapter extends BaseAdapter {
 
                                             else {
 
-                                                Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+                                             //   Toast.makeText(activity, "Failed to update quantity", Toast.LENGTH_SHORT).show();
+
+                                                SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                        //     .setButtonText("Please click BACK again to exit")
+                                                        //     .setButtonIconResource(R.drawable.ic_undo)
+                                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                        //     .setProgressBarColor(Color.WHITE)
+                                                        .setText("Failed\nPlease retry")
+                                                        .setDuration(Style.DURATION_LONG)
+                                                        .setFrame(Style.FRAME_STANDARD)
+                                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                        .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -501,7 +585,20 @@ public class CartAdapter extends BaseAdapter {
                         }
                         else {
 
-                            final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
+
+
+                            final Dialog loading = new Dialog(activity);
+                            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            loading.setCancelable(false);
+                            TextView t=(TextView)loading.findViewById(R.id.txt);
+                            t.setText("Adding to cart");
+                            loading.show();
+
+
+
+                            //  final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
                                     new Response.Listener<String>() {
                                         @Override
@@ -517,7 +614,18 @@ public class CartAdapter extends BaseAdapter {
                                                     getView(position, finalConvertView,parent);
                                                     EventBus.getDefault().post(new HelloWorldEvent(String.valueOf(cartitems.get(position).getQUANTITY()+1)));
                                                     alertDialog.dismiss();
-                                                    Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+                                                //    Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
+
+                                                    SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                            //     .setButtonText("Please click BACK again to exit")
+                                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                            //     .setProgressBarColor(Color.WHITE)
+                                                            .setText("Quantity updated")
+                                                            .setDuration(Style.DURATION_LONG)
+                                                            .setFrame(Style.FRAME_STANDARD)
+                                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                                            .setAnimations(Style.ANIMATIONS_POP).show();
 
 
 
@@ -533,7 +641,19 @@ public class CartAdapter extends BaseAdapter {
 
                                                 else {
                                                     alertDialog.dismiss();
-                                                    Toast.makeText(activity, "Failed to add", Toast.LENGTH_SHORT).show();
+                                                  //  Toast.makeText(activity, "Failed to add", Toast.LENGTH_SHORT).show();
+
+                                                    SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                            //     .setButtonText("Please click BACK again to exit")
+                                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                            //     .setProgressBarColor(Color.WHITE)
+                                                            .setText("Failed\nPlease retry")
+                                                            .setDuration(Style.DURATION_LONG)
+                                                            .setFrame(Style.FRAME_STANDARD)
+                                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                            .setAnimations(Style.ANIMATIONS_POP).show();
+
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();

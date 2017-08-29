@@ -5,16 +5,19 @@ package com.webquiver.lelu.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +34,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.WishListActivity;
@@ -102,7 +108,19 @@ public class WishListAdapter extends BaseAdapter {
 
         if (getCount()==0) {
 
-            Toast.makeText(activity, " YOUR WISH LIST IS EMPTY", Toast.LENGTH_LONG).show();
+           // Toast.makeText(activity, " YOUR WISH LIST IS EMPTY", Toast.LENGTH_LONG).show();
+
+
+            SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                    //     .setButtonText("Please click BACK again to exit")
+                    //     .setButtonIconResource(R.drawable.ic_undo)
+                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                    //     .setProgressBarColor(Color.WHITE)
+                    .setText("Your wishlist is empty")
+                    .setDuration(Style.DURATION_SHORT)
+                    .setFrame(Style.FRAME_STANDARD)
+                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                    .setAnimations(Style.ANIMATIONS_POP).show();
 
         }
 
@@ -134,7 +152,20 @@ public class WishListAdapter extends BaseAdapter {
                         // TODO Add your code for the button here.
 
 
-                        final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
+
+
+                        final Dialog loading = new Dialog(activity);
+                        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        loading.setCancelable(false);
+                        TextView t=(TextView)loading.findViewById(R.id.txt);
+                        t.setText("Removing item");
+                        loading.show();
+
+
+
+                        //  final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.WISHLIST_REMOVE_URL,
                         new Response.Listener<String>() {
                             @Override
@@ -147,8 +178,18 @@ public class WishListAdapter extends BaseAdapter {
                                     if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
                                         //change
-                                        Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
+                                      //  Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
 
+                                        SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Item removed")
+                                                .setDuration(Style.DURATION_SHORT)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
 
                                         //cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
 
@@ -209,7 +250,24 @@ public class WishListAdapter extends BaseAdapter {
 
                                     else {
 
-                                        Toast.makeText(activity, "Removing failed", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(activity, "Removing failed", Toast.LENGTH_SHORT).show();
+
+                                        SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Failed")
+                                                .setDuration(Style.DURATION_SHORT)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
+
+
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

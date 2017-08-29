@@ -7,8 +7,8 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:weightSum="5"
-         android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
+         android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/cartitem_shape"
         android:layout_height="match_parent">

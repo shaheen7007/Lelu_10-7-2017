@@ -27,6 +27,7 @@ public class CartActivity extends AppCompatActivity {
 
             Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
             openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
+             overridePendingTransition(android.R.anim.fade_out,android.R.anim.fade_in);
             startActivity(openFragmentBIntent);
 
         try {

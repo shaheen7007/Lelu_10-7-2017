@@ -74,7 +74,7 @@ public class HomeFragment extends android.app.Fragment {
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
 
-    public static final String DATA_URL = "http://192.168.1.9:8000/get-inventory";
+ //   public static final String DATA_URL = "http://192.168.1.9:8000/get-inventory";
 
 
     public static final String TAG_IMAGE_URL = "i_image";
@@ -110,9 +110,6 @@ public class HomeFragment extends android.app.Fragment {
 
         gridView = (ExpandableHeightGridView) rootView.findViewById(R.id.grid);
         gridView.setExpanded(true);
-
-
-
 
         images = new ArrayList<>();
         names = new ArrayList<>();
@@ -161,7 +158,7 @@ public class HomeFragment extends android.app.Fragment {
         progressBar.setVisibility(View.VISIBLE);
 
         //Creating a json array request to get the json from our api
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(DATA_URL,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Config.TOP_SELLING_URL,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -218,11 +215,11 @@ public class HomeFragment extends android.app.Fragment {
                 e.printStackTrace();
             }
         }
-        //Creating GridViewAdapter Object
+
         GridViewAdapter gridViewAdapter = new GridViewAdapter(getActivity(), images, names, ids);
 
-        //Adding adapter to gridview
         gridView.setAdapter(gridViewAdapter);
+
     }
 
     public static HomeFragment getInstance() {
@@ -239,8 +236,6 @@ public class HomeFragment extends android.app.Fragment {
     }
 
     //functions for getting and displaying number of items in cart(green circle)
-
-
 
 
     public boolean isOnline() {
@@ -272,10 +267,6 @@ public class HomeFragment extends android.app.Fragment {
         }
         return true;
     }
-
-
-
-
 
 
 }

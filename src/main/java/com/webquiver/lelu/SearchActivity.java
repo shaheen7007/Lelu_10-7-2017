@@ -50,8 +50,10 @@ public class SearchActivity extends AppCompatActivity {
 
         Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
         openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         startActivity(openFragmentBIntent);
         finish();
+
     }
 
 
@@ -160,13 +162,10 @@ public class SearchActivity extends AppCompatActivity {
         searchnames = new ArrayList<>();
         getSearchData();
 
-
         mSearchView.populateEditText(String.valueOf(b.getString("searchterm")));
 
-
-        //   mSearchView.openSearch();
+        // mSearchView.openSearch();
         mSearchView.clearSuggestions();
-
 
         mSearchView.setHomeButtonListener(new PersistentSearchView.HomeButtonListener() {
 
@@ -175,16 +174,13 @@ public class SearchActivity extends AppCompatActivity {
                 //Hamburger has been clicked
                 mSearchView.setVisibility(View.GONE);
                 Intent intent=new Intent(SearchActivity.this,HomeActivity.class);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 startActivity(intent);
                 finish();
 
             }
 
         });
-
-
-
-
 
         if (searchhistory.getString(Config.numofhistory, "NULL").equals("NULL")) {
 

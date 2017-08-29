@@ -37,6 +37,7 @@ import com.android.volley.toolbox.Volley;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
+import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.AddressItem;
 import com.webquiver.lelu.classes.Config;
@@ -76,6 +77,8 @@ public class ShowSelectedADDR extends android.app.Fragment {
     AlertDialog alertDialog;
 
     int i;
+
+    int numofaddres;
     TextView showALL_TXT_id;
 
 
@@ -403,7 +406,21 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
         requestQueue = Volley.newRequestQueue(getActivity());
 
-        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+
+        final Dialog loading = new Dialog(getActivity());
+        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.setCancelable(false);
+        TextView t=(TextView)loading.findViewById(R.id.txt);
+        t.setText("Loading");
+        loading.show();
+
+
+
+
+
+       // final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_GET_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -471,7 +488,21 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
         requestQueue2 = Volley.newRequestQueue(getActivity());
 
-        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+
+
+        final Dialog loading = new Dialog(getActivity());
+        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.setCancelable(false);
+        TextView t=(TextView)loading.findViewById(R.id.txt);
+        t.setText("Loading");
+        loading.show();
+
+
+
+
+    //    final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_GET_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -558,6 +589,8 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
 
         showALL_TXT_id.setText("You have "+arr.length()+" addresses saved");
+
+        numofaddres=arr.length();
 
 
         for (i = 0; i < arr.length(); i++) {
@@ -732,8 +765,8 @@ public class ShowSelectedADDR extends android.app.Fragment {
             addr_place.setText(m.getPLACE());
             addr_district.setText(m.getDISTRICT());
             addr_state.setText(m.getSTATE());
-            addr_pincode.setText(m.getPINCODE());
-            addr_phone.setText(m.getPHONE());
+            addr_pincode.setText("PIN -"+m.getPINCODE());
+            addr_phone.setText("mobile: "+m.getPHONE());
 
 
             final View finalConvertView = convertView;
@@ -810,7 +843,21 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
                             requestQueue_editADDR = Volley.newRequestQueue(getActivity());
 
-                            final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+
+
+                            final Dialog loading = new Dialog(getActivity());
+                            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            loading.setCancelable(false);
+                            TextView t=(TextView)loading.findViewById(R.id.txt);
+                            t.setText("Loading");
+                            loading.show();
+
+
+
+
+                          //  final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_EDIT_URL,
                                     new Response.Listener<String>() {
                                         @Override
@@ -946,7 +993,18 @@ public class ShowSelectedADDR extends android.app.Fragment {
                             requestQueue = Volley.newRequestQueue((v.getRootView().getContext()));
 
 
-                            final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
+
+                            final Dialog loading = new Dialog(getActivity());
+                            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            loading.setCancelable(false);
+                            TextView t=(TextView)loading.findViewById(R.id.txt);
+                            t.setText("Loading");
+                            loading.show();
+
+
+                            //  final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_SEND_URL,
                                     new Response.Listener<String>() {
                                         @Override
@@ -959,6 +1017,10 @@ public class ShowSelectedADDR extends android.app.Fragment {
                                                 if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
                                                     Toast.makeText((v.getRootView().getContext()),"Address added",Toast.LENGTH_LONG).show();
+
+                                                    int i=numofaddres+1;
+                                                    showALL_TXT_id.setText(String.valueOf("You have "+i+" addresses saved"));
+
 
                                                     alertDialog.dismiss();
 

@@ -139,7 +139,28 @@ public class Config {
 
     //url item
 
-    public static final String SINGLE_PROD_GET_URL="";
+    public static final String SINGLE_PROD_GET_URL=BASE_URL+"get_single_inventory/";
+    public static final String SINGLE_PROD_Id = "inv_id";
+
+
+
+
+
+    //urls search
+    public static final String SEARCH_GET_URL = "";
+
+
+
+
+   // products list urls
+   public static final String TOP_SELLING_URL=BASE_URL+"get-inventory/";
+
+
+
+
+
+
+
 
 
 

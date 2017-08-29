@@ -1,5 +1,6 @@
 package com.webquiver.lelu;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -25,6 +26,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +40,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
@@ -69,6 +73,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
         Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
         openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         startActivity(openFragmentBIntent);
         finish();
 
@@ -78,11 +83,17 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     //search
     private PersistentSearchView mSearchView;
     private SearchResultAdapter mResultAdapter;
-
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1023;
     private SharedPreferences searchhistory;
     SharedPreferences.Editor search_historyEditor;
     private ArrayList<String> searchnames;
+
+
+
+    LinearLayout lyt;
+
+
+
 
 
     //sharedpref
@@ -114,14 +125,25 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     RequestQueue requestQueue;
     RequestQueue requestQueue_cart;
 
+
+    AlertDialog.Builder alert;
+    AlertDialog alertDialog;
+
+
+
     TextView qty;
 
     String pro_id;
 
     TextView name,price,realprice,description;
-    public static final String TAG_IMAGE_URL = "i_image";
+    public static final String TAG_IMAGE_URL = "image";
     public static final String TAG_NAME = "i_name";
+    public static final String TAG_PRICE = "i_retailPrice";
+    public static final String TAG_REALPRICE = "i_salesPrice";
+    public static final String TAG_IMAGE = "i_image";
     public static final String TAG_COLOR = "categ_name";
+    public static final String TAG_PROD_ID = "inv_id";
+    String prod_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +153,10 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setCollapsible(false);
         setSupportActionBar(toolbar);
 
+
+        lyt=(LinearLayout)findViewById(R.id.content_item);
+
+        lyt.setVisibility(View.INVISIBLE);
 
 
         //search history
@@ -159,9 +185,9 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
         //price text strike and ruppee symbol
         realprice = (TextView) findViewById(R.id.realprice_id);
-        description = (TextView) findViewById(R.id.realprice_id);
+      //  description = (TextView) findViewById(R.id.realprice_id);
         price = (TextView) findViewById(R.id.pricetxt_id);
-        name = (TextView) findViewById(R.id.pricetxt_id);
+        name = (TextView) findViewById(R.id.pronametxt_id);
        /// realprice.setText(realprice.getText().toString()+" "+"14,500.00");
       //  price.setText(price.getText().toString()+" "+"10,500.00");
       //  realprice.setPaintFlags(realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -192,21 +218,45 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         ab.setCustomView(customView);
         ab.setDisplayShowCustomEnabled(true);
 
-
-
         //image slider
-        getimgs();
+     //   getimgs();
 
         getall();               //cart number
+
+
+        LayoutInflater lii = LayoutInflater.from(ItemActivity.this);
+
+        //Creating a view to get the dialog box
+        View confirmDialog = lii.inflate(R.layout.something_went_wrong, null);
+        alert = new AlertDialog.Builder(ItemActivity.this);
+        alert.setView(confirmDialog);
+        alert.setCancelable(false);
+        Button buttonSave = (Button) confirmDialog.findViewById(R.id.buttonretry);
+        alertDialog = alert.create();
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimationSHAKE;
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getprodet();
+
+            }
+        });
+
 
         getprodet();
 
     }
-
     //show image
     private void init(ArrayList<String> test) {
+
+
+
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new Banner_Adapter(ItemActivity.this, test));
+        Banner_Adapter banner_adapter=new Banner_Adapter(ItemActivity.this, test);
+        mPager.setAdapter(banner_adapter);
+        banner_adapter.notifyDataSetChanged();
 
         CirclePageIndicator indicator = (CirclePageIndicator) findViewById(R.id.indicator);
 
@@ -257,6 +307,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+
     }
 
 //get image json
@@ -317,7 +368,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                 e.printStackTrace();
             }
 
-            init(images);
+            //init(images);
         }
     }
 
@@ -325,6 +376,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         if (view == findViewById(R.id.cartitem)) {
 
             Intent intent=new Intent(ItemActivity.this,CartActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
             finish();
 
@@ -340,6 +392,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         {
             Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
             openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(openFragmentBIntent);
             finish();
         }
@@ -431,6 +484,8 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 */
 
                         Intent intent=new Intent(ItemActivity.this,SearchActivity.class);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        intent.putExtra("searchterm",string);
                         startActivity(intent);
                         finish();
 
@@ -608,7 +663,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                     Map<String, String> params = new HashMap<>();
                     //Adding the parameters to the request
                     params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE,""));
-                    params.put(Config.KEY_CART_ProdId, "2");
+                    params.put(Config.KEY_CART_ProdId, prod_id);
                     return params;
                 }
             };
@@ -655,8 +710,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                                             .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
                                             .setAnimations(Style.ANIMATIONS_POP).show();
 
-
-
                                     getall();
 
                                 }
@@ -675,10 +728,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                                             .setFrame(Style.FRAME_STANDARD)
                                             .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
                                             .setAnimations(Style.ANIMATIONS_POP).show();
-
-
-
-
 
                                 }
                             } catch (JSONException e) {
@@ -713,7 +762,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                     Map<String, String> params = new HashMap<>();
                     //Adding the parameters to the request
                     params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE,""));
-                    params.put(Config.KEY_CART_ProdId, "2");
+                    params.put(Config.KEY_CART_ProdId, prod_id);
                     params.put(Config.KEY_CART_ProdQty,qty.getText().toString());
                     return params;
                 }
@@ -721,7 +770,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
             //Adding request the the queue
             requestQueue.add(stringRequest);
-
         }
     }
 
@@ -740,6 +788,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_gallery) {
 
             Intent intent=new Intent(getApplicationContext(),MyOrdersActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
 
 
@@ -756,7 +805,6 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.dl_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-
 
     }
 
@@ -840,36 +888,50 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
     public void getprodet() {
 
+        final Dialog loading = new Dialog(ItemActivity.this);
+        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.setCancelable(false);
+        TextView t=(TextView)loading.findViewById(R.id.txt);
+        t.setText("Loading");
+        loading.show();
+
         requestQueue_cart = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SINGLE_PROD_GET_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                    //    Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
+                    //   Toast.makeText(getApplicationContext(),response, Toast.LENGTH_LONG).show();
 
+                        loading.dismiss();
+                        alertDialog.dismiss();
+                        lyt.setVisibility(View.VISIBLE);
                         try {
 
-                            JSONObject jsonResponse = new JSONObject(response);
+                         //   JSONObject jsonResponse = new JSONObject(response);
 
                             //   JSONArray jsonArray=new JSONArray(response);
 
-                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+                      //      if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
+                         //   Toast.makeText(getApplicationContext(),response, Toast.LENGTH_LONG).show();
 
                                 showPRO(response);
 
 
-                            } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+                          //  } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
-                                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+                          //      Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
 
-                            } else {
+                        //    } else {
 
-                                Toast.makeText(getApplicationContext(), "Invalid user", Toast.LENGTH_LONG).show();
+                         //       Toast.makeText(getApplicationContext(), "Invalid user", Toast.LENGTH_LONG).show();
 
-                            }
+                        //    }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        //    Toast.makeText(getApplicationContext(), "catch", Toast.LENGTH_LONG).show();
                         }
                     }
                 },
@@ -877,8 +939,16 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
+                        loading.dismiss();
+                        lyt.setVisibility(View.INVISIBLE);
                         //
-                        Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
+
+
+
+                        alertDialog.show();
+
+
 
                     }
                 }) {
@@ -886,7 +956,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 //Adding the parameters to the request
-                params.put(Config.KEY_CART_ProdId,pro_id);
+                params.put(Config.SINGLE_PROD_Id,pro_id);
                 return params;
             }
         };
@@ -898,13 +968,27 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
     public void showPRO(String jsonArray) throws JSONException {
 
-        JSONObject json = new JSONObject(jsonArray);
-      //  JSONArray arr = json.getJSONArray("products");
+   //     Toast.makeText(getApplicationContext(), "show prod", Toast.LENGTH_LONG).show();
+        images = new ArrayList<>();
 
-        name.setText(json.getString(TAG_NAME));
-     //   price.setText(json.getString(TAG_PRICE));
- //      realprice.setText(json.getString(TAG_REALPRICE));
-  //     description.setText(json.getString(TAG_DESCRIPTION));
+        JSONArray jsonArr=new JSONArray(jsonArray);
+        JSONObject obj = null;
+        obj = jsonArr.getJSONObject(0);
+        prod_id=obj.getString(TAG_PROD_ID);
+        name.setText(obj.getString(TAG_NAME));
+       price.setText("\u20B9 "+obj.getString(TAG_PRICE));
+       realprice.setText("\u20B9 "+obj.getString(TAG_REALPRICE));
+        realprice.setPaintFlags(realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        images.add(obj.getString(TAG_IMAGE));
+
+       // images.add(obj.getString(TAG_IMAGE));
+
+       init(images);
+
+
+
+        //     description.setText(json.getString(TAG_DESCRIPTION));
 
     }
 
@@ -927,7 +1011,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
             }
         }
-        //  init();
+         // init(images);
 
         mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL"), searchnames));
 

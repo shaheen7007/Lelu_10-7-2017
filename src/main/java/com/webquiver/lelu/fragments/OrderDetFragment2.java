@@ -1,6 +1,7 @@
 package com.webquiver.lelu.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +52,8 @@ public class OrderDetFragment2 extends Fragment {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
+    LinearLayout lyt;
+
     TextView ordrID,ordrSTATUS,ordrPlaceDate,currentSTATUS,currentstatus_date;
     View line;
     ImageView secondtick;
@@ -67,6 +71,24 @@ public class OrderDetFragment2 extends Fragment {
 
         View rootView = inflater.inflate(
                 R.layout.track_order_frag, container, false);
+
+
+        lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
+
+        ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bk_id);
+        bckBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            }
+        });
+
+
+
+
+
 
         movieList= new ArrayList<CartItem>();
       //  listView = (ListView) rootView.findViewById(R.id.prod_list);
@@ -201,6 +223,8 @@ public class OrderDetFragment2 extends Fragment {
                     public void onResponse(String response) {
                         //    loading.dismiss();
                         Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+
+                        lyt.setVisibility(View.VISIBLE);
 
                         try {
 

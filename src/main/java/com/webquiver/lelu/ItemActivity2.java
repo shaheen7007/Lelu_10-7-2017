@@ -1,11 +1,14 @@
 package com.webquiver.lelu;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -22,6 +25,8 @@ import android.view.LayoutInflater;
 
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +39,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.adapters.Banner_Adapter;
 import com.webquiver.lelu.adapters.SearchResultAdapter;
@@ -63,6 +71,12 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
     SessionManagement sessionManagement;
 
+
+
+    AlertDialog.Builder alert;
+    AlertDialog alertDialog;
+
+
     //images slider
     private static ViewPager mPager;
     private static int currentPage = 0;
@@ -87,6 +101,24 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
     TextView qty;
 
+    public static final String TAG_IMAGE_URL = "image";
+    public static final String TAG_NAME = "i_name";
+    public static final String TAG_PRICE = "i_retailPrice";
+    public static final String TAG_REALPRICE = "i_salesPrice";
+    public static final String TAG_IMAGE = "i_image";
+    public static final String TAG_COLOR = "categ_name";
+    public static final String TAG_PROD_ID = "inv_id";
+    String prod_id;
+    TextView name,price,realprice,description;
+
+
+
+
+
+
+
+
+
 
     //search
     private PersistentSearchView mSearchView;
@@ -97,7 +129,7 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
     SharedPreferences.Editor search_historyEditor;
     private ArrayList<String> searchnames;
 
-
+    String pro_id;
 
 
 
@@ -132,12 +164,16 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
 
 
+        realprice = (TextView) findViewById(R.id.realprice_id);
+        //  description = (TextView) findViewById(R.id.realprice_id);
+        price = (TextView) findViewById(R.id.pricetxt_id);
+        name = (TextView) findViewById(R.id.pronametxt_id);
+
 
 
         //check if logged in or not
         sessionManagement=new SessionManagement(getApplicationContext());
         sessionManagement.checkLogin();
-
 
 
         //price text strike and ruppee symbol
@@ -162,12 +198,17 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
         editor_num_pref=pref_numbers.edit();
 
 
+
+
         //getintent
         Intent iin = getIntent();
         Bundle b = iin.getExtras();
         if (b != null) {
 
-            Toast.makeText(this, String.valueOf(b.get("name")), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, String.valueOf(b.get("name")), Toast.LENGTH_LONG).show();
+
+            pro_id=String.valueOf(b.get("id"));
+
         }
 
 
@@ -181,10 +222,32 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
 
         //image slider
-        getimgs();
+      //  getimgs();
 
         getall();
 
+        LayoutInflater lii = LayoutInflater.from(ItemActivity2.this);
+
+        //Creating a view to get the dialog box
+        View confirmDialog = lii.inflate(R.layout.something_went_wrong, null);
+        alert = new AlertDialog.Builder(ItemActivity2.this);
+        alert.setView(confirmDialog);
+        alert.setCancelable(false);
+        Button buttonSave = (Button) confirmDialog.findViewById(R.id.buttonretry);
+        alertDialog = alert.create();
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimationSHAKE;
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getprodet();
+
+            }
+        });
+
+
+        getprodet();
 
 
 
@@ -317,6 +380,8 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
         if (view == findViewById(R.id.cartitem)) {
 
             Intent intent=new Intent(ItemActivity2.this,CartActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
             finish();
 
@@ -349,7 +414,17 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
         else if (view == findViewById(R.id.addtowishlist_id))
         {
-            final ProgressDialog loading = ProgressDialog.show(ItemActivity2.this, "Adding to wish list", "Please wait...", false, false);
+
+            final Dialog loading = new Dialog(ItemActivity2.this);
+            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            loading.setCancelable(false);
+            TextView t=(TextView)loading.findViewById(R.id.txt);
+            t.setText("Adding item to your Wishlist");
+            loading.show();
+
+          //  final ProgressDialog loading = ProgressDialog.show(ItemActivity2.this, "Adding to wish list", "Please wait...", false, false);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.WISHLIST_ADD_URL,
                     new Response.Listener<String>() {
                         @Override
@@ -360,7 +435,16 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
                                 JSONObject jsonResponse = new JSONObject(response);
                                 if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-                                    Toast.makeText(ItemActivity2.this,"Item added to your Wish List",Toast.LENGTH_SHORT).show();
+                                    SuperActivityToast.create(ItemActivity2.this, new Style(), Style.TYPE_STANDARD)
+                                            //     .setButtonText("Please click BACK again to exit")
+                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                            //     .setProgressBarColor(Color.WHITE)
+                                            .setText("Item added to your wishlist")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_STANDARD)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
 
                                     getall();
 
@@ -368,14 +452,30 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
                                 else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("exist"))
                                 {
-                                    Toast.makeText(ItemActivity2.this,"Item is already in your wish list ",Toast.LENGTH_SHORT).show();
-
+                                    SuperActivityToast.create(ItemActivity2.this, new Style(), Style.TYPE_STANDARD)
+                                            //     .setButtonText("Please click BACK again to exit")
+                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                            //     .setProgressBarColor(Color.WHITE)
+                                            .setText("Item is already in your wishlist")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_STANDARD)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
                                 }
 
                                 else {
 
-                                    Toast.makeText(ItemActivity2.this, "Failed \nPlease Retry", Toast.LENGTH_SHORT).show();
-
+                                    SuperActivityToast.create(ItemActivity2.this, new Style(), Style.TYPE_STANDARD)
+                                            //     .setButtonText("Please click BACK again to exit")
+                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                            //     .setProgressBarColor(Color.WHITE)
+                                            .setText("Adding item to your wishlist failed\nPlease retry")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_STANDARD)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
                                 }
                             } catch (JSONException e) {
 
@@ -389,7 +489,17 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
                         public void onErrorResponse(VolleyError error) {
                             loading.dismiss();
                             //
-                            Toast.makeText(ItemActivity2.this, "error1", Toast.LENGTH_LONG).show();
+
+                            SuperActivityToast.create(ItemActivity2.this, new Style(), Style.TYPE_STANDARD)
+                                    //     .setButtonText("Please click BACK again to exit")
+                                    //     .setButtonIconResource(R.drawable.ic_undo)
+                                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                    //     .setProgressBarColor(Color.WHITE)
+                                    .setText("Adding item to your wishlist failed\nPlease retry")
+                                    .setDuration(Style.DURATION_LONG)
+                                    .setFrame(Style.FRAME_STANDARD)
+                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                    .setAnimations(Style.ANIMATIONS_POP).show();
                         }
                     }) {
                 @Override
@@ -397,7 +507,7 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
                     Map<String, String> params = new HashMap<>();
                     //Adding the parameters to the request
                     params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE,""));
-                    params.put(Config.KEY_CART_ProdId, "2");
+                    params.put(Config.KEY_CART_ProdId, prod_id);
                     return params;
                 }
             };
@@ -502,6 +612,8 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
 
                         Intent intent=new Intent(ItemActivity2.this,SearchActivity.class);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        intent.putExtra("searchterm",string);
                         startActivity(intent);
                         finish();
 
@@ -555,22 +667,23 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
             }
 
 
-
-
-
-
-
         }
-
-
-
-
 
 
         else if (view == findViewById(R.id.addtocartbtn_id))
         {
 
-            final ProgressDialog loading = ProgressDialog.show(ItemActivity2.this, "Adding to cart", "Please wait...", false, false);
+            final Dialog loading = new Dialog(ItemActivity2.this);
+            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            loading.setCancelable(false);
+            TextView t=(TextView)loading.findViewById(R.id.txt);
+            t.setText("Adding item to your Wishlist");
+            loading.show();
+
+
+          //  final ProgressDialog loading = ProgressDialog.show(ItemActivity2.this, "Adding to cart", "Please wait...", false, false);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
                     new Response.Listener<String>() {
                         @Override
@@ -581,8 +694,16 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
                                 JSONObject jsonResponse = new JSONObject(response);
                                 if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-                                    Toast.makeText(ItemActivity2.this,"Item added to cart",Toast.LENGTH_SHORT).show();
-
+                                    SuperActivityToast.create(ItemActivity2.this, new Style(), Style.TYPE_STANDARD)
+                                            //     .setButtonText("Please click BACK again to exit")
+                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                            //     .setProgressBarColor(Color.WHITE)
+                                            .setText("Item added to your cart")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_STANDARD)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
 
                                     getall();
 
@@ -590,7 +711,16 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
                                 else {
 
-                                    Toast.makeText(ItemActivity2.this, "Failed to add", Toast.LENGTH_SHORT).show();
+                                    SuperActivityToast.create(ItemActivity2.this, new Style(), Style.TYPE_STANDARD)
+                                            //     .setButtonText("Please click BACK again to exit")
+                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                            //     .setProgressBarColor(Color.WHITE)
+                                            .setText("Adding item to your cart failed \nPlease retry")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_STANDARD)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -602,7 +732,16 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
                         public void onErrorResponse(VolleyError error) {
                             loading.dismiss();
                             //
-                            Toast.makeText(ItemActivity2.this, "error1", Toast.LENGTH_LONG).show();
+                            SuperActivityToast.create(ItemActivity2.this, new Style(), Style.TYPE_STANDARD)
+                                    //     .setButtonText("Please click BACK again to exit")
+                                    //     .setButtonIconResource(R.drawable.ic_undo)
+                                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                    //     .setProgressBarColor(Color.WHITE)
+                                    .setText("Adding item to your cart failed \nPlease retry")
+                                    .setDuration(Style.DURATION_LONG)
+                                    .setFrame(Style.FRAME_STANDARD)
+                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                    .setAnimations(Style.ANIMATIONS_POP).show();
                         }
                     }) {
                 @Override
@@ -610,7 +749,7 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
                     Map<String, String> params = new HashMap<>();
                     //Adding the parameters to the request
                     params.put(Config.KEY_PHONE, pref.getString(SessionManagement.KEY_PHONE,""));
-                    params.put(Config.KEY_CART_ProdId, "2");
+                    params.put(Config.KEY_CART_ProdId,prod_id);
                     params.put(Config.KEY_CART_ProdQty,qty.getText().toString());
                     return params;
                 }
@@ -637,6 +776,7 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.nav_gallery) {
 
             Intent intent=new Intent(getApplicationContext(),MyOrdersActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
 
 
@@ -765,6 +905,102 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
 
 
+    public void getprodet() {
+
+        final Dialog loading = new Dialog(ItemActivity2.this);
+        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.setCancelable(false);
+        TextView t=(TextView)loading.findViewById(R.id.txt);
+        t.setText("Loading");
+        loading.show();
+
+        requestQueue_cart = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SINGLE_PROD_GET_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //   Toast.makeText(getApplicationContext(),response, Toast.LENGTH_LONG).show();
+
+                        loading.dismiss();
+                        alertDialog.dismiss();
+                        try {
+
+                            //   JSONObject jsonResponse = new JSONObject(response);
+
+                            //   JSONArray jsonArray=new JSONArray(response);
+
+                            //      if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                            //   Toast.makeText(getApplicationContext(),response, Toast.LENGTH_LONG).show();
+
+                            showPRO(response);
+
+
+                            //  } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+
+                            //      Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+
+                            //    } else {
+
+                            //       Toast.makeText(getApplicationContext(), "Invalid user", Toast.LENGTH_LONG).show();
+
+                             //    }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            //    Toast.makeText(getApplicationContext(), "catch", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        loading.dismiss();
+                        alertDialog.show();
+                        //
+                        Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Adding the parameters to the request
+                params.put(Config.SINGLE_PROD_Id,pro_id);
+                return params;
+            }
+        };
+
+        //Adding request the the queue
+        requestQueue_cart.add(stringRequest);
+
+    }
+
+    public void showPRO(String jsonArray) throws JSONException {
+
+        //     Toast.makeText(getApplicationContext(), "show prod", Toast.LENGTH_LONG).show();
+        images = new ArrayList<>();
+
+        JSONArray jsonArr=new JSONArray(jsonArray);
+        JSONObject obj = null;
+        obj = jsonArr.getJSONObject(0);
+        prod_id=obj.getString(TAG_PROD_ID);
+        name.setText(obj.getString(TAG_NAME));
+        price.setText(obj.getString(TAG_PRICE));
+        realprice.setText(obj.getString(TAG_REALPRICE));
+        images.add(obj.getString(TAG_IMAGE));
+
+        // images.add(obj.getString(TAG_IMAGE));
+
+        init(images);
+
+
+
+        //     description.setText(json.getString(TAG_DESCRIPTION));
+
+    }
 
 
 

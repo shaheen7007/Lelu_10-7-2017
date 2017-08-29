@@ -2,15 +2,18 @@ package com.webquiver.lelu.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -31,6 +34,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.classes.AppController;
 import com.webquiver.lelu.classes.CartItem;
@@ -59,6 +65,7 @@ public class OrderAdapter extends BaseAdapter
     private Activity activity;
     RequestQueue requestQueue;
     SharedPreferences pref;
+    SharedPreferences.Editor editor_pref;
     private LayoutInflater inflater;
     private List<ODRItem> cartitems;
     private List<CartItem> movieList;
@@ -72,6 +79,9 @@ public class OrderAdapter extends BaseAdapter
 
     ListView listView;
     AlertDialog alertDialog;
+
+    String GET_ODR_JSON_STRING="get_odr_jsonstring";
+
 
 
 
@@ -102,8 +112,10 @@ public class OrderAdapter extends BaseAdapter
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
+
         requestQueue = Volley.newRequestQueue(activity);            //
         pref = activity.getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
+        editor_pref=pref.edit();
 
 
         if (inflater == null)
@@ -134,7 +146,6 @@ public class OrderAdapter extends BaseAdapter
             public void onRatingChanged(final RatingBar ratingBar, float rating, boolean fromUser) {
 
                 final String rateValue = String.valueOf(ratingBar.getRating());
-                System.out.println("Rate for Module is" + rateValue);
 
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_RATING_URL,
@@ -149,12 +160,37 @@ public class OrderAdapter extends BaseAdapter
 
                                     //    Toast.makeText(activity, "Thank you for Rating", Toast.LENGTH_SHORT).show();
 
+                                      /*
+                                        SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Thank you for the rating")
+                                                .setDuration(Style.DURATION_LONG)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+                                        */
+
                                         cartitems.get(position).setRATING(ratingBar.getRating());
                                         notifyDataSetChanged();
 
                                     } else {
 
-                                        Toast.makeText(activity, "Failed to submit rating", Toast.LENGTH_SHORT).show();
+                                     //   Toast.makeText(activity, "Failed to submit rating", Toast.LENGTH_SHORT).show();
+
+                                        SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Failed to submit rating")
+                                                .setDuration(Style.DURATION_LONG)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -200,7 +236,6 @@ public class OrderAdapter extends BaseAdapter
                 alert.setCancelable(true);
                 listView = (ListView) confirmDialog.findViewById(R.id.prod_list);
              //   close=(TextView)confirmDialog.findViewById(R.id.closeTXT_id);
-
                 alertDialog = alert.create();
            //     close.setOnClickListener(new View.OnClickListener() {
              //       @Override
@@ -218,9 +253,13 @@ public class OrderAdapter extends BaseAdapter
                A_DIST=(TextView)confirmDialog.findViewById(R.id.ADDR_district_id);
                A_STATE=(TextView)confirmDialog.findViewById(R.id.ADDR_state_id);
 
-                getall(position);
+                try {
+                    showODR(pref.getString(GET_ODR_JSON_STRING,"NULL"),position);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-                 flag=0;
+                flag=0;
 
                 addr.setOnClickListener(new View.OnClickListener() {
                    @Override
@@ -284,7 +323,18 @@ public class OrderAdapter extends BaseAdapter
 
                         } else {
 
-                            final ProgressDialog loading = ProgressDialog.show(activity, "Submitting your review", "Please wait...", false, false);
+
+                            final Dialog loading = new Dialog(activity);
+                            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            loading.setCancelable(false);
+                            TextView t=(TextView)loading.findViewById(R.id.txt);
+                            t.setText("Submitting review");
+                            loading.show();
+
+
+                            //   final ProgressDialog loading = ProgressDialog.show(activity, "Submitting your review", "Please wait...", false, false);
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_REVIEW_URL,
                                     new Response.Listener<String>() {
                                         @Override
@@ -296,7 +346,24 @@ public class OrderAdapter extends BaseAdapter
                                                 JSONObject jsonResponse = new JSONObject(response);
                                                 if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
                                                     alertDialog.dismiss();
-                                                    Toast.makeText(activity, "Review submitted", Toast.LENGTH_SHORT).show();
+                                               //     Toast.makeText(activity, "Review submitted", Toast.LENGTH_SHORT).show();
+
+                                                    SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                            //     .setButtonText("Please click BACK again to exit")
+                                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                            //     .setProgressBarColor(Color.WHITE)
+                                                            .setText("Review submitted")
+                                                            .setDuration(Style.DURATION_LONG)
+                                                            .setFrame(Style.FRAME_STANDARD)
+                                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                                            .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
+
+
 
                                                     cartitems.get(position).setFEEDBACK( new_QTY.getText().toString());
 
@@ -306,7 +373,18 @@ public class OrderAdapter extends BaseAdapter
                                                 } else {
 
                                                     alertDialog.dismiss();
-                                                    Toast.makeText(activity, "Failed to submit your review", Toast.LENGTH_SHORT).show();
+                                                //    Toast.makeText(activity, "Failed to submit your review", Toast.LENGTH_SHORT).show();
+                                                    SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                                            //     .setButtonText("Please click BACK again to exit")
+                                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                            //     .setProgressBarColor(Color.WHITE)
+                                                            .setText("Failed")
+                                                            .setDuration(Style.DURATION_LONG)
+                                                            .setFrame(Style.FRAME_STANDARD)
+                                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                            .setAnimations(Style.ANIMATIONS_POP).show();
+
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -356,7 +434,22 @@ public class OrderAdapter extends BaseAdapter
 
         if (getCount() == 0) {
 
-            Toast.makeText(activity, "You haven't placed any orders yet", Toast.LENGTH_LONG).show();
+        //    Toast.makeText(activity, "You haven't placed any orders yet", Toast.LENGTH_LONG).show();
+
+            SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                    //     .setButtonText("Please click BACK again to exit")
+                    //     .setButtonIconResource(R.drawable.ic_undo)
+                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                    //     .setProgressBarColor(Color.WHITE)
+                    .setText("You haven't placed any orders yet")
+                    .setDuration(Style.DURATION_LONG)
+                    .setFrame(Style.FRAME_STANDARD)
+                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                    .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
 
         }
 

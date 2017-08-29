@@ -22,6 +22,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_height="@dimen/backbtn_height"
                 android:layout_gravity="center"
+                android:id="@+id/bk_id"
                 android:scaleType="fitCenter"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"/>

@@ -174,8 +174,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     //api
     public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
-    public static final String BANNER_URL = "https://api.myjson.com/bins/15eqh3";
-    public static final String TAG_IMAGE_URL = "image";
+    public static final String BANNER_URL = "http://192.168.1.9:8000/get-inventory";
+    public static final String TAG_IMAGE_URL = "i_image";
     //GridView Object
     private ExpandableHeightGridView gridView;
 
@@ -231,10 +231,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         searchnames = new ArrayList<>();
         mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
-
-
-
-
 
 
         pref_numberss = this.getSharedPreferences(NUM_PREFERENCE, MODE_PRIVATE);
@@ -306,7 +302,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             cartnum.setText(nn);
         }
 
-
 */
 
         ImageView menu = (ImageView) customView.findViewById(R.id.menuitem);
@@ -358,8 +353,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
-
-
 //show items in grid view
 /*
         gridView = (ExpandableHeightGridView) findViewById(R.id.grid);
@@ -369,11 +362,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             names = new ArrayList<>();
             banimages = new ArrayList<>();
             color = new ArrayList<>();
-
-
-
-
-
 
 
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -393,9 +381,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-
-        private void getData(){
+    private void getData(){
             //Showing a progress dialog while our app fetches the data from url
            //final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
     //        progressBar.setVisibility(View.VISIBLE);
@@ -437,14 +423,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     }
             );
 
-
             //Creating a request queue
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             //Adding our request to the queue
             requestQueue.add(bannerjsonArrayRequest);
+
         }
-
-
 
         private void showbanner(JSONArray jsonArray){
 
@@ -456,7 +440,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     obj = jsonArray.getJSONObject(i);
                      banimages.add(obj.getString(TAG_IMAGE_URL));
                     } catch (JSONException e) {
+
                          e.printStackTrace();
+
                     }
         }
         init();
@@ -498,7 +484,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         public void run() {
             handler.post(Update);
         }
-    }, 5000, 5000);
+    }, 7000, 7000);
 
     // Pager listener over indicator
          indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -534,12 +520,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_gallery) {
 
             Intent intent=new Intent(getApplicationContext(),MyOrdersActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
 
 
         } else if (id == R.id.nav_slideshow) {
 
             Intent intent=new Intent(getApplicationContext(),WishListActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
             finish();
 
@@ -585,6 +573,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
           Intent intent = new Intent(HomeActivity.this, CartActivity.class);
 
             intent.putExtra("home","home");
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
             finish();
         }
@@ -654,9 +643,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                     //      Toast.makeText(HomeActivity.this, string +" Searched", Toast.LENGTH_LONG).show();
 
-
                     //fragment
-
 
                     //appBarLayout.setExpanded(false,true);
 
@@ -679,6 +666,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                     Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
                     intent.putExtra("searchterm",string);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     startActivity(intent);
                     finish();
 
@@ -927,10 +915,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL"), searchnames));
 
 
-
     }
-
-
 
 
  }

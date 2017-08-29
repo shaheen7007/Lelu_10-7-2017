@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,6 +96,24 @@ public class OrderDetFragment extends Fragment {
         ordrDIST=(TextView)rootView.findViewById(R.id.ADDR_district_id);
         ordrPIN=(TextView)rootView.findViewById(R.id.ADDR_pin_id);
         ordrSTATE=(TextView)rootView.findViewById(R.id.ADDR_state_id);
+
+
+
+        ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bckBTN_id);
+        bckBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            }
+        });
+
+
+
+
+
+
 
 
     /* DUMMY DATAS

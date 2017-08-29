@@ -13,6 +13,7 @@ package com.webquiver.lelu.adapters;
         import android.widget.ImageView;
         import android.widget.LinearLayout;
 
+        import com.bumptech.glide.Glide;
         import com.squareup.picasso.NetworkPolicy;
         import com.squareup.picasso.Picasso;
         import com.webquiver.lelu.R;
@@ -26,7 +27,6 @@ public class Banner_Adapter extends PagerAdapter {
     Context context;
     LayoutInflater layoutInflater;
     ArrayList<String> arrayList;
-
 
     public Banner_Adapter(Context context, ArrayList<String> IMAGES) {
         this.context = context;
@@ -47,14 +47,19 @@ public class Banner_Adapter extends PagerAdapter {
         return 0;
     }
 
+
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = layoutInflater.inflate(R.layout.banner_layout, container, false);
 
         ImageView imageView = (ImageView) itemView.findViewById(R.id.image);
 
-        Picasso.with(context).load(arrayList.get(position))
-                .into(imageView);
+    //    Picasso.with(context).load(arrayList.get(position))
+     //           .into(imageView);
+
+        Glide.with(context).load("http://192.168.1.9:8000"+arrayList.get(position)).into(imageView);
+
+
 
         container.addView(itemView);
 
@@ -75,6 +80,11 @@ public class Banner_Adapter extends PagerAdapter {
     public Parcelable saveState() {
         return null;
     }
+
+
+
+
+
 
 
 }

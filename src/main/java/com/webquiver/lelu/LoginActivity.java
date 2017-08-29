@@ -32,6 +32,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SessionManagement;
 
@@ -74,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         if (session.isLoggedIn())
         {
             Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
             finish();
         }
@@ -133,7 +137,22 @@ public class LoginActivity extends AppCompatActivity {
                                                // Toast.makeText(LoginActivity.this,jsonResponse.getString(Config.KEY_OTP), Toast.LENGTH_LONG).show();
 
                                             } else {
-                                                Toast.makeText(LoginActivity.this, "Phone number not registered", Toast.LENGTH_LONG).show();
+                                              //  Toast.makeText(LoginActivity.this, "Phone number not registered", Toast.LENGTH_LONG).show();
+
+                                                SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                        //     .setButtonText("Please click BACK again to exit")
+                                                        //     .setButtonIconResource(R.drawable.ic_undo)
+                                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                        //     .setProgressBarColor(Color.WHITE)
+                                                        .setText("The mobile number you have entered is not registered")
+                                                        .setDuration(Style.DURATION_LONG)
+                                                        .setFrame(Style.FRAME_STANDARD)
+                                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                        .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
                                                 //   confirmotp();
                                             }
 
@@ -202,6 +221,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                             session.createLoginSession(password, phone);
                                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                                             startActivity(intent);
                                             finish();
 
@@ -222,7 +242,23 @@ public class LoginActivity extends AppCompatActivity {
 
                                         else {
                                             //If not successful user may already have registered
-                                            Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_LONG).show();
+
+                                            SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                    //     .setButtonText("Please click BACK again to exit")
+                                                    //     .setButtonIconResource(R.drawable.ic_undo)
+                                                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                    //     .setProgressBarColor(Color.WHITE)
+                                                    .setText("Invalid credentials")
+                                                    .setDuration(Style.DURATION_LONG)
+                                                    .setFrame(Style.FRAME_STANDARD)
+                                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                    .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+
+
+
+                                           // Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_LONG).show();
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -379,7 +415,7 @@ public class LoginActivity extends AppCompatActivity {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(LoginActivity.this);
         alert.setView(confirmDialog);
-        alert.setCancelable(true);
+        alert.setCancelable(false);
         AppCompatButton buttonConfirm = (AppCompatButton) confirmDialog.findViewById(R.id.resetbtn2_id);
         final AlertDialog alertDialog = alert.create();
         alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
@@ -400,7 +436,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (passwordvalid(f_pass)) {
                     if (!f_pass.equals(f_confpass)) {
                         forgot_ConfET.setError("Passwords doesn't match");
-                        Toast.makeText(LoginActivity.this,"Passwords doesn't match",Toast.LENGTH_LONG).show();
+                 //       Toast.makeText(LoginActivity.this,"Passwords doesn't match",Toast.LENGTH_LONG).show();
                     } else {
 
                         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.FORGOT2_URL,
@@ -413,11 +449,32 @@ public class LoginActivity extends AppCompatActivity {
                                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
                                                 alertDialog.dismiss();
-                                                Toast.makeText(LoginActivity.this, "Password Reset Successfull", Toast.LENGTH_LONG).show();
+                                            //   Toast.makeText(LoginActivity.this, "Password Reset Successfull", Toast.LENGTH_LONG).show();
+
+                                                SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                        //     .setButtonText("Please click BACK again to exit")
+                                                        //     .setButtonIconResource(R.drawable.ic_undo)
+                                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                        //     .setProgressBarColor(Color.WHITE)
+                                                        .setText("Password reset successful")
+                                                        .setDuration(Style.DURATION_LONG)
+                                                        .setFrame(Style.FRAME_STANDARD)
+                                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                                        .setAnimations(Style.ANIMATIONS_POP).show();
+
+
 
                                             } else {
-                                                Toast.makeText(LoginActivity.this, "Wrong OTP", Toast.LENGTH_LONG).show();
-
+                                                SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                        //     .setButtonText("Please click BACK again to exit")
+                                                        //     .setButtonIconResource(R.drawable.ic_undo)
+                                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                        //     .setProgressBarColor(Color.WHITE)
+                                                        .setText("Wrong OTP")
+                                                        .setDuration(Style.DURATION_LONG)
+                                                        .setFrame(Style.FRAME_STANDARD)
+                                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                        .setAnimations(Style.ANIMATIONS_POP).show();
                                             }
 
                                         } catch (JSONException e) {
@@ -512,12 +569,25 @@ public class LoginActivity extends AppCompatActivity {
 
                                         session.createLoginSession(password, phone);
                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                                         startActivity(intent);
                                         finish();
 
 
                                     } else {
-                                        Toast.makeText(LoginActivity.this, "Wrong OTP", Toast.LENGTH_LONG).show();
+                                       // Toast.makeText(LoginActivity.this, "Wrong OTP", Toast.LENGTH_LONG).show();
+
+                                        SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                //     .setButtonText("Please click BACK again to exit")
+                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                //     .setProgressBarColor(Color.WHITE)
+                                                .setText("Wrong OTP")
+                                                .setDuration(Style.DURATION_LONG)
+                                                .setFrame(Style.FRAME_STANDARD)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
                                         //   confirmotp();
                                     }
 
@@ -578,6 +648,7 @@ public class LoginActivity extends AppCompatActivity {
         if (view == findViewById(R.id.regbtn_id)) {
 
             Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
 
         } else if (view == findViewById(R.id.indoorIMG_iid)) {

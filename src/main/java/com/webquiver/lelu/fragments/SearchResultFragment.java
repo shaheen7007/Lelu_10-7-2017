@@ -63,18 +63,18 @@ public class SearchResultFragment extends android.app.Fragment {
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
 
-    public static final String DATA_URL = "https://api.myjson.com/bins/rpssx";
+ //   public static final String DATA_URL = "https://api.myjson.com/bins/rpssx";
 
-
-    public static final String TAG_IMAGE_URL = "image";
-    public static final String TAG_NAME = "name";
-    public static final String TAG_COLOR = "color";
+    public static final String TAG_IMAGE_URL = "i_image";
+    public static final String TAG_NAME = "i_name";
+    public static final String TAG_COLOR = "categ_name";
+  //  public static final String TAG_ID = "inv_id";
 
     //GridView Object
     private ExpandableHeightGridView gridView;
 
-
     private ArrayList<String> images;
+    private ArrayList<String> ids;
     private ArrayList<String> names;
 
     private ArrayList<String> color;
@@ -85,6 +85,7 @@ public class SearchResultFragment extends android.app.Fragment {
     String search_string;
 
     BottomSheetListener bottomSheetListener;
+    public static final String TAG_ID = "inv_id";
 
 
 
@@ -114,6 +115,7 @@ public class SearchResultFragment extends android.app.Fragment {
 
 
         images = new ArrayList<>();
+        ids = new ArrayList<>();
         names = new ArrayList<>();
         color = new ArrayList<>();
 
@@ -141,6 +143,7 @@ public class SearchResultFragment extends android.app.Fragment {
 */
 
                 Intent intent =new Intent(getActivity(),ItemActivity2.class);
+                intent.putExtra("id", String.valueOf(ids.get(position)));
                 startActivity(intent);
 
 
@@ -157,11 +160,10 @@ public class SearchResultFragment extends android.app.Fragment {
     private void getData() {
         //Showing a progress dialog while our app fetches the data from url
         //   final ProgressDialog loading = ProgressDialog.show(this, "Please wait...","Fetching data...",false,false);
-
         progressBar.setVisibility(View.VISIBLE);
 
         //Creating a json array request to get the json from our api
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(DATA_URL,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Config.TOP_SELLING_URL,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -199,7 +201,7 @@ public class SearchResultFragment extends android.app.Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         //Adding our request to the queue
         requestQueue.add(jsonArrayRequest);
-     }
+    }
 
 
     private void showGrid(JSONArray jsonArray) {
@@ -213,16 +215,16 @@ public class SearchResultFragment extends android.app.Fragment {
 
                 images.add(obj.getString(TAG_IMAGE_URL));
                 names.add(obj.getString(TAG_NAME));
-                color.add(obj.getString(TAG_COLOR));
+                ids.add(obj.getString(TAG_ID));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        //Creating GridViewAdapter Object
-        GridViewAdapter gridViewAdapter = new GridViewAdapter(getActivity(), images, names, color);
 
-        //Adding adapter to gridview
+        GridViewAdapter gridViewAdapter = new GridViewAdapter(getActivity(), images, names, ids);
+
         gridView.setAdapter(gridViewAdapter);
+
     }
 
 

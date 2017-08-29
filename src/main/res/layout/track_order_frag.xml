@@ -25,15 +25,14 @@
                 android:scaleType="fitCenter"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:id="@+id/bckBTN_id" />
+                android:id="@+id/bk_id" />
 
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:text="Order Details"
             android:textColor="#fff"
-            android:layout_marginLeft="7dp"
-            android:layout_toRightOf="@+id/menuitem"
+            android:layout_centerHorizontal="true"
             android:id="@+id/homeitem"
             style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:gravity="center"
@@ -46,7 +45,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:visibility="gone"
         android:weightSum="3"
+        android:id="@+id/lyt"
         android:background="@color/colorgrey2"
         android:layout_height="match_parent">
 

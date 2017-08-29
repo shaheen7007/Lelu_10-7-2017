@@ -98,15 +98,6 @@ public class CartFragment extends android.app.Fragment {
 
         container.removeAllViews();
 
-        EventBus.getDefault().register(this);
-
-
-
-
-
-
-
-
 
         View rootView = inflater.inflate(
                 R.layout.cart_frag, container, false);
@@ -123,8 +114,13 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
         BIGTOTAL=(TextView)rootView.findViewById(R.id.bigtotaltxt_id);
         TOTALPAYABLE=(TextView)rootView.findViewById(R.id.totalpayable_id);
 
-
-
+try {
+    EventBus.getDefault().register(this);
+}
+catch (Exception e)
+{
+    //
+}
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -140,8 +136,6 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
 
 
 /* DUMMY DATAS
-
-
         CartItem C_item = new CartItem();
         C_item.setNAME("Baybee BMW");
         C_item.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");

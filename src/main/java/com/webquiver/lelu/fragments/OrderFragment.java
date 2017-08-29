@@ -1,5 +1,6 @@
 package com.webquiver.lelu.fragments;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -7,11 +8,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +61,8 @@ public class OrderFragment extends Fragment {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
+    String GET_ODR_JSON_STRING="get_odr_jsonstring";
+
     int i;
 
     @Override
@@ -70,11 +76,27 @@ public class OrderFragment extends Fragment {
 
         movieList= new ArrayList<ODRItem>();
         listView = (ListView) rootView.findViewById(R.id.order_list);
+        ImageView bsckbtn=(ImageView) rootView.findViewById(R.id.bk_id);
         adapter = new OrderAdapter(getActivity(), movieList);
         listView.setAdapter(adapter);
 
         pref = this.getActivity().getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
         editor = pref.edit();
+
+
+
+        bsckbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getActivity().finish();
+
+            }
+        });
+
+
+
+
 
     /* DUMMY DATAS
 
@@ -200,13 +222,30 @@ public class OrderFragment extends Fragment {
     public void getall() {
 
         requestQueue = Volley.newRequestQueue(getActivity());
-        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+    //    final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+
+        final Dialog loading = new Dialog(getActivity());
+        loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.setCancelable(false);
+        TextView t=(TextView)loading.findViewById(R.id.txt);
+        t.setText("Loaading");
+        loading.show();
+
+
+
+
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_GET_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         loading.dismiss();
-                        Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+
+                        editor.putString(GET_ODR_JSON_STRING,response);
+                        editor.commit();
+
 
                         try {
 
