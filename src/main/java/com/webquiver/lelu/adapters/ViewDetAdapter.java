@@ -108,8 +108,8 @@ public class ViewDetAdapter extends BaseAdapter
         // thumbnail image
      //   thumbNail.setImageUrl(m.getIMAGE_URL(), imageLoader);
 
-                Item_name.setText("Product Name");
-                thumbNail.setImageUrl("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg", imageLoader);
+                Item_name.setText(m.getNAME());
+                thumbNail.setImageUrl(Config.BASE_URLwithoutslash+m.getIMAGE_URL(), imageLoader);
                 Item_QTY.setText(String.valueOf(m.getQUANTITY()));
                 Item_Price.setText(m.getPRICE());
 

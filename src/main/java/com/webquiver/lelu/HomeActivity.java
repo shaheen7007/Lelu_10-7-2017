@@ -855,7 +855,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //  progressBar.setVisibility(View.VISIBLE);
 
         //get banner json
-        JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest("https://api.myjson.com/bins/1fgsw9",
+        JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest(Config.SEARCH_HISTORY_URL,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -905,7 +905,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             try {
 
                 obj = jsonArray.getJSONObject(i);
-                searchnames.add(obj.getString("name"));
+                searchnames.add(obj.getString("i_name"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

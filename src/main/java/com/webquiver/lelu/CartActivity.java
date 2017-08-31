@@ -27,7 +27,7 @@ public class CartActivity extends AppCompatActivity {
 
             Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
             openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
-             overridePendingTransition(android.R.anim.fade_out,android.R.anim.fade_in);
+            overridePendingTransition(android.R.anim.fade_out,android.R.anim.fade_in);
             startActivity(openFragmentBIntent);
 
         try {
@@ -42,12 +42,12 @@ public class CartActivity extends AppCompatActivity {
 
    //     } else {
 
-        //    Intent openFragmentBIntent = new Intent(this, ItemActivity.class);
-         //   openFragmentBIntent.putExtra("cart", "cart");
+           //    Intent openFragmentBIntent = new Intent(this, ItemActivity.class);
+          //   openFragmentBIntent.putExtra("cart", "cart");
          //   startActivity(openFragmentBIntent);
-         //   finish();
+        //   finish();
 
-    //    }
+        //    }
     }
 
     private static final String TAG = CartActivity.class.getSimpleName();

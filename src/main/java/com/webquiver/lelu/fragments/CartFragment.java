@@ -78,6 +78,8 @@ public class CartFragment extends android.app.Fragment {
 
     TextView continu;
 
+    int numofitems;
+
 
     TextView BIGTOTAL,BAGDISCOUNT,TOTALPAYABLE;
 
@@ -231,17 +233,37 @@ catch (Exception e)
           @Override
           public void onClick(View v) {
               //fragment
-              Fragment fr = null;
-              FragmentManager fm = null;
-              View selectedView = null;
+            //  Fragment fr = null;
+           //   FragmentManager fm = null;
+            //  View selectedView = null;
+
 
               //fragment
+            //  fm = getFragmentManager();
+         //     FragmentTransaction fragmentTransaction = fm.beginTransaction();
+           //   fragmentTransaction.replace(R.id.cart_FL, AddressFragment.getInstance());
+          //    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+           //   fragmentTransaction.addToBackStack("cart");
+           //   fragmentTransaction.commit();
+
+
+
+              Bundle bundle = new Bundle();
+              bundle.putString("bigtotal",String.valueOf(total));
+              bundle.putString("totalpayable",String.valueOf(bigtotal));
+              bundle.putString("numofitems",String.valueOf(numofitems));
+              AddressFragment showSelectedADDR = new AddressFragment();
+              showSelectedADDR.setArguments(bundle);
+              FragmentManager fm = null;
               fm = getFragmentManager();
               FragmentTransaction fragmentTransaction = fm.beginTransaction();
-              fragmentTransaction.replace(R.id.cart_FL, AddressFragment.getInstance());
+              fragmentTransaction.replace(R.id.cart_FL, showSelectedADDR);
               fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
               fragmentTransaction.addToBackStack("cart");
               fragmentTransaction.commit();
+
+
+
           }
       });
 
@@ -284,9 +306,6 @@ catch (Exception e)
         super.onDestroy();
         cartFragment = null;
     }
-
-
-
 
 
     public void getall() {
@@ -400,6 +419,7 @@ catch (Exception e)
         JSONArray arr = json.getJSONArray("products");
         movieList= new ArrayList<CartItem>();
         bigtotal=0;total=0;bagdiscount=0;
+        numofitems=arr.length();
 
         for (i = 0; i < arr.length(); i++) {
 
@@ -408,17 +428,16 @@ catch (Exception e)
                 JSONObject tt = arr.getJSONObject(i);
 
                 CartItem C_item5 = new CartItem();
-                C_item5.setNAME("default");
+                C_item5.setNAME(tt.getString("i_name"));
                 //C_item5.setDESC("default");
                 C_item5.setQUANTITY(Integer.parseInt(tt.getString("cp_qty")));
-                C_item5.setREALPRICE("default");
-                C_item5.setPRICE("default");
-                C_item5.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+                C_item5.setREALPRICE(tt.getString("i_retailPrice"));
+                C_item5.setPRICE(tt.getString("i_salesPrice"));
+                C_item5.setIMAGE_URL(tt.getString("i_image"));
                 C_item5.setPRODUCT_ID(tt.getString("cp_code"));
 
-                bigtotal=bigtotal + Double.parseDouble(tt.getString("cp_qty"));             //change
-                total=total + Double.parseDouble(tt.getString("cp_qty"));
-
+                bigtotal= bigtotal + Double.parseDouble(tt.getString("i_salesPrice"))*Double.parseDouble(tt.getString("cp_qty"));             //change
+                total=total + Double.parseDouble(tt.getString("i_retailPrice"))*Double.parseDouble(tt.getString("cp_qty"));
 
                 movieList.add(C_item5);
 
@@ -434,9 +453,9 @@ catch (Exception e)
 
         bagdiscount = bigtotal - total;
 
-        BIGTOTAL.setText("\u20B9 "+String.valueOf(bigtotal));
+        BIGTOTAL.setText("\u20B9 "+String.valueOf(total));
         BAGDISCOUNT.setText("\u20B9 "+String.valueOf(bagdiscount));
-        TOTALPAYABLE.setText("\u20B9 "+String.valueOf(total));
+        TOTALPAYABLE.setText("\u20B9 "+String.valueOf(bigtotal));
 
         adapter = new CartAdapter(getActivity(), movieList);         //.subList(i-1, i)
         listView.setAdapter(adapter);

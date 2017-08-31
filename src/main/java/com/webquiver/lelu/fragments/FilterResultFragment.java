@@ -1,20 +1,12 @@
 package com.webquiver.lelu.fragments;
 
-import android.app.Dialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,9 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.kennyc.bottomsheet.BottomSheet;
 import com.kennyc.bottomsheet.BottomSheetListener;
-import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.ItemActivity2;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.adapters.GridViewAdapter;
@@ -51,10 +41,10 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by WebQuiver 04 on 7/12/2017.
  */
 
-public class SearchResultFragment extends android.app.Fragment {
+public class FilterResultFragment extends android.app.Fragment {
 
 
-            private static SearchResultFragment homeFragment = null;
+    private static FilterResultFragment homeFragment = null;
 
     //sharedprefference
     private SharedPreferences sharedPreferences;
@@ -90,13 +80,11 @@ public class SearchResultFragment extends android.app.Fragment {
     private RequestQueue requestQueue_cart;
 
     TextView cartnum,filterbtn;
-    String search_string,term;
+    String search_string,term,rate1,rate2;
 
     BottomSheetListener bottomSheetListener;
     public static final String TAG_ID = "inv_id";
     public static final String TAG_PRICE = "i_salesPrice";
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -119,12 +107,17 @@ public class SearchResultFragment extends android.app.Fragment {
         if (b!=null) {
 
             term = String.valueOf(b.getString("searchterm", "null"));
+            rate1 = String.valueOf(b.getString("rate1", "null"));
+            rate2 = String.valueOf(b.getString("rate2", "null"));
+
         }
 
        // TextView search_result_for=(TextView)rootView.findViewById(R.id.searchresultfortxt);
       //  Bundle b=getArguments();
        // search_string=b.getString("search_item","");
         //search_result_for.setText("Search result for: "+search_string);
+
+
 
 
         images = new ArrayList<>();
@@ -138,8 +131,16 @@ public class SearchResultFragment extends android.app.Fragment {
         //CirclePageIndicator indicator = (CirclePageIndicator)rootView.findViewById(R.id.indicator);
 
        // getData();
-        getprodet();
 
+
+        if (rate1.equals("asc")||rate1.equals("desc"))
+        {
+            sort();
+        }
+
+        else {
+            getprodet();
+        }
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -156,12 +157,9 @@ public class SearchResultFragment extends android.app.Fragment {
                    fragmentTransaction.addToBackStack("srchitem");
                 fragmentTransaction.commit();
 */
-
                 Intent intent =new Intent(getActivity(),ItemActivity2.class);
                 intent.putExtra("id", String.valueOf(ids.get(position)));
                 startActivity(intent);
-
-
 
             }
         });
@@ -226,7 +224,7 @@ public class SearchResultFragment extends android.app.Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         //Adding our request to the queue
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SEARCH_RESULTS_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SEARCH_FILTER_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -261,6 +259,8 @@ public class SearchResultFragment extends android.app.Fragment {
                 Map<String, String> params = new HashMap<>();
                 //Adding the parameters to the request
                 params.put(Config.KEY_SEARCH_TERM,term);
+                params.put(Config.KEY_FILTER_RATE1,rate1);
+                params.put(Config.KEY_FILTER_RATE2,rate2);
                 return params;
             }
         };
@@ -269,12 +269,6 @@ public class SearchResultFragment extends android.app.Fragment {
         requestQueue.add(stringRequest);
 
     }
-
-
-
-
-
-
 
 
     private void showGrid(JSONArray jsonArray) {
@@ -302,9 +296,9 @@ public class SearchResultFragment extends android.app.Fragment {
     }
 
 
-    public static SearchResultFragment getInstance() {
+    public static FilterResultFragment getInstance() {
         if (homeFragment == null) {
-            homeFragment = new SearchResultFragment();
+            homeFragment = new FilterResultFragment();
         }
             return homeFragment;
     }
@@ -325,6 +319,71 @@ public class SearchResultFragment extends android.app.Fragment {
     public interface MyListener {
         // you can define any parameter as per your requirement
         public void callback(View view, String result);
+    }
+
+
+
+
+
+    public void sort()
+    {
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        //Adding our request to the queue
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SEARCH_SORT_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //   Toast.makeText(getApplicationContext(),response, Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        //Dismissing the progressdialog on response
+                        //         loading.dismiss();
+                        //Displaying our grid
+                        SharedPreferences.Editor prefEdit = sharedPreferences.edit();
+                        String jsonstring=response.toString();
+                        prefEdit.putString(Config.JSONSTRING,jsonstring);
+                        prefEdit.apply();
+                        try {
+                            JSONArray jsonArray=new JSONArray(response);
+                            showGrid(jsonArray);
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Adding the parameters to the request
+                params.put(Config.KEY_SEARCH_TERM,term);
+                if (rate1.equals("asc")) {
+                    params.put("asc", rate1);
+                }
+                else
+                {
+                    params.put("desc", rate1);
+                }
+                params.put(Config.KEY_SEARCH_TERM, term);
+
+                return params;
+            }
+        };
+
+        //Adding request the the queue
+        requestQueue.add(stringRequest);
+
     }
 
 

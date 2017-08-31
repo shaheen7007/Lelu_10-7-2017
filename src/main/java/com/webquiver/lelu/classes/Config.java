@@ -15,6 +15,7 @@ public class Config {
 
     //BASE URL
     public static final String BASE_URL = "http://192.168.1.9:8000/";
+    public static final String BASE_URLwithoutslash = "http://192.168.1.9:8000";
 
 
 
@@ -47,8 +48,6 @@ public class Config {
     public static final String ODR_GET_URL = BASE_URL+"get_place_order";
     public static final String ODR_REVIEW_URL = BASE_URL+"order_rating"; //same
     public static final String ODR_RATING_URL = BASE_URL+"order_rating"; //same
-
-
 
 
 
@@ -135,21 +134,15 @@ public class Config {
 
 
 
-
-
     //url item
 
     public static final String SINGLE_PROD_GET_URL=BASE_URL+"get_single_inventory/";
     public static final String SINGLE_PROD_Id = "inv_id";
 
 
-
-
-
     //urls search
-    public static final String SEARCH_GET_URL = "";
-
-
+    public static final String SEARCH_RESULTS_URL = BASE_URL+"search_all_product/";
+    public static final String SEARCH_HISTORY_URL = BASE_URL+"search_product/";
 
 
    // products list urls
@@ -157,11 +150,17 @@ public class Config {
 
 
 
+    public static final String KEY_SEARCH_TERM="term";
+    public static final String KEY_FILTER_RATE1="rate1";
+    public static final String KEY_FILTER_RATE2="rate2";
 
 
 
 
+    //urls filter
+    public static final String SEARCH_FILTER_URL=BASE_URL+"filter_by_price/";
 
+    public static final String SEARCH_SORT_URL=BASE_URL+"order_by_price/";
 
 
 

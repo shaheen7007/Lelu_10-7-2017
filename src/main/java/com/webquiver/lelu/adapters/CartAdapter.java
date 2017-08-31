@@ -149,7 +149,7 @@ public class CartAdapter extends BaseAdapter {
             CartItem m = cartitems.get(position);
 
             // thumbnail image
-            thumbNail.setImageUrl(m.getIMAGE_URL(), imageLoader);
+            thumbNail.setImageUrl(Config.BASE_URLwithoutslash+m.getIMAGE_URL(), imageLoader);
 
             item_name.setText(m.getNAME());
             item_price.setText("\u20B9" + " " + m.getPRICE());
@@ -384,6 +384,10 @@ public class CartAdapter extends BaseAdapter {
 
                                                 //change
                                              //   Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
+
+                                                EventBus.getDefault().post(new HelloWorldEvent(String.valueOf(cartitems.get(position).getQUANTITY()+1)));
+
+
 
 
                                                 SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)

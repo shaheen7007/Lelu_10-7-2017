@@ -279,15 +279,8 @@ public class OrderAdapter extends BaseAdapter
 
 
 
-
-
-
-
                    }
                       });
-
-
-
 
 
 
@@ -711,10 +704,10 @@ public class OrderAdapter extends BaseAdapter
                 for (int j = 0; j < prod.length(); j++) {
                     CartItem Item_item = new CartItem();
                     JSONObject ss = prod.getJSONObject(j);
-                    Item_item.setNAME("default");                         //change
-                    Item_item.setPRICE("4,600.00");
+                    Item_item.setNAME(ss.getString("i_name"));                         //change
+                    Item_item.setPRICE(ss.getString("i_salesPrice"));
                     Item_item.setQUANTITY(ss.getInt("opp_qty"));
-                    Item_item.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+                    Item_item.setIMAGE_URL(ss.getString("i_image"));
                     movieList.add(Item_item);
                 }
 

@@ -988,8 +988,8 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
         obj = jsonArr.getJSONObject(0);
         prod_id=obj.getString(TAG_PROD_ID);
         name.setText(obj.getString(TAG_NAME));
-        price.setText(obj.getString(TAG_PRICE));
-        realprice.setText(obj.getString(TAG_REALPRICE));
+        price.setText("\u20B9 "+obj.getString(TAG_PRICE));
+        realprice.setText("\u20B9 "+obj.getString(TAG_REALPRICE));
         images.add(obj.getString(TAG_IMAGE));
 
         // images.add(obj.getString(TAG_IMAGE));

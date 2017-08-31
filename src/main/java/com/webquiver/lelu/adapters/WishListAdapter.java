@@ -129,7 +129,7 @@ public class WishListAdapter extends BaseAdapter {
             CartItem m = cartitems.get(position);
 
             // thumbnail image
-            thumbNail.setImageUrl(m.getIMAGE_URL(), imageLoader);
+            thumbNail.setImageUrl(Config.BASE_URLwithoutslash+m.getIMAGE_URL(), imageLoader);
 
             item_name.setText(m.getNAME());
             item_price.setText("\u20B9" + " " + m.getPRICE());

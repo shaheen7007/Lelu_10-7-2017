@@ -165,6 +165,7 @@
                 android:text="5 items"
                 android:textColor="@color/colorgreen"
                 style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:id="@+id/numofitems_id"
 
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
@@ -206,6 +207,7 @@
                 android:layout_width="0dp"
                 android:textAlignment="textEnd"
                 style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:id="@+id/bitotal_id"
 
                 android:text="Rs. 150"
                 android:layout_weight="1"
@@ -271,7 +273,7 @@
                 android:textAlignment="textEnd"
                 android:text="Rs. 10,090.00"
                 style="@android:style/TextAppearance.DeviceDefault.Small"
-
+                android:id="@+id/totalpayable_id"
                 android:textStyle="bold"
                 android:textColor="#000"
                 android:layout_weight="1"

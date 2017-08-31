@@ -82,6 +82,13 @@ public class AddressFragment extends android.app.Fragment {
 
     LinearLayout lyt;
 
+
+    double bigtotal,totalpayable;
+    int numofitems;
+    TextView bigtotalTXT,numofitemsTXT,totalpayableTXT;
+
+
+
     int numofaddres;
 
     TextView PlaceOrderBTN;
@@ -105,7 +112,6 @@ public class AddressFragment extends android.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
         container.removeAllViews();
 
         View rootView = inflater.inflate(
@@ -152,6 +158,25 @@ public class AddressFragment extends android.app.Fragment {
         });
 
 
+        Bundle b=getArguments();
+
+        if (b!=null) {
+            bigtotal = Double.parseDouble(b.getString("bigtotal", "99999"));
+            totalpayable = Double.parseDouble(b.getString("totalpayable", "9999"));
+            numofitems = Integer.parseInt(b.getString("numofitems", "99999"));
+        }
+
+        bigtotalTXT=(TextView)rootView.findViewById(R.id.bitotal_id);
+        numofitemsTXT=(TextView)rootView.findViewById(R.id.numofitems_id);
+        totalpayableTXT=(TextView)rootView.findViewById(R.id.totalpayable_id);
+
+        bigtotalTXT.setText(String.valueOf(bigtotal));
+        numofitemsTXT.setText(String.valueOf(numofitems)+" items");
+        totalpayableTXT.setText(String.valueOf(totalpayable));
+
+
+
+
         //back btn
 
         ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bckBTN_id);
@@ -167,7 +192,6 @@ public class AddressFragment extends android.app.Fragment {
 
 
         getall();
-
 
 /*
         AddressItem C_item = new AddressItem();
@@ -379,7 +403,6 @@ public class AddressFragment extends android.app.Fragment {
                                                  alertDialog.show();
                                                      }
                                                  });
-
 
 
         viewdeatails_TXT.setOnClickListener(new View.OnClickListener() {

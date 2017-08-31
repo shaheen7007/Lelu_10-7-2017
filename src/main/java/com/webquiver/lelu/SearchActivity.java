@@ -30,6 +30,8 @@ import com.kennyc.bottomsheet.BottomSheet;
 import com.kennyc.bottomsheet.BottomSheetListener;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
+import com.webquiver.lelu.fragments.AddressFragment;
+import com.webquiver.lelu.fragments.FilterResultFragment;
 import com.webquiver.lelu.fragments.SearchResultFragment;
 
 import org.cryse.widget.persistentsearch.PersistentSearchView;
@@ -70,6 +72,8 @@ public class SearchActivity extends AppCompatActivity {
 
     BottomSheetListener bottomSheetListener;
 
+    Bundle b;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +86,7 @@ public class SearchActivity extends AppCompatActivity {
         fa = this;
 
 
-        Bundle b=getIntent().getExtras();
+        b=getIntent().getExtras();
 
 
 
@@ -98,7 +102,55 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onSheetItemSelected(@NonNull BottomSheet bottomSheet, MenuItem menuItem) {
 
-                Toast.makeText(SearchActivity.this,menuItem.getTitle(),Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("searchterm",String.valueOf(b.getString("searchterm")));
+                if (menuItem.getNumericShortcut()=='1') {
+                    bundle.putString("rate1", "100");
+                    bundle.putString("rate2", "200");
+                    Toast.makeText(SearchActivity.this,"1",Toast.LENGTH_LONG).show();
+
+                }
+
+                if (menuItem.getNumericShortcut()=='2') {
+                    bundle.putString("rate1", "200");
+                    bundle.putString("rate2", "500");
+                }
+
+                if (menuItem.getNumericShortcut()=='3') {
+                    bundle.putString("rate1", "500");
+                    bundle.putString("rate2", "1000");
+                }
+
+                if (menuItem.getNumericShortcut()=='4') {
+                    bundle.putString("rate1", "1000");
+                    bundle.putString("rate2", "5000");
+                }
+                if (menuItem.getNumericShortcut()=='5') {
+                    bundle.putString("rate1", "5000");
+                    bundle.putString("rate2", "200000");
+                }
+
+                if (menuItem.getNumericShortcut()=='a') {
+                    bundle.putString("rate1", "asc");
+                    bundle.putString("rate2", "200000");
+                }
+
+                if (menuItem.getNumericShortcut()=='d') {
+                    bundle.putString("rate1", "desc");
+                    bundle.putString("rate2", "200000");
+                }
+
+
+                    FilterResultFragment showSelectedADDR = new FilterResultFragment();
+                    showSelectedADDR.setArguments(bundle);
+                    FragmentManager fm = null;
+                    fm = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.add(R.id.search_frag_container, showSelectedADDR);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    //  fragmentTransaction.addToBackStack("cart");
+                    fragmentTransaction.commit();
+
 
             }
 
@@ -114,7 +166,6 @@ public class SearchActivity extends AppCompatActivity {
         filterbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
 
                 new BottomSheet.Builder(SearchActivity.this)
@@ -141,15 +192,28 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         //fragment
-        Fragment fr = null;
-        FragmentManager fm = null;
-        View selectedView = null;
+    //    Fragment fr = null;
+    //    FragmentManager fm = null;
+     //   View selectedView = null;
 
         //fragment
+   //     fm = getFragmentManager();
+   //     FragmentTransaction fragmentTransaction = fm.beginTransaction();
+   //     fragmentTransaction.add(R.id.search_frag_container, SearchResultFragment.getInstance());
+    //    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+      //  fragmentTransaction.commit();
+
+
+        Bundle bundle = new Bundle();
+        bundle.putString("searchterm",String.valueOf(b.getString("searchterm")));
+        SearchResultFragment showSelectedADDR = new SearchResultFragment();
+        showSelectedADDR.setArguments(bundle);
+        FragmentManager fm = null;
         fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.search_frag_container, SearchResultFragment.getInstance());
+        fragmentTransaction.add(R.id.search_frag_container, showSelectedADDR);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+      //  fragmentTransaction.addToBackStack("cart");
         fragmentTransaction.commit();
 
 
@@ -191,7 +255,6 @@ public class SearchActivity extends AppCompatActivity {
         {
 
             mSearchView.setSearchListener(new PersistentSearchView.SearchListener() {
-
 
                 @Override
                 public boolean onSuggestion(SearchItem searchItem) {
@@ -276,6 +339,24 @@ public class SearchActivity extends AppCompatActivity {
                     }
 
 
+                    Bundle bundle = new Bundle();
+                    bundle.putString("searchterm",string);
+                    SearchResultFragment showSelectedADDR = new SearchResultFragment();
+                    showSelectedADDR.setArguments(bundle);
+                    FragmentManager fm = null;
+                    fm = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.add(R.id.search_frag_container, showSelectedADDR);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    //  fragmentTransaction.addToBackStack("cart");
+                    fragmentTransaction.commit();
+
+
+
+
+
+
+
                 }
 
                 @Override
@@ -308,7 +389,7 @@ public class SearchActivity extends AppCompatActivity {
         //  progressBar.setVisibility(View.VISIBLE);
 
         //get banner json
-        JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest("https://api.myjson.com/bins/1fgsw9",
+        JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest(Config.SEARCH_HISTORY_URL,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -357,7 +438,7 @@ public class SearchActivity extends AppCompatActivity {
             try {
 
                 obj = jsonArray.getJSONObject(i);
-                searchnames.add(obj.getString("name"));
+                searchnames.add(obj.getString("i_name"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

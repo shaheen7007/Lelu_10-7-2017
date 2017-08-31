@@ -37,13 +37,15 @@ public class GridViewAdapter extends BaseAdapter {
     private ArrayList<String> images;
     private ArrayList<String> names;
     private ArrayList<String> color;
+    private ArrayList<String> price;
 
-    public GridViewAdapter (Context context, ArrayList<String> images, ArrayList<String> names, ArrayList<String> color){
+    public GridViewAdapter (Context context, ArrayList<String> images, ArrayList<String> names, ArrayList<String> color,ArrayList<String> price){
         //Getting all the values
         this.context = context;
         this.images = images;
         this.names = names;
         this.color = color;
+        this.price = price;
     }
 
     @Override
@@ -87,11 +89,8 @@ Movie m;
          //   imageLoader.get("http://192.168.1.9:8000"+images.get(position), ImageLoader.getImageListener(imageView, R.drawable.blank_image,R.drawable.loading2));
         //    imageView.setImageUrl(images.get(position),imageLoader);
 
-
-
-
             name.setText(names.get(position));
-            clr.setText(color.get(position));
+            clr.setText("\u20B9 "+price.get(position));
         } else {
             grid = (View) convertView;
         }

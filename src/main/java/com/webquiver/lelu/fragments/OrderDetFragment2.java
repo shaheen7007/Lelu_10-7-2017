@@ -2,8 +2,10 @@ package com.webquiver.lelu.fragments;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.adapters.ViewDetAdapter;
 import com.webquiver.lelu.classes.CartItem;
@@ -80,7 +83,28 @@ public class OrderDetFragment2 extends Fragment {
             @Override
             public void onClick(View v) {
 
-                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+           //     getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+
+                if (poss==999) {
+
+                    Intent intent =new Intent(getActivity(), HomeActivity.class);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
+
+
+
+                }
+
+                else
+                {
+                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                }
+
+
+
+
 
             }
         });

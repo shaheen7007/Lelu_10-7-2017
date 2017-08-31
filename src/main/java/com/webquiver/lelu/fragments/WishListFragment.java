@@ -311,12 +311,12 @@ public class WishListFragment extends Fragment {
                 JSONObject tt = arr.getJSONObject(i);
 
                 CartItem C_item5 = new CartItem();
-                C_item5.setNAME(tt.getString("wl_prod"));
+                C_item5.setNAME(tt.getString("i_name"));
                 //C_item5.setDESC("default");
             //    C_item5.setQUANTITY(Integer.parseInt(tt.getString("cp_qty")));
-                C_item5.setREALPRICE("default");
-                C_item5.setPRICE("default");
-                C_item5.setIMAGE_URL("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg");
+                C_item5.setREALPRICE(tt.getString("i_retailPrice"));
+                C_item5.setPRICE(tt.getString("i_salesPrice"));
+                C_item5.setIMAGE_URL(tt.getString("i_image"));
                // C_item5.setPRODUCT_ID(tt.getString("cp_code"));
 
                 movieList.add(C_item5);

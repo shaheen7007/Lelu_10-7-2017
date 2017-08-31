@@ -1003,7 +1003,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
             try {
 
                 obj = jsonArray.getJSONObject(i);
-                searchnames.add(obj.getString("name"));
+                searchnames.add(obj.getString("i_name"));
 
             } catch (JSONException e) {
 

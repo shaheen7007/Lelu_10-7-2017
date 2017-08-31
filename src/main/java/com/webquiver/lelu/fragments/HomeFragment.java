@@ -81,6 +81,7 @@ public class HomeFragment extends android.app.Fragment {
     public static final String TAG_NAME = "i_name";
     public static final String TAG_COLOR = "categ_name";
     public static final String TAG_ID = "inv_id";
+    public static final String TAG_PRICE = "i_salesPrice";
 
     //GridView Object
     private ExpandableHeightGridView gridView;
@@ -91,6 +92,7 @@ public class HomeFragment extends android.app.Fragment {
 
     private ArrayList<String> color;
     private ArrayList<String> ids;
+    private ArrayList<String> prices;
 
     private RequestQueue requestQueue_cart;
 
@@ -115,6 +117,7 @@ public class HomeFragment extends android.app.Fragment {
         names = new ArrayList<>();
         color = new ArrayList<>();
         ids = new ArrayList<>();
+        prices = new ArrayList<>();
 
 
         //mPager = (ViewPager) rootView.findViewById(R.id.pager);
@@ -211,12 +214,13 @@ public class HomeFragment extends android.app.Fragment {
                 images.add(obj.getString(TAG_IMAGE_URL));
                 names.add(obj.getString(TAG_NAME));
                 ids.add(obj.getString(TAG_ID));
+                prices.add(obj.getString(TAG_PRICE));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        GridViewAdapter gridViewAdapter = new GridViewAdapter(getActivity(), images, names, ids);
+        GridViewAdapter gridViewAdapter = new GridViewAdapter(getActivity(), images, names, ids,prices);
 
         gridView.setAdapter(gridViewAdapter);
 
@@ -255,13 +259,6 @@ public class HomeFragment extends android.app.Fragment {
                     .setFrame(Style.FRAME_STANDARD)
                     .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
                     .setAnimations(Style.ANIMATIONS_FADE).show();
-
-
-
-
-
-
-
 
             return false;
         }
