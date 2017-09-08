@@ -14,8 +14,8 @@ public class Config {
 
 
     //BASE URL
-    public static final String BASE_URL = "http://192.168.1.9:8000/";
-    public static final String BASE_URLwithoutslash = "http://192.168.1.9:8000";
+    public static final String BASE_URL = "http://192.168.1.2:8000/";
+    public static final String BASE_URLwithoutslash = "http://192.168.1.2:8000";
 
 
 
@@ -161,6 +161,8 @@ public class Config {
     public static final String SEARCH_FILTER_URL=BASE_URL+"filter_by_price/";
 
     public static final String SEARCH_SORT_URL=BASE_URL+"order_by_price/";
+
+    public static final String GET_CATEG_URL=BASE_URL+"get_category/";
 
 
 

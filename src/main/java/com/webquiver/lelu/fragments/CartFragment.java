@@ -128,9 +128,9 @@ catch (Exception e)
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
                 Intent intent=new Intent(getActivity(),ItemActivity.class);
+                intent.putExtra("id", String.valueOf(movieList.get(position).getPRODUCT_ID()));
                 startActivity(intent);
                 getActivity().finish();
-
 
             }
         });

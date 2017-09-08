@@ -168,6 +168,7 @@ public class WishListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
                 Intent intent=new Intent(getActivity(),ItemActivity.class);
+                intent.putExtra("id", String.valueOf(movieList.get(position).getPRODUCT_ID()));
                 startActivity(intent);
                 getActivity().finish();
 
@@ -259,6 +260,7 @@ public class WishListFragment extends Fragment {
                                         //Hiding the alert dialog
                                         alertDialog.dismiss();
                                         Intent intent=new Intent(getActivity(),HomeActivity.class);
+
                                         startActivity(intent);
 
                                         getActivity().finish();
@@ -317,7 +319,7 @@ public class WishListFragment extends Fragment {
                 C_item5.setREALPRICE(tt.getString("i_retailPrice"));
                 C_item5.setPRICE(tt.getString("i_salesPrice"));
                 C_item5.setIMAGE_URL(tt.getString("i_image"));
-               // C_item5.setPRODUCT_ID(tt.getString("cp_code"));
+                C_item5.setPRODUCT_ID(tt.getString("inv_id"));
 
                 movieList.add(C_item5);
 

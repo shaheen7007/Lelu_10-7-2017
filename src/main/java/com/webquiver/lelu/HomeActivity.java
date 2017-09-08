@@ -25,12 +25,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -84,7 +86,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 /*
     public void onBackPressed()
     {
-
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
         alertDialog.setTitle("Exit ?");
@@ -276,7 +277,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //navigation drawer
         mDrawerLayout = (DrawerLayout)findViewById(R.id.dl_drawer_layout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nv_navigation_view);
+         NavigationView navigationView = (NavigationView) findViewById(R.id.nv_navigation_view);
+
         navigationView.setNavigationItemSelectedListener(this);
 
         //custom toolbar
@@ -511,33 +513,45 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_logout) {
 
 
            sessionManagement.logoutUser();
             finish();
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_orders) {
 
             Intent intent=new Intent(getApplicationContext(),MyOrdersActivity.class);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
 
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_wishlist) {
 
             Intent intent=new Intent(getApplicationContext(),WishListActivity.class);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
             finish();
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_cart) {
 
-        } else if (id == R.id.nav_share) {
+            Intent intent = new Intent(HomeActivity.this, CartActivity.class);
 
-        } else if (id == R.id.nav_send) {
+            intent.putExtra("home","home");
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent);
+            finish();
+        }
+        else if (id == R.id.nav_account) {
+
 
         }
+
+
+
+
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.dl_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -555,6 +569,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (view == findViewById(R.id.indoorIMG_iid)) {
             Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+
+        }
+
+        else if (view == findViewById(R.id.homenav_id)) {
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.dl_drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
 
         }
 
@@ -814,12 +835,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .setAnimations(Style.ANIMATIONS_FADE).show();
 
 
-
-
-
-
-
-
             return false;
         }
         return true;
@@ -917,5 +932,139 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+
+
+    public void showsettings(View v) {
+
+        //Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(HomeActivity.this, v);
+        //Inflating the Popup using xml file
+        popup.getMenuInflater().inflate(R.menu.actions, popup.getMenu());
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+
+                String itemname=item.getTitle().toString();
+                if (itemname.equals("Retail Price"))
+                {
+
+                    Toast.makeText(HomeActivity.this,"Retail Price",Toast.LENGTH_LONG).show();
+
+
+                }
+
+                if (itemname.equals("Wholesale Price"))
+                {
+
+                    Toast.makeText(HomeActivity.this,"Wholesale Price",Toast.LENGTH_LONG).show();
+
+
+                }
+
+                return true;
+            }
+        });
+
+        popup.show();//showing popup menu
+    }
+
+
+    public void showcategories(View v) {
+
+
+        //Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(HomeActivity.this, v);
+        //Inflating the Popup using xml file
+        popup.getMenuInflater().inflate(R.menu.categories, popup.getMenu());
+        popup.getMenuInflater().inflate(R.menu.categories, popup.getMenu());
+
+
+
+
+        /*
+
+        JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest(Config.GET_CATEG_URL,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        //Dismissing the progressdialog on response
+                        //                       loading.dismiss();
+
+                        //                  progressBar.setVisibility(View.INVISIBLE);
+
+                        SharedPreferences.Editor prefEdit = sharedPreferences.edit();
+                        String jsonstring=response.toString();
+                        prefEdit.putString(Config.JSONSTRING,jsonstring);
+                        prefEdit.apply();
+                        //Displaying banner
+                        showbanner(response);
+                    }
+
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //      Toast.makeText(HomeActivity.this,"No response from api",Toast.LENGTH_LONG).show();
+                        //set from preference
+                        JSONArray jsonArray = null;
+                        try {
+                            jsonArray = new JSONArray(sharedPreferences.getString(Config.JSONSTRING, "NULL"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //            progressBar.setVisibility(View.INVISIBLE);
+                        showbanner(jsonArray);
+
+                    }
+                }
+        );
+
+        //Creating a request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        //Adding our request to the queue
+        requestQueue.add(bannerjsonArrayRequest);
+
+*/
+
+
+
+        Menu menu=popup.getMenu();
+        menu.add("hai");
+        menu.add("hello");
+        menu.add("hello=");
+        menu.add("hello=l");
+        menu.add("hello=la");
+
+
+
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+
+                String itemname=item.getTitle().toString();
+                if (itemname.equals("hai"))
+                {
+
+                    Toast.makeText(HomeActivity.this,"hai",Toast.LENGTH_LONG).show();
+
+
+                }
+
+                if (itemname.equals("hello"))
+                {
+
+                    Toast.makeText(HomeActivity.this,"hello",Toast.LENGTH_LONG).show();
+
+
+                }
+
+                return true;
+            }
+        });
+
+        popup.show();//showing popup menu
+    }
 
  }

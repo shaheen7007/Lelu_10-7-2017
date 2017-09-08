@@ -208,7 +208,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         if (b != null) {
 
             pro_id=String.valueOf(b.get("id"));
-            Toast.makeText(ItemActivity.this,pro_id,Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(ItemActivity.this,pro_id,Toast.LENGTH_SHORT).show();
         }
 
         //custom toolbar
@@ -778,7 +778,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+/*
         if (id == R.id.nav_camera) {
 
 
@@ -796,11 +796,8 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
+        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.dl_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

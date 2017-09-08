@@ -17,6 +17,7 @@ package com.webquiver.lelu.adapters;
         import com.squareup.picasso.NetworkPolicy;
         import com.squareup.picasso.Picasso;
         import com.webquiver.lelu.R;
+        import com.webquiver.lelu.classes.Config;
 
         import java.util.ArrayList;
 
@@ -57,7 +58,7 @@ public class Banner_Adapter extends PagerAdapter {
     //    Picasso.with(context).load(arrayList.get(position))
      //           .into(imageView);
 
-        Glide.with(context).load("http://192.168.1.9:8000"+arrayList.get(position)).into(imageView);
+        Glide.with(context).load(Config.BASE_URLwithoutslash+arrayList.get(position)).into(imageView);
 
 
 

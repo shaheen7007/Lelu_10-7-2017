@@ -170,9 +170,9 @@ public class AddressFragment extends android.app.Fragment {
         numofitemsTXT=(TextView)rootView.findViewById(R.id.numofitems_id);
         totalpayableTXT=(TextView)rootView.findViewById(R.id.totalpayable_id);
 
-        bigtotalTXT.setText(String.valueOf(bigtotal));
+        bigtotalTXT.setText(String.valueOf("\u20B9"+bigtotal));
         numofitemsTXT.setText(String.valueOf(numofitems)+" items");
-        totalpayableTXT.setText(String.valueOf(totalpayable));
+        totalpayableTXT.setText(String.valueOf("\u20B9"+totalpayable));
 
 
 
