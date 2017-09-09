@@ -170,7 +170,7 @@ public class WishListFragment extends Fragment {
                 Intent intent=new Intent(getActivity(),ItemActivity.class);
                 intent.putExtra("id", String.valueOf(movieList.get(position).getPRODUCT_ID()));
                 startActivity(intent);
-                getActivity().finish();
+              //  getActivity().finish();
 
             }
         });
@@ -259,9 +259,9 @@ public class WishListFragment extends Fragment {
                                     public void onClick(View v) {
                                         //Hiding the alert dialog
                                         alertDialog.dismiss();
-                                        Intent intent=new Intent(getActivity(),HomeActivity.class);
+                                  //      Intent intent=new Intent(getActivity(),HomeActivity.class);
 
-                                        startActivity(intent);
+                                 //       startActivity(intent);
 
                                         getActivity().finish();
 

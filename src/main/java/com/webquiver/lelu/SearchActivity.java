@@ -50,11 +50,14 @@ public class SearchActivity extends AppCompatActivity {
     public void onBackPressed()
     {
 
+        /*
         Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
         openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         startActivity(openFragmentBIntent);
         finish();
+        */
+        super.onBackPressed();
 
     }
 
@@ -236,11 +239,14 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onHomeButtonClick() {
                 //Hamburger has been clicked
+                /*
                 mSearchView.setVisibility(View.GONE);
                 Intent intent=new Intent(SearchActivity.this,HomeActivity.class);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 startActivity(intent);
                 finish();
+                */
+                SearchActivity.super.onBackPressed();
 
             }
 

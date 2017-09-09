@@ -21,6 +21,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.webquiver.lelu.R;
+import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.CustomVolleyRequest;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ Movie m;
        //     Picasso.with(context).load("http://192.168.1.9:8000"+images.get(position))
         //            .into(imageView);
 
-            Glide.with(context).load("http://192.168.1.9:8000"+images.get(position)).into(imageView);
+            Glide.with(context).load(Config.BASE_URLwithoutslash+images.get(position)).into(imageView);
 
 
          //   imageLoader = CustomVolleyRequest.getInstance(context).getImageLoader();

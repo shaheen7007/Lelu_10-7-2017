@@ -229,8 +229,8 @@ public class WishListAdapter extends BaseAdapter {
                                                 public void onClick(View v) {
                                                     //Hiding the alert dialog
                                                     alertDialog.dismiss();
-                                                    Intent intent=new Intent(activity,HomeActivity.class);
-                                                    activity.startActivity(intent);
+                                                 //   Intent intent=new Intent(activity,HomeActivity.class);
+                                                //    activity.startActivity(intent);
                                                     activity.finish();
 
                                                 }
@@ -289,7 +289,7 @@ public class WishListAdapter extends BaseAdapter {
                         Map<String, String> params = new HashMap<>();
                         //Adding the parameters to the request
                         params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
-                        params.put(Config.KEY_CART_ProdId,cartitems.get(position).getNAME());        //change to produc id
+                        params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());        //change to produc id
                         return params;
                     }
                 };

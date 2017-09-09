@@ -1,6 +1,7 @@
 package com.webquiver.lelu;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -56,6 +57,7 @@ import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.tuyenmonkey.mkloader.MKLoader;
 import com.viewpagerindicator.CirclePageIndicator;
+import com.webquiver.lelu.adapters.CartAdapter;
 import com.webquiver.lelu.adapters.SearchResultAdapter;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.ExpandableHeightGridView;
@@ -63,6 +65,7 @@ import com.webquiver.lelu.adapters.Banner_Adapter;
 import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
 import com.webquiver.lelu.classes.SearchResult;
 import com.webquiver.lelu.classes.SessionManagement;
+import com.webquiver.lelu.fragments.AddressFragment;
 import com.webquiver.lelu.fragments.HomeFragment;
 import com.webquiver.lelu.fragments.OrderDetFragment2;
 import com.webquiver.lelu.fragments.SearchResultFragment;
@@ -81,7 +84,18 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.greenrobot.event.EventBus;
+
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+
+
+
+    public static Activity fa;
+
+
+
+
 
 /*
     public void onBackPressed()
@@ -119,6 +133,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
+
+            try {
+                HomeActivity.fa.finish();
+            }
+            catch (Exception e)
+            {
+
+            }
+
             return;
         }
 
@@ -175,7 +198,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     //api
     public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
-    public static final String BANNER_URL = "http://192.168.1.9:8000/get-inventory";
+    public static final String BANNER_URL = "http://192.168.1.2:8000/get-inventory";
     public static final String TAG_IMAGE_URL = "i_image";
     //GridView Object
     private ExpandableHeightGridView gridView;
@@ -225,6 +248,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
+        fa=this;
+
+
+
        sharedPreferences = getSharedPreferences(BANNER_PREFERENCE, MODE_PRIVATE);
         pref_numberss = this.getSharedPreferences(NUM_PREFERENCE, MODE_PRIVATE);
         editor_num_pref=pref_numberss.edit();
@@ -254,7 +282,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         searchhistory = this.getSharedPreferences(Config.SearchPref, Context.MODE_PRIVATE);
         search_historyEditor=searchhistory.edit();
 
+
+
+        //eventbus
+
+        EventBus.getDefault().register(this);
+
         getSearchData();
+
 
 
         //
@@ -531,7 +566,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Intent intent=new Intent(getApplicationContext(),WishListActivity.class);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
-            finish();
+       //     finish();
 
         } else if (id == R.id.nav_cart) {
 
@@ -540,7 +575,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             intent.putExtra("home","home");
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
-            finish();
+      //      finish();
         }
         else if (id == R.id.nav_account) {
 
@@ -596,7 +631,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             intent.putExtra("home","home");
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
-            finish();
+           // finish();
         }
     }
 
@@ -689,7 +724,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     intent.putExtra("searchterm",string);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     startActivity(intent);
-                    finish();
+                 //   finish();
 
                     int num=Integer.parseInt(searchhistory.getString(Config.numofhistory,"NULL"));
 
@@ -764,6 +799,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                                 Toast.makeText(getApplicationContext(), "Failed_num", Toast.LENGTH_LONG).show();
 
+                                cartnum.setVisibility(View.INVISIBLE);
+
                             } else {
 
                                 Toast.makeText(getApplicationContext(), "Invalid user", Toast.LENGTH_LONG).show();
@@ -805,6 +842,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         String nn=pref_numberss.getString(Config.KEY_NUM_CART,"0");
         if (nn.equals("0"))
         {
+
+            cartnum.setVisibility(View.INVISIBLE);
 
         }
         else {
@@ -1067,4 +1106,40 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         popup.show();//showing popup menu
     }
 
- }
+
+
+    public void onEvent(CartAdapter.HelloWorldEvent event){
+
+
+        getall();
+
+
+    }
+    public void onEvent(ItemActivity.HelloWorldEvent event){
+
+
+        getall();
+
+
+    }
+    public void onEvent(ItemActivity2.HelloWorldEvent event){
+
+
+        getall();
+
+
+    }
+
+    public void onEvent(AddressFragment.HelloWorldEvent event){
+
+
+        getall();
+
+
+    }
+
+
+
+
+
+}

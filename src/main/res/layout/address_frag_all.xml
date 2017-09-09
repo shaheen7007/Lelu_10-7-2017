@@ -19,6 +19,8 @@
             <ImageView android:src="@drawable/back_btn"
                 android:background="?attr/actionBarItemBackground"
                 android:layout_width="@dimen/backbtn_width"
+                android:clickable="true"
+                android:focusable="true"
                 android:id="@+id/bck_id"
                 android:layout_marginLeft="10dp"
                 android:layout_height="@dimen/backbtn_height"

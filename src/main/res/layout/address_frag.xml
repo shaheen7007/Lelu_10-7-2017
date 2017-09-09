@@ -22,6 +22,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_height="22dp"
                 android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true"
                 android:scaleType="fitCenter"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
@@ -308,6 +310,8 @@
             android:id="@+id/menuitem"
             android:layout_height="match_parent">
             <ImageView android:src="@drawable/back_btn"
+                android:clickable="true"
+                android:focusable="true"
                 android:background="?attr/actionBarItemBackground"
                 android:layout_width="23dp"
                 android:layout_marginLeft="10dp"

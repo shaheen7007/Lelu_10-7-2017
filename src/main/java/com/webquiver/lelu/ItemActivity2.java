@@ -1,5 +1,6 @@
 package com.webquiver.lelu;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -49,6 +50,7 @@ import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
 import com.webquiver.lelu.classes.SearchResult;
 import com.webquiver.lelu.classes.SessionManagement;
+import com.webquiver.lelu.fragments.AddressFragment;
 
 import org.cryse.widget.persistentsearch.PersistentSearchView;
 import org.cryse.widget.persistentsearch.SearchItem;
@@ -61,6 +63,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
+
 
 public class ItemActivity2 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -71,6 +75,8 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
     SessionManagement sessionManagement;
 
+
+    public static Activity fa;
 
 
     AlertDialog.Builder alert;
@@ -141,6 +147,11 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setCollapsible(false);
         setSupportActionBar(toolbar);
+
+
+        EventBus.getDefault().register(this);
+        fa=this;
+
 
 
         qty=(TextView)findViewById(R.id.qtytxt_id);
@@ -694,6 +705,12 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
                                 JSONObject jsonResponse = new JSONObject(response);
                                 if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
+
+
+
+                                    EventBus.getDefault().post(new HelloWorldEvent(""));
+
+
                                     SuperActivityToast.create(ItemActivity2.this, new Style(), Style.TYPE_STANDARD)
                                             //     .setButtonText("Please click BACK again to exit")
                                             //     .setButtonIconResource(R.drawable.ic_undo)
@@ -868,6 +885,7 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
         if (nn.equals("0"))
         {
 
+            cartnum.setVisibility(View.INVISIBLE);
         }
         else {
             cartnum.setVisibility(View.VISIBLE);
@@ -996,6 +1014,28 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
 
         //     description.setText(json.getString(TAG_DESCRIPTION));
+
+    }
+
+
+    public class HelloWorldEvent {             //event to update cartnum
+        public final String message;
+
+        public HelloWorldEvent(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
+
+    public void onEvent(AddressFragment.HelloWorldEvent event){
+
+
+        getall();
+
 
     }
 

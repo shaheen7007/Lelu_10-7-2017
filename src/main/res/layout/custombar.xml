@@ -9,6 +9,8 @@
         android:layout_width="@dimen/menuitem1custbar_width"
         android:layout_height="@dimen/menuitem1custbar_height"
         android:scaleType="fitCenter"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_marginTop="18dp"
         android:id="@+id/menuitem"
         android:layout_alignParentLeft="true"
@@ -30,6 +32,8 @@
     <ImageView android:src="@drawable/cart"
         android:layout_width="@dimen/menuitem3custbar_width"
         android:layout_marginLeft="22dp"
+        android:clickable="true"
+        android:focusable="true"
 
         android:layout_height="@dimen/menuitem3custbar_height"
         android:scaleType="fitCenter"
@@ -44,6 +48,10 @@
         android:background="?attr/actionBarItemBackground"
         android:layout_width="@dimen/menuitem2custbar_width"
         android:layout_marginLeft="22dp"
+
+
+        android:clickable="true"
+        android:focusable="true"
 
         android:layout_height="@dimen/menuitem2custbar_height"
         android:scaleType="fitCenter"

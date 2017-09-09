@@ -37,9 +37,11 @@ import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.webquiver.lelu.CartActivity;
 import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.ItemActivity;
+import com.webquiver.lelu.ItemActivity2;
 import com.webquiver.lelu.LoginActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.RegisterActivity;
+import com.webquiver.lelu.SearchActivity;
 import com.webquiver.lelu.adapters.CartAdapter;
 import com.webquiver.lelu.classes.AddressItem;
 import com.webquiver.lelu.classes.CartItem;
@@ -118,19 +120,22 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
 
 try {
     EventBus.getDefault().register(this);
+    Toast.makeText(getActivity(), "try", Toast.LENGTH_SHORT).show();
 }
 catch (Exception e)
 {
     //
+    Toast.makeText(getActivity(), "catch", Toast.LENGTH_SHORT).show();
 }
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
+
                 Intent intent=new Intent(getActivity(),ItemActivity.class);
                 intent.putExtra("id", String.valueOf(movieList.get(position).getPRODUCT_ID()));
                 startActivity(intent);
-                getActivity().finish();
+            //    getActivity().finish();
 
             }
         });
@@ -211,15 +216,20 @@ catch (Exception e)
 
 
 
-        ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bckBTTN_cartfrag_id);
+        LinearLayout bckBTN=(LinearLayout) rootView.findViewById(R.id.menuitem);
         bckBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                /*
                     Intent openFragmentBIntent = new Intent(getActivity(), HomeActivity.class);
                     openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
                     startActivity(openFragmentBIntent);
                     getActivity().finish();
+                    */
+           //     getFragmentManager().popBackStack();
+
+                getActivity().finish();
 
             }
         });
@@ -375,9 +385,24 @@ catch (Exception e)
                                     public void onClick(View v) {
                                         //Hiding the alert dialog
                                         alertDialog.dismiss();
+                                  //      Intent intent=new Intent(getActivity(),HomeActivity.class);
+                               //         startActivity(intent);
+                                    //    getActivity().finish();
+
+                                        try {
+                                            HomeActivity.fa.finish();
+                                            ItemActivity.fa.finish();
+                                            ItemActivity2.fa.finish();
+                                            SearchActivity.fa.finish();
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            Toast.makeText(getActivity(), "ctch", Toast.LENGTH_SHORT).show();
+                                        }
                                         Intent intent=new Intent(getActivity(),HomeActivity.class);
-                                        startActivity(intent);
+                                        getActivity().startActivity(intent);
                                         getActivity().finish();
+
                                     }
 
                                 });

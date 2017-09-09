@@ -170,6 +170,7 @@
         <TextView
             android:layout_width="match_parent"
             android:text="REMOVE"
+            android:padding="2.5dp"
             android:id="@+id/removeBTN_id"
             android:textColor="#484747"
             android:layout_marginTop="2dp"

@@ -22,7 +22,7 @@ public class CartActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+/*
      //   if (getIntent().hasExtra("home")) {
 
             Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
@@ -48,6 +48,9 @@ public class CartActivity extends AppCompatActivity {
         //   finish();
 
         //    }
+
+        */
+        super.onBackPressed();
     }
 
     private static final String TAG = CartActivity.class.getSimpleName();

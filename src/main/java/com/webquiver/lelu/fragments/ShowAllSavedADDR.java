@@ -1,50 +1,52 @@
-package com.webquiver.lelu.fragments;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+        package com.webquiver.lelu.fragments;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.webquiver.lelu.ItemActivity;
-import com.webquiver.lelu.R;
-import com.webquiver.lelu.classes.AddressItem;
-import com.webquiver.lelu.classes.Config;
-import com.webquiver.lelu.classes.SessionManagement;
+        import android.app.Activity;
+        import android.app.AlertDialog;
+        import android.app.Dialog;
+        import android.app.Fragment;
+        import android.app.FragmentManager;
+        import android.app.FragmentTransaction;
+        import android.app.ProgressDialog;
+        import android.content.Context;
+        import android.content.SharedPreferences;
+        import android.graphics.drawable.ColorDrawable;
+        import android.os.Bundle;
+        import android.util.Log;
+        import android.view.KeyEvent;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.view.Window;
+        import android.widget.BaseAdapter;
+        import android.widget.Button;
+        import android.widget.EditText;
+        import android.widget.ImageView;
+        import android.widget.ListView;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+        import com.android.volley.AuthFailureError;
+        import com.android.volley.Request;
+        import com.android.volley.RequestQueue;
+        import com.android.volley.Response;
+        import com.android.volley.VolleyError;
+        import com.android.volley.toolbox.StringRequest;
+        import com.android.volley.toolbox.Volley;
+        import com.webquiver.lelu.ItemActivity;
+        import com.webquiver.lelu.R;
+        import com.webquiver.lelu.classes.AddressItem;
+        import com.webquiver.lelu.classes.Config;
+        import com.webquiver.lelu.classes.SessionManagement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+        import org.json.JSONArray;
+        import org.json.JSONException;
+        import org.json.JSONObject;
+
+        import java.util.ArrayList;
+        import java.util.HashMap;
+        import java.util.List;
+        import java.util.Map;
 
 /**
  * Created by WebQuiver 04 on 7/27/2017.
@@ -57,6 +59,9 @@ public class ShowAllSavedADDR extends android.app.Fragment {
     private RequestQueue requestQueue;
     private RequestQueue requestQueue2;
     private RequestQueue requestQueue_editADDR;
+
+    double bigtotal,totalpayable;
+    int numofitems;
 
 
     //private ProgressDialog pDialog;
@@ -95,7 +100,31 @@ public class ShowAllSavedADDR extends android.app.Fragment {
                 Log.i("test", "keyCode: " + keyCode);
                 if( keyCode == KeyEvent.KEYCODE_BACK ) {
                     Log.i("test", "onKey Back listener is working!!!");
-                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+               //     getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+
+
+                    Fragment fr = null;
+                    FragmentManager fm = null;
+                    View selectedView = null;
+
+
+
+                    //fragment
+                    fm = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.replace(R.id.cart_FL, CartFragment.getInstance());
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    //   fragmentTransaction.addToBackStack("ct");
+                    fragmentTransaction.commit();
+
+
+
+
+
+
+
+
                     return true;
                 } else {
                     return false;
@@ -110,7 +139,29 @@ public class ShowAllSavedADDR extends android.app.Fragment {
             @Override
             public void onClick(View v) {
 
-                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+       //         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+
+
+
+                Fragment fr = null;
+                FragmentManager fm = null;
+                View selectedView = null;
+
+
+
+                //fragment
+                fm = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.cart_FL, CartFragment.getInstance());
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                //   fragmentTransaction.addToBackStack("ct");
+                fragmentTransaction.commit();
+
+
+
+
+
 
             }
         });
@@ -495,6 +546,22 @@ public class ShowAllSavedADDR extends android.app.Fragment {
             addr_phone.setText("mobile: "+m.getPHONE());
 
 
+
+
+
+            Bundle b=getArguments();
+
+            if (b!=null) {
+                bigtotal = Double.parseDouble(b.getString("bigtotal", "99999"));
+                totalpayable = Double.parseDouble(b.getString("totalpayable", "9999"));
+                numofitems = Integer.parseInt(b.getString("numofitems", "99999"));
+            }
+
+
+
+
+
+
             final View finalConvertView = convertView;
 
 
@@ -563,7 +630,7 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
 
 
-                        //    final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+                            //    final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_EDIT_URL,
                                     new Response.Listener<String>() {
                                         @Override
@@ -585,8 +652,8 @@ public class ShowAllSavedADDR extends android.app.Fragment {
                                                     addrtems.get(position).setADDRESS1(address1.getText().toString());
                                                     addrtems.get(position).setPLACE(place.getText().toString());
                                                     addrtems.get(position).setDISTRICT(district.getText().toString());
-                                                    addrtems.get(position).setPINCODE("PIN - "+pincode.getText().toString());
-                                                    addrtems.get(position).setPHONE("Mobile: "+phone.getText().toString());
+                                                    addrtems.get(position).setPINCODE(pincode.getText().toString());
+                                                    addrtems.get(position).setPHONE(phone.getText().toString());
                                                     addrtems.get(position).setSTATE(state.getText().toString());
 
                                                     getView(position, finalConvertView,parent);
@@ -680,6 +747,9 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("p",String.valueOf(position));
+                    bundle.putString("bigtotal",String.valueOf(totalpayable));
+                    bundle.putString("totalpayable",String.valueOf(bigtotal));
+                    bundle.putString("numofitems",String.valueOf(numofitems));
                     ShowSelectedADDR showSelectedADDR=new ShowSelectedADDR();
                     showSelectedADDR.setArguments(bundle);
 
@@ -765,3 +835,8 @@ public class ShowAllSavedADDR extends android.app.Fragment {
 
 
 }
+
+
+
+
+

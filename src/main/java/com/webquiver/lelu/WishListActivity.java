@@ -19,15 +19,15 @@ public class WishListActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         //   if (getIntent().hasExtra("home")) {
-
+/*
         Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
       //  openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         startActivity(openFragmentBIntent);
+        */
         finish();
 
         //     } else {
-
         //    Intent openFragmentBIntent = new Intent(this, ItemActivity.class);
         //   openFragmentBIntent.putExtra("cart", "cart");
         //   startActivity(openFragmentBIntent);
@@ -58,10 +58,13 @@ public class WishListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                /*
                 Intent openFragmentBIntent = new Intent(WishListActivity.this, HomeActivity.class);
                 //  openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 startActivity(openFragmentBIntent);
+                finish();
+                */
                 finish();
 
             }

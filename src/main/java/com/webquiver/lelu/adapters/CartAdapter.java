@@ -52,6 +52,7 @@ import com.webquiver.lelu.classes.SessionManagement;
 import com.webquiver.lelu.fragments.AddressFragment;
 import com.webquiver.lelu.fragments.CartFragment;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,6 +69,7 @@ public class CartAdapter extends BaseAdapter {
     private Activity activity;
     RequestQueue requestQueue;
     SharedPreferences pref;
+    RequestQueue requestQueue_cart;
     TextView item_qty;
     private LayoutInflater inflater;
     private List<CartItem> cartitems;
@@ -101,6 +103,10 @@ public class CartAdapter extends BaseAdapter {
 
         requestQueue= Volley.newRequestQueue(activity);            //
         pref = activity.getSharedPreferences(SessionManagement.PREF_NAME,Context.MODE_PRIVATE);
+
+
+        requestQueue_cart=Volley.newRequestQueue(activity);
+
 
 
         if (inflater == null)
@@ -385,8 +391,7 @@ public class CartAdapter extends BaseAdapter {
                                                 //change
                                              //   Toast.makeText(activity,"Item removed",Toast.LENGTH_SHORT).show();
 
-                                                EventBus.getDefault().post(new HelloWorldEvent(String.valueOf(cartitems.get(position).getQUANTITY()+1)));
-
+                                                EventBus.getDefault().post(new HelloWorldEvent(""));
 
 
 
@@ -410,10 +415,14 @@ public class CartAdapter extends BaseAdapter {
 
                                                 cartitems.remove(position);
                                                 notifyDataSetChanged();
+
+
                                                 //     getView(position, finalConvertView,parent); //
 
                                                 if (cartitems.size()==0)
                                                 {
+
+                                                    EventBus.getDefault().post(new HelloWorldEvent(""));
 
                                                     LayoutInflater li = LayoutInflater.from(activity);
                                                     //Creating a view to get the dialog box
@@ -441,9 +450,17 @@ public class CartAdapter extends BaseAdapter {
                                                         public void onClick(View v) {
                                                             //Hiding the alert dialog
                                                             alertDialog.dismiss();
+                                                            Toast.makeText(activity, "ctch", Toast.LENGTH_SHORT).show();
 
-                                                            Intent intent=new Intent(activity,HomeActivity.class);
-                                                            activity.startActivity(intent);
+                                                            try {
+                                                                HomeActivity.fa.finish();
+                                                            }
+                                                            catch (Exception e)
+                                                            {
+                                                                Toast.makeText(activity, "ctch", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                           Intent intent=new Intent(activity,HomeActivity.class);
+                                                           activity.startActivity(intent);
                                                             activity.finish();
 
 
@@ -747,6 +764,93 @@ public class CartAdapter extends BaseAdapter {
             return message;
         }
     }
+
+
+    //eventbus
+    public class CARTNUMEvent {
+        private final String message;
+
+        public CARTNUMEvent(String message) {
+            this.message = message;
+
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
+
+/*
+    public void getall() {
+
+        // requestQueue_cart = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_GET_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(activity, "response", Toast.LENGTH_LONG).show();
+
+                        try {
+
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            //   JSONArray jsonArray=new JSONArray(response);
+
+                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                showNUM(response);
+
+                            } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+
+                                Toast.makeText(activity, "Failed_num", Toast.LENGTH_LONG).show();
+
+                            } else {
+
+                                Toast.makeText(activity, "Invalid user", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        //
+                        //       Toast.makeText(getApplicationContext(), "error1", Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //Adding the parameters to the request
+                params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
+                return params;
+            }
+        };
+
+        //Adding request the the queue
+        requestQueue_cart.add(stringRequest);
+
+    }
+
+
+    public void showNUM(String jsonArray) throws JSONException {
+
+        JSONObject json = new JSONObject(jsonArray);
+        JSONArray arr = json.getJSONArray("products");
+        editor_num_pref.putString(Config.KEY_NUM_CART,String.valueOf(arr.length()) );
+        editor_num_pref.commit();
+        String nn=pref_numberss.getString(Config.KEY_NUM_CART,"0");
+
+
+    }
+
+*/
+
+
 
 
 

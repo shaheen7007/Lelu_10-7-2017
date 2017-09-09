@@ -143,7 +143,9 @@ public class HomeFragment extends android.app.Fragment {
                     intent.putExtra("id", String.valueOf(ids.get(position)));
                     // intent.putStringArrayListExtra("images",images);
                     startActivity(intent);
-                    getActivity().finish();
+               //     getActivity().finish();
+
+
                 }
                 else
                 {

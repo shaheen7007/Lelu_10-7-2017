@@ -1,5 +1,6 @@
 package com.webquiver.lelu;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -46,11 +47,13 @@ import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.adapters.Banner_Adapter;
+import com.webquiver.lelu.adapters.CartAdapter;
 import com.webquiver.lelu.adapters.SearchResultAdapter;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
 import com.webquiver.lelu.classes.SearchResult;
 import com.webquiver.lelu.classes.SessionManagement;
+import com.webquiver.lelu.fragments.AddressFragment;
 
 import org.cryse.widget.persistentsearch.PersistentSearchView;
 import org.cryse.widget.persistentsearch.SearchItem;
@@ -63,6 +66,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
+
 
 public class ItemActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -71,11 +76,14 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed()
     {
 
+        /*
         Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
         openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         startActivity(openFragmentBIntent);
         finish();
+        */
+        super.onBackPressed();
 
     }
 
@@ -93,7 +101,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     LinearLayout lyt;
 
 
-
+    public static Activity fa;
 
 
     //sharedpref
@@ -154,6 +162,12 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
 
+        fa=this;
+
+        EventBus.getDefault().register(this);
+
+
+
         lyt=(LinearLayout)findViewById(R.id.content_item);
 
         lyt.setVisibility(View.INVISIBLE);
@@ -173,6 +187,8 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
         pref = this.getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
         editor = pref.edit();
+
+
 
         requestQueue = Volley.newRequestQueue(this);
         requestQueue_cart=Volley.newRequestQueue(this);
@@ -378,7 +394,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
             Intent intent=new Intent(ItemActivity.this,CartActivity.class);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
-            finish();
+          //  finish();
 
         }
 
@@ -390,10 +406,12 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
         else if (view == findViewById(R.id.back_id))
         {
+           /*
             Intent openFragmentBIntent = new Intent(this, HomeActivity.class);
             openFragmentBIntent.putExtra("OPEN_FRAGMENT_B", "yes");
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(openFragmentBIntent);
+            */
             finish();
         }
 
@@ -697,7 +715,13 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
                                 JSONObject jsonResponse = new JSONObject(response);
                                 if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-                              //      Toast.makeText(ItemActivity.this,"Item added to cart",Toast.LENGTH_SHORT).show();
+
+                                    EventBus.getDefault().post(new HelloWorldEvent(""));
+
+
+
+
+                                    //      Toast.makeText(ItemActivity.this,"Item added to cart",Toast.LENGTH_SHORT).show();
 
                                     SuperActivityToast.create(ItemActivity.this, new Style(), Style.TYPE_STANDARD)
                                             //     .setButtonText("Please click BACK again to exit")
@@ -875,6 +899,8 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         if (nn.equals("0"))
         {
 
+            cartnum.setVisibility(View.INVISIBLE);
+
         }
         else {
             cartnum.setVisibility(View.VISIBLE);
@@ -1013,5 +1039,32 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
         mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL"), searchnames));
 
     }
+
+
+    public class HelloWorldEvent {             //event to update cartnum
+        public final String message;
+
+        public HelloWorldEvent(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
+
+
+    public void onEvent(AddressFragment.HelloWorldEvent event){
+
+
+        getall();
+
+
+    }
+
+
+
+
 
 }

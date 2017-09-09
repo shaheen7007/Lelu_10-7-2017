@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.webquiver.lelu.HomeActivity;
+import com.webquiver.lelu.ItemActivity;
+import com.webquiver.lelu.ItemActivity2;
 import com.webquiver.lelu.R;
+import com.webquiver.lelu.SearchActivity;
 import com.webquiver.lelu.adapters.ViewDetAdapter;
 import com.webquiver.lelu.classes.CartItem;
 import com.webquiver.lelu.classes.Config;
@@ -78,6 +83,66 @@ public class OrderDetFragment2 extends Fragment {
 
         lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
 
+
+
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+        rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.i("test", "keyCode: " + keyCode);
+                if( keyCode == KeyEvent.KEYCODE_BACK ) {
+
+                    Toast.makeText(getActivity(), "bck", Toast.LENGTH_SHORT).show();
+
+                    if (poss==999) {
+
+
+                     //   try {
+
+                  //          HomeActivity.fa.finish();
+
+                    //    } catch (Exception e) {
+
+                  //          Toast.makeText(getActivity(), "ctchhhhh", Toast.LENGTH_SHORT).show();
+
+                 //       }
+                        try {
+                            ItemActivity.fa.finish();
+                        } catch (Exception e) {
+                            // Toast.makeText(getActivity(), "ctch", Toast.LENGTH_SHORT).show();
+                        }
+                        try {
+
+                            ItemActivity2.fa.finish();
+                        } catch (Exception e) {
+                            //   Toast.makeText(getActivity(), "ctch", Toast.LENGTH_SHORT).show();
+                        }
+                        try {
+                            SearchActivity.fa.finish();
+                        } catch (Exception e) {
+                            //   Toast.makeText(getActivity(), "ctch", Toast.LENGTH_SHORT).show();
+                        }
+
+                     //   Intent intent = new Intent(getActivity(), HomeActivity.class);
+                    //    getActivity().startActivity(intent);
+                        getActivity().finish();
+                    }
+
+                    else
+                    {
+                        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                    }
+
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
         ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bk_id);
         bckBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,9 +153,32 @@ public class OrderDetFragment2 extends Fragment {
 
                 if (poss==999) {
 
+
+                    /*
                     Intent intent =new Intent(getActivity(), HomeActivity.class);
                     getActivity().startActivity(intent);
                     getActivity().finish();
+*/
+                  //  getActivity().finish();
+
+
+                    try {
+                        HomeActivity.fa.finish();
+                        ItemActivity.fa.finish();
+                        ItemActivity2.fa.finish();
+                        SearchActivity.fa.finish();
+                    }
+                    catch (Exception e)
+                    {
+                        Toast.makeText(getActivity(), "ctch", Toast.LENGTH_SHORT).show();
+                    }
+                    Intent intent=new Intent(getActivity(),HomeActivity.class);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
+
+
+
+
 
 
 
