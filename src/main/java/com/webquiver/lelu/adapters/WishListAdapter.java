@@ -61,6 +61,8 @@ public class WishListAdapter extends BaseAdapter {
     TextView item_qty;
     private LayoutInflater inflater;
     private List<CartItem> cartitems;
+    AlertDialog.Builder alert;
+    AlertDialog alertDialog;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
     public WishListAdapter(Activity activity, List<CartItem> cartitems) {
@@ -142,17 +144,21 @@ public class WishListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+                LayoutInflater li = LayoutInflater.from(activity);
 
-                alertDialog.setTitle("Remove item ?");
+                //Creating a view to get the dialog box
+                View confirmDialog = li.inflate(R.layout.rmovewishlist, null);
+                alert = new AlertDialog.Builder(activity);
+                alert.setView(confirmDialog);
+                alert.setCancelable(true);
+                Button buttonSave = (Button) confirmDialog.findViewById(R.id.buttonSave);
+                Button buttonNO = (Button) confirmDialog.findViewById(R.id.buttonCancel);
+                alertDialog = alert.create();
+                alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimationSHAKE;
 
-
-                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Add your code for the button here.
-
-
-
+                buttonSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
                         final Dialog loading = new Dialog(activity);
                         loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -164,13 +170,13 @@ public class WishListAdapter extends BaseAdapter {
                         loading.show();
 
 
-
                         //  final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.WISHLIST_REMOVE_URL,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 loading.dismiss();
+                                alertDialog.dismiss();
 
                                 try {
 
@@ -279,6 +285,7 @@ public class WishListAdapter extends BaseAdapter {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 loading.dismiss();
+                                alertDialog.dismiss();
                                 //
                                 Toast.makeText(activity, "error1", Toast.LENGTH_LONG).show();
                             }
@@ -301,13 +308,13 @@ public class WishListAdapter extends BaseAdapter {
         });
 
 
-                alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener() {
-
+                buttonNO.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
+                    public void onClick(View v) {
 
-                        dialog.dismiss();
+
+                        alertDialog.dismiss();
+
 
                     }
                 });

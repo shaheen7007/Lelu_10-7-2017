@@ -147,16 +147,14 @@ public class CartAdapter extends BaseAdapter {
                     .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
                     .setAnimations(Style.ANIMATIONS_FADE).show();
 
-
         }
-
 
             // getting ccart data for the row
             CartItem m = cartitems.get(position);
 
             // thumbnail image
             thumbNail.setImageUrl(Config.BASE_URLwithoutslash+m.getIMAGE_URL(), imageLoader);
-
+        
             item_name.setText(m.getNAME());
             item_price.setText("\u20B9" + " " + m.getPRICE());
             item_qty.setText(String.valueOf(m.getQUANTITY()));
@@ -168,7 +166,7 @@ public class CartAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(activity, cartitems.get(position).getPRODUCT_ID(), Toast.LENGTH_LONG).show();
+             //   Toast.makeText(activity, cartitems.get(position).getPRODUCT_ID(), Toast.LENGTH_LONG).show();
 
                 final Dialog loading = new Dialog(activity);
                 loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -596,7 +594,7 @@ public class CartAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         final EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
 
-                        Toast.makeText(activity, cartitems.get(position).getPRODUCT_ID(), Toast.LENGTH_LONG).show();
+                    //    Toast.makeText(activity, cartitems.get(position).getPRODUCT_ID(), Toast.LENGTH_LONG).show();
 
                         if (new_QTY.getText().toString().equals("")||Integer.parseInt(new_QTY.getText().toString())>100)
                         {

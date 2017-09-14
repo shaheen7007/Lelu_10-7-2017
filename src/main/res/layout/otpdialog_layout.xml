@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress" />
+        android:inputType="number" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/buttonConfirm"

@@ -34,6 +34,7 @@ public class SessionManagement {
 
     public static final String KEY_PASS = "pass";
     public static final String KEY_PHONE = "mobile";
+    public static final String KEY_NAME = "name";
 
 
     // Constructor
@@ -46,13 +47,13 @@ public class SessionManagement {
     /**
      * Create login session
      * */
-    public void createLoginSession(String pas,String phone){
+    public void createLoginSession(String pas,String phone,String name){
 
         editor.putBoolean(IS_LOGIN, true);
 
 
         editor.putString(KEY_PASS, pas);
-
+        editor.putString(KEY_NAME, name);
         editor.putString(KEY_PHONE, phone);
 
         editor.commit();

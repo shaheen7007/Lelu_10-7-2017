@@ -45,6 +45,7 @@ import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.adapters.Banner_Adapter;
+import com.webquiver.lelu.adapters.ItemImage_Adapter;
 import com.webquiver.lelu.adapters.SearchResultAdapter;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
@@ -270,7 +271,7 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
     //show image
     private void init(ArrayList<String> test) {
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new Banner_Adapter(ItemActivity2.this, test));
+        mPager.setAdapter(new ItemImage_Adapter(ItemActivity2.this, test));
 
         CirclePageIndicator indicator = (CirclePageIndicator) findViewById(R.id.indicator);
 
@@ -401,7 +402,9 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
         else if (view == findViewById(R.id.cartminus_id))
         {
-            qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString())-1));
+            if (Integer.parseInt(qty.getText().toString())>1) {
+                qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString()) - 1));
+            }
         }
 
         else if (view == findViewById(R.id.back_id))
@@ -418,7 +421,8 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
         else if (view == findViewById(R.id.cartplus_id))
         {
 
-            qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString())+1));
+            if (Integer.parseInt(qty.getText().toString())<101)
+                 qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString())+1));
 
         }
 
@@ -709,6 +713,7 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
 
                                     EventBus.getDefault().post(new HelloWorldEvent(""));
+                                    EventBus.getDefault().post(new ItemActivity2 .HelloWo(""));
 
 
                                     SuperActivityToast.create(ItemActivity2.this, new Style(), Style.TYPE_STANDARD)
@@ -1039,6 +1044,18 @@ public class ItemActivity2 extends AppCompatActivity implements NavigationView.O
 
     }
 
+
+    public class HelloWo {             //event to update cartnum
+        public final String message;
+
+        public HelloWo (String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
 
 
 }

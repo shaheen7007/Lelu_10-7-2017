@@ -180,8 +180,6 @@ public class AddressFragment extends android.app.Fragment {
         totalpayableTXT.setText(String.valueOf("\u20B9"+totalpayable));
 
 
-
-
         //back btn
 
         ImageView bckBTN=(ImageView)rootView.findViewById(R.id.bckBTN_id);
@@ -547,12 +545,16 @@ public class AddressFragment extends android.app.Fragment {
 
 
                                 showADDR(response);
+                                showALL_TXT_id.setClickable(true);
+                                PlaceOrderBTN.setClickable(true);
 
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
 
                                 showALL_TXT_id.setText("No saved addresses");
+                                showALL_TXT_id.setClickable(false);
+                                PlaceOrderBTN.setClickable(false);
                                 listView.setVisibility(View.GONE);
                                 lyt_addnewadrbtn.setVisibility(View.VISIBLE);
 
@@ -606,7 +608,7 @@ public class AddressFragment extends android.app.Fragment {
                                                                 public void onResponse(JSONObject response) {
                                                                     // display response
                                                                     Log.d("Response", response.toString());
-                                                                    Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_LONG).show();
+                                                             //       Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_LONG).show();
 
                                                                     try {
 
@@ -627,7 +629,7 @@ public class AddressFragment extends android.app.Fragment {
                                                                 public void onErrorResponse(VolleyError error) {
                                                                     Log.d("Error.Response", error.toString());
 
-                                                                    Toast.makeText(getActivity(),error.toString(),Toast.LENGTH_LONG).show();
+                                                          //          Toast.makeText(getActivity(),error.toString(),Toast.LENGTH_LONG).show();
 
                                                                 }
                                                             }
@@ -676,6 +678,9 @@ public class AddressFragment extends android.app.Fragment {
                                                                     JSONObject jsonResponse = new JSONObject(response);
                                                                     if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
+                                                                        PlaceOrderBTN.setClickable(true);
+                                                                        showALL_TXT_id.setClickable(true);
+
                                                                         SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_STANDARD)
                                                                                 //     .setButtonText("Please click BACK again to exit")
                                                                                 //     .setButtonIconResource(R.drawable.ic_undo)
@@ -690,19 +695,21 @@ public class AddressFragment extends android.app.Fragment {
 
                                                                         //  getall2();
 
-                                                                        Fragment fr = null;
-                                                                        FragmentManager fm = null;
-                                                                        View selectedView = null;
 
                                                                         //fragment
+                                                                        Bundle bundle = new Bundle();
+                                                                        bundle.putString("bigtotal",String.valueOf(totalpayable));
+                                                                        bundle.putString("totalpayable",String.valueOf(bigtotal));
+                                                                        bundle.putString("numofitems",String.valueOf(numofitems));
+                                                                        AddressFragment showSelectedADDR = new AddressFragment();
+                                                                        showSelectedADDR.setArguments(bundle);
+                                                                        FragmentManager fm = null;
                                                                         fm = getFragmentManager();
                                                                         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                                                                        fragmentTransaction.replace(R.id.cart_FL, addressFragment.getInstance());
+                                                                        fragmentTransaction.replace(R.id.cart_FL, showSelectedADDR);
                                                                         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-
-                                                                        //change
+                                                                      //  fragmentTransaction.addToBackStack("cart");
                                                                         fragmentTransaction.commit();
-
                                                                         //  adapter.notifyDataSetChanged();
 
                                                                         //get the last saved address
@@ -931,7 +938,7 @@ public class AddressFragment extends android.app.Fragment {
                     @Override
                     public void onResponse(String response) {
                         loading.dismiss();
-                        Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+                //        Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                         try {
 
@@ -945,13 +952,22 @@ public class AddressFragment extends android.app.Fragment {
 
                             if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
+                                showALL_TXT_id.setClickable(true);
+                                PlaceOrderBTN.setClickable(true);
+
 
                                 showADDR2(response);
 
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
-                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                             //   Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+
+                                showALL_TXT_id.setClickable(false);
+                                PlaceOrderBTN.setClickable(false);
+
+
+
 
                             } else {
 
@@ -992,7 +1008,16 @@ public class AddressFragment extends android.app.Fragment {
         JSONObject json = new JSONObject(jsonArray);
         JSONArray arr = json.getJSONArray("addr");
 
-        showALL_TXT_id.setText("You have "+arr.length()+" addresses saved");
+
+        if (!(arr.length()==1))
+        {
+            showALL_TXT_id.setText("You have " + arr.length() + " addresses saved");
+            showALL_TXT_id.setVisibility(View.VISIBLE);
+        }
+        else {
+            showALL_TXT_id.setText("You have no other saved addresses");
+            showALL_TXT_id.setVisibility(View.GONE);
+        }
 
         numofaddres=arr.length();
 
@@ -1218,107 +1243,185 @@ public class AddressFragment extends android.app.Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            requestQueue_editADDR = Volley.newRequestQueue(getActivity());
+                            String namestring=(name.getText().toString());
+                            String addrstring=address1.getText().toString();
+                            String placestring=place.getText().toString();
+                            String pincodestring=pincode.getText().toString();
+                            String districtstring=district.getText().toString();
+                            String statestring=state.getText().toString();
+                            String phonestring=phone.getText().toString();
 
-
-                            //  final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
-                            final Dialog loading = new Dialog(getActivity());
-                            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
-                            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                            loading.setCancelable(false);
-                            TextView t=(TextView)loading.findViewById(R.id.txt);
-                            t.setText("Saving");
-                            loading.show();
-
-
-
-                            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_EDIT_URL,
-                                    new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            loading.dismiss();
-                                            Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
-
-                                            try {
-
-                                                JSONObject jsonResponse = new JSONObject(response);
-                                                Toast.makeText(getActivity(),jsonResponse.getString(Config.TAG_RESPONSE),Toast.LENGTH_LONG).show();
-
-                                                //   JSONArray jsonArray=new JSONArray(response);
-
-                                                if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
-
-                                                    addrtems.get(position).setNAME(name.getText().toString());
-                                                    addrtems.get(position).setADDRESS1(address1.getText().toString());
-                                                    addrtems.get(position).setPLACE(place.getText().toString());
-                                                    addrtems.get(position).setDISTRICT(district.getText().toString());
-                                                    addrtems.get(position).setPINCODE(pincode.getText().toString());
-                                                    addrtems.get(position).setPHONE(phone.getText().toString());
-                                                    addrtems.get(position).setSTATE(state.getText().toString());
-
-                                                    getView(position, finalConvertView,parent);
-
-                                                    alertDialog.dismiss();
-
-
-                                                } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
-
-                                                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
-                                                    alertDialog.dismiss();
-
-                                                } else {
-                                                    alertDialog.dismiss();
-                                                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                            if (namestring.length()<3) {
+                                name.setError("Invalid name");
+                                address1.setError(null);
+                                place.setError(null);
+                                pincode.setError(null);
+                                district.setError(null);
+                                state.setError(null);
+                                phone.setError(null);
+                            }
+                            else if (addrstring.length() < 3) {
+                                address1.setError("Invalid address");
+                                name.setError(null);
+                                place.setError(null);
+                                pincode.setError(null);
+                                district.setError(null);
+                                state.setError(null);
+                                phone.setError(null);
+                            }
+                            else if (placestring.length() < 3) {
+                                        place.setError("Invalid place");
+                                        address1.setError(null);
+                                address1.setError(null);
+                                name.setError(null);
+                                pincode.setError(null);
+                                district.setError(null);
+                                state.setError(null);
+                                phone.setError(null);
+                                    }
+                            else  if (pincodestring.length() < 6) {
+                                            pincode.setError("Invalid pincode");
+                                            place.setError(null);
+                                address1.setError(null);
+                                place.setError(null);
+                                name.setError(null);
+                                district.setError(null);
+                                state.setError(null);
+                                phone.setError(null);
+                                        }
+                            else if (districtstring.length() < 3) {
+                                                district.setError("Invalid district");
+                                                pincode.setError(null);
+                                address1.setError(null);
+                                place.setError(null);
+                                pincode.setError(null);
+                                name.setError(null);
+                                state.setError(null);
+                                phone.setError(null);
                                             }
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            loading.dismiss();
-                                            //
-                                            //      Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
-                                        }
-                                    }) {
-                                @Override
-                                protected Map<String, String> getParams() throws AuthFailureError {
-                                    Map<String, String> params = new HashMap<>();
-                                    //Adding the parameters to the request
-                                    // params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
-                                    params.put("ca_id", pref_cid.getString("caid",""));
-                                    params.put(Config.KEY_ADDR_NAME, name.getText().toString());
-                                    //  params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));             //change
-                                    params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
-                                    params.put(Config.KEY_ADDR_STREET, place.getText().toString());
-                                    params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());
-                                    params.put(Config.KEY_ADDR_DISTRICT, district.getText().toString());
-                                    params.put(Config.KEY_ADDR_PIN, pincode.getText().toString());
-                                    params.put(Config.KEY_ADDR_STATE, state.getText().toString());
+                            else if (statestring.length() < 3) {
+                                district.setError(null);
+                                state.setError("Invalid state");
+                                address1.setError(null);
+                                place.setError(null);
+                                pincode.setError(null);
+                                district.setError(null);
+                                name.setError(null);
+                                phone.setError(null);
 
-                                    return params;
-                                }
-                            };
+                            }
+                            else if (phonestring.length() < 10) {
+                                phone.setError("Invalid phone number");
+                                state.setError(null);
+                                address1.setError(null);
+                                place.setError(null);
+                                pincode.setError(null);
+                                district.setError(null);
+                                state.setError(null);
+                                name.setError(null);
+                            }
+                            else
+                            {
+                                requestQueue_editADDR = Volley.newRequestQueue(getActivity());
+                                //  final ProgressDialog loading = ProgressDialog.show(getActivity(), "Loading", "Please wait...", false, false);
+                                final Dialog loading = new Dialog(getActivity());
+                                loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                                loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                loading.setCancelable(false);
+                                TextView t = (TextView) loading.findViewById(R.id.txt);
+                                t.setText("Saving");
+                                loading.show();
 
-                            //Adding request the the queue
-                            requestQueue_editADDR.add(stringRequest);
 
-                            //
-                            //   EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_EDIT_URL,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                loading.dismiss();
+                                                Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
-                            //  if (new_QTY.getText().toString().equals("")||Integer.parseInt(new_QTY.getText().toString())>100)
-                            //  {
+                                                try {
 
-                            //       new_QTY.setError("Enter valid number");
+                                                    JSONObject jsonResponse = new JSONObject(response);
+                                                 //   Toast.makeText(getActivity(), jsonResponse.getString(Config.TAG_RESPONSE), Toast.LENGTH_LONG).show();
 
-                            //   }
-                            //  else {
-                            //addrtems.get(position).setQUANTITY(Integer.parseInt(new_QTY.getText().toString()));
-                            //     alertDialog.dismiss();
-                            //
+                                                    //   JSONArray jsonArray=new JSONArray(response);
+
+                                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                                        addrtems.get(position).setNAME(name.getText().toString());
+                                                        addrtems.get(position).setADDRESS1(address1.getText().toString());
+                                                        addrtems.get(position).setPLACE(place.getText().toString());
+                                                        addrtems.get(position).setDISTRICT(district.getText().toString());
+                                                        addrtems.get(position).setPINCODE(pincode.getText().toString());
+                                                        addrtems.get(position).setPHONE(phone.getText().toString());
+                                                        addrtems.get(position).setSTATE(state.getText().toString());
+
+                                                        getView(position, finalConvertView, parent);
+
+                                                        alertDialog.dismiss();
+
+
+                                                    } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+
+                                                        Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                                                        alertDialog.dismiss();
+
+                                                    } else {
+                                                        alertDialog.dismiss();
+                                                        Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                loading.dismiss();
+                                                //
+                                                //      Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();
+                                            }
+                                        }) {
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<>();
+                                        //Adding the parameters to the request
+                                        // params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));
+                                        params.put("ca_id", pref_cid.getString("caid", ""));
+                                        params.put(Config.KEY_ADDR_NAME, name.getText().toString());
+                                        //  params.put(Config.KEY_ADDR_MOBILE,  pref.getString(SessionManagement.KEY_PHONE,""));             //change
+                                        params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
+                                        params.put(Config.KEY_ADDR_STREET, place.getText().toString());
+                                        params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());
+                                        params.put(Config.KEY_ADDR_DISTRICT, district.getText().toString());
+                                        params.put(Config.KEY_ADDR_PIN, pincode.getText().toString());
+                                        params.put(Config.KEY_ADDR_STATE, state.getText().toString());
+
+                                        return params;
+                                    }
+                                };
+
+                                //Adding request the the queue
+                                requestQueue_editADDR.add(stringRequest);
+
+                                //
+                                //   EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
+
+                                //  if (new_QTY.getText().toString().equals("")||Integer.parseInt(new_QTY.getText().toString())>100)
+                                //  {
+
+                                //       new_QTY.setError("Enter valid number");
+
+                                //   }
+                                //  else {
+                                //addrtems.get(position).setQUANTITY(Integer.parseInt(new_QTY.getText().toString()));
+                                //     alertDialog.dismiss();
+                                //
+                            }
+
                         }
                     });
 
@@ -1383,7 +1486,7 @@ public class AddressFragment extends android.app.Fragment {
                                             public void onResponse(JSONObject response) {
                                                 // display response
                                                 Log.d("Response", response.toString());
-                                                Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_LONG).show();
+                                              //  Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_LONG).show();
 
                                                 try {
 
@@ -1429,41 +1532,142 @@ public class AddressFragment extends android.app.Fragment {
                         @Override
                         public void onClick(final View v) {
 
-                            requestQueue = Volley.newRequestQueue((v.getRootView().getContext()));
+                            String namestring=(name.getText().toString());
+                            String addrstring=address1.getText().toString();
+                            String placestring=place.getText().toString();
+                            String pincodestring=pincode.getText().toString();
+                            String districtstring=district.getText().toString();
+                            String statestring=state.getText().toString();
+                            String phonestring=phone.getText().toString();
 
-                            final Dialog loading = new Dialog(getActivity());
-                            loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            loading.setContentView(R.layout.custom_dialog_progress_loggingin);
-                            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                            loading.setCancelable(false);
-                            TextView t=(TextView)loading.findViewById(R.id.txt);
-                            t.setText("Saving");
-                            loading.show();
+                            if (namestring.length()<3) {
+                                name.setError("Invalid name");
+                                address1.setError(null);
+                                place.setError(null);
+                                pincode.setError(null);
+                                district.setError(null);
+                                state.setError(null);
+                                phone.setError(null);
+                            }
+                            else if (addrstring.length() < 3) {
+                                address1.setError("Invalid address");
+                                name.setError(null);
+                                place.setError(null);
+                                pincode.setError(null);
+                                district.setError(null);
+                                state.setError(null);
+                                phone.setError(null);
+                            }
+                            else if (placestring.length() < 3) {
+                                place.setError("Invalid place");
+                                address1.setError(null);
+                                address1.setError(null);
+                                name.setError(null);
+                                pincode.setError(null);
+                                district.setError(null);
+                                state.setError(null);
+                                phone.setError(null);
+                            }
+                            else  if (pincodestring.length() < 6) {
+                                pincode.setError("Invalid pincode");
+                                place.setError(null);
+                                address1.setError(null);
+                                place.setError(null);
+                                name.setError(null);
+                                district.setError(null);
+                                state.setError(null);
+                                phone.setError(null);
+                            }
+                            else if (districtstring.length() < 3) {
+                                district.setError("Invalid district");
+                                pincode.setError(null);
+                                address1.setError(null);
+                                place.setError(null);
+                                pincode.setError(null);
+                                name.setError(null);
+                                state.setError(null);
+                                phone.setError(null);
+                            }
+                            else if (statestring.length() < 3) {
+                                district.setError(null);
+                                state.setError("Invalid state");
+                                address1.setError(null);
+                                place.setError(null);
+                                pincode.setError(null);
+                                district.setError(null);
+                                name.setError(null);
+                                phone.setError(null);
+
+                            }
+                            else if (phonestring.length() < 10) {
+                                phone.setError("Invalid phone number");
+                                state.setError(null);
+                                address1.setError(null);
+                                place.setError(null);
+                                pincode.setError(null);
+                                district.setError(null);
+                                state.setError(null);
+                                name.setError(null);
+                            }
+                            else {
+                                requestQueue = Volley.newRequestQueue((v.getRootView().getContext()));
+
+                                final Dialog loading = new Dialog(getActivity());
+                                loading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                loading.setContentView(R.layout.custom_dialog_progress_loggingin);
+                                loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                loading.setCancelable(false);
+                                TextView t = (TextView) loading.findViewById(R.id.txt);
+                                t.setText("Saving");
+                                loading.show();
 
 
-                            //   final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
-                            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_SEND_URL,
-                                    new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            loading.dismiss();
+                                //   final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ADDR_SEND_URL,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                loading.dismiss();
 
-                                            try {
+                                                try {
 
-                                                JSONObject jsonResponse = new JSONObject(response);
-                                                if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+                                                    JSONObject jsonResponse = new JSONObject(response);
+                                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-                                                    Toast.makeText((v.getRootView().getContext()),"Address added",Toast.LENGTH_LONG).show();
-                                                    int i=numofaddres+1;
-                                                    showALL_TXT_id.setText(String.valueOf("You have "+i+" addresses saved"));
 
-                                                    alertDialog.dismiss();
+                                                        showALL_TXT_id.setClickable(true);
+                                                        PlaceOrderBTN.setClickable(true);
 
-                                                    getall2();
+                                                        //   Toast.makeText((v.getRootView().getContext()),"Address added",Toast.LENGTH_LONG).show();
 
-                                                    // notifyDataSetChanged();
 
-                                                    //get the last saved address
+                                                        SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_STANDARD)
+                                                                //     .setButtonText("Please click BACK again to exit")
+                                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                                //     .setProgressBarColor(Color.WHITE)
+                                                                .setText("Address added")
+                                                                .setDuration(Style.DURATION_LONG)
+                                                                .setFrame(Style.FRAME_STANDARD)
+                                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+                                                        int i = numofaddres + 1;
+                                                        if (!(i == 1)) {
+                                                            showALL_TXT_id.setText("You have " + i + " addresses saved");
+                                                            showALL_TXT_id.setVisibility(View.VISIBLE);
+                                                        } else {
+                                                            showALL_TXT_id.setText("You have no other saved addresses");
+                                                            showALL_TXT_id.setVisibility(View.GONE);
+                                                        }
+                                                        alertDialog.dismiss();
+
+                                                        getall2();
+
+                                                        // notifyDataSetChanged();
+
+                                                        //get the last saved address
 
                                                 /*
                                                 final ProgressDialog loading = ProgressDialog.show((v.getRootView().getContext()), "Loading", "Please wait...", false, false);
@@ -1526,51 +1730,46 @@ public class AddressFragment extends android.app.Fragment {
 
                                                 */
 
+                                                    } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
+
+                                                        Toast.makeText((v.getRootView().getContext()), "Failed", Toast.LENGTH_LONG).show();
+
+
+                                                    } else {
+
+                                                        Toast.makeText((v.getRootView().getContext()), "Invalid user", Toast.LENGTH_LONG).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
                                                 }
-                                                else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed"))
-                                                {
-
-                                                    Toast.makeText((v.getRootView().getContext()),"Failed",Toast.LENGTH_LONG).show();
-
-
-                                                }
-
-
-                                                else {
-
-                                                    Toast.makeText((v.getRootView().getContext()), "Invalid user", Toast.LENGTH_LONG).show();
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
                                             }
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            loading.dismiss();
-                                            //
-                                            Toast.makeText((v.getRootView().getContext()), "error1", Toast.LENGTH_LONG).show();
-                                        }
-                                    }) {
-                                @Override
-                                protected Map<String, String> getParams() throws AuthFailureError {
-                                    Map<String, String> params = new HashMap<>();
-                                    //Adding the parameters to the request
-                                    params.put(Config.KEY_ADDR_NAME, name.getText().toString());
-                                    params.put(Config.KEY_ADDR_MOBILE,  prefmob.getString(SessionManagement.KEY_PHONE,""));             //change
-                                    params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
-                                    params.put(Config.KEY_ADDR_STREET, place.getText().toString());
-                                    params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());
-                                    params.put(Config.KEY_ADDR_DISTRICT, district.getText().toString());
-                                    params.put(Config.KEY_ADDR_PIN, pincode.getText().toString());
-                                    params.put(Config.KEY_ADDR_STATE, state.getText().toString());
-                                    return params;
-                                }
-                            };
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                loading.dismiss();
+                                                //
+                                                Toast.makeText((v.getRootView().getContext()), "error1", Toast.LENGTH_LONG).show();
+                                            }
+                                        }) {
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<>();
+                                        //Adding the parameters to the request
+                                        params.put(Config.KEY_ADDR_NAME, name.getText().toString());
+                                        params.put(Config.KEY_ADDR_MOBILE, prefmob.getString(SessionManagement.KEY_PHONE, ""));             //change
+                                        params.put(Config.KEY_ADDR_HOUSE, address1.getText().toString());
+                                        params.put(Config.KEY_ADDR_STREET, place.getText().toString());
+                                        params.put(Config.KEY_ADDR_PHONE, phone.getText().toString());
+                                        params.put(Config.KEY_ADDR_DISTRICT, district.getText().toString());
+                                        params.put(Config.KEY_ADDR_PIN, pincode.getText().toString());
+                                        params.put(Config.KEY_ADDR_STATE, state.getText().toString());
+                                        return params;
+                                    }
+                                };
 
-                            //Adding request the the queue
-                            requestQueue.add(stringRequest);
+                                //Adding request the the queue
+                                requestQueue.add(stringRequest);
 
 
                      /*
@@ -1605,6 +1804,7 @@ public class AddressFragment extends android.app.Fragment {
                         //
 
                         */
+                            }
                         }
                     });
 

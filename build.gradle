@@ -48,7 +48,12 @@ dependencies {
 
     compile 'de.greenrobot:eventbus:2.4.0'
 
-
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
+
+    compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
+        // exclusion is not necessary, but generally a good idea.
+        exclude group: 'com.google.android', module: 'support-v4'
+    }
+
 
 }

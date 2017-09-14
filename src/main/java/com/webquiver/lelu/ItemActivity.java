@@ -48,6 +48,7 @@ import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.webquiver.lelu.adapters.Banner_Adapter;
 import com.webquiver.lelu.adapters.CartAdapter;
+import com.webquiver.lelu.adapters.ItemImage_Adapter;
 import com.webquiver.lelu.adapters.SearchResultAdapter;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SampleSuggestionsBuilder;
@@ -70,7 +71,6 @@ import de.greenrobot.event.EventBus;
 
 
 public class ItemActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-
 
     @Override
     public void onBackPressed()
@@ -270,7 +270,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
 
         mPager = (ViewPager) findViewById(R.id.pager);
-        Banner_Adapter banner_adapter=new Banner_Adapter(ItemActivity.this, test);
+        ItemImage_Adapter banner_adapter=new ItemImage_Adapter(ItemActivity.this, test);
         mPager.setAdapter(banner_adapter);
         banner_adapter.notifyDataSetChanged();
 
@@ -391,6 +391,14 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
     public void onclickhandler_itemactivity(View view) {
         if (view == findViewById(R.id.cartitem)) {
 
+            try {
+                CartActivity.fa.finish();
+            }
+            catch (Exception e)
+            {
+                //
+            }
+
             Intent intent=new Intent(ItemActivity.this,CartActivity.class);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
@@ -401,7 +409,9 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
         else if (view == findViewById(R.id.cartminus_id))
         {
-            qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString())-1));
+            if (Integer.parseInt(qty.getText().toString())>1) {
+                qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString()) - 1));
+            }
         }
 
         else if (view == findViewById(R.id.back_id))
@@ -568,7 +578,8 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
         else if (view == findViewById(R.id.cartplus_id))
         {
-            qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString())+1));
+            if (Integer.parseInt(qty.getText().toString())<101)
+                    qty.setText(String.valueOf(Integer.parseInt(qty.getText().toString())+1));
         }
 
 
@@ -717,8 +728,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
 
                                     EventBus.getDefault().post(new HelloWorldEvent(""));
-
-
+                                    EventBus.getDefault().post(new HelloWo(""));
 
 
                                     //      Toast.makeText(ItemActivity.this,"Item added to cart",Toast.LENGTH_SHORT).show();
@@ -853,7 +863,7 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
-                                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+                           //     Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
 
                             } else {
 
@@ -1052,6 +1062,22 @@ public class ItemActivity extends AppCompatActivity implements NavigationView.On
             return message;
         }
     }
+
+
+    public class HelloWo {             //event to update cartnum
+        public final String message;
+
+        public HelloWo (String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
+
+
 
 
 

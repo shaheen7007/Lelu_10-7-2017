@@ -118,7 +118,7 @@ public class SearchResultFragment extends android.app.Fragment {
 
         if (b!=null) {
 
-            term = String.valueOf(b.getString("searchterm", "null"));
+             term = String.valueOf(b.getString("searchterm", "null"));
         }
 
        // TextView search_result_for=(TextView)rootView.findViewById(R.id.searchresultfortxt);
@@ -269,12 +269,6 @@ public class SearchResultFragment extends android.app.Fragment {
         requestQueue.add(stringRequest);
 
     }
-
-
-
-
-
-
 
 
     private void showGrid(JSONArray jsonArray) {

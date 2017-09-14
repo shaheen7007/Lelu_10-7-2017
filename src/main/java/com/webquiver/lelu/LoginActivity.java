@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SlidingPaneLayout;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -38,6 +41,7 @@ import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.SessionManagement;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,6 +50,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -72,7 +77,6 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
 
-
         //rediret if logged in
         if (session.isLoggedIn())
         {
@@ -96,93 +100,99 @@ public class LoginActivity extends AppCompatActivity {
         loginbtn = (ImageView) findViewById(R.id.loginbtn_id);
         forgotpassbtn=(TextView)findViewById(R.id.forgotpassbtn_id);
 
-
-//forgot password/reset password
+        //forgot password/reset password
         forgotpassbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                if (isOnline()) {
 
-                LayoutInflater li = LayoutInflater.from(LoginActivity.this);
+                    LayoutInflater li = LayoutInflater.from(LoginActivity.this);
 
-                //Creating a view to get the dialog box
-                View confirmDialog = li.inflate(R.layout.otpdialogforgotpass_layout, null);
+                    //Creating a view to get the dialog box
+                    View confirmDialog = li.inflate(R.layout.otpdialogforgotpass_layout, null);
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(LoginActivity.this);
-                alert.setView(confirmDialog);
-                alert.setCancelable(true);
-                AppCompatButton buttonConfirm = (AppCompatButton) confirmDialog.findViewById(R.id.buttonreset1);
-                forgot_phonenumberET = (EditText) confirmDialog.findViewById(R.id.forg_editTextphone_id);
-                final AlertDialog alertDialog = alert.create();
-                alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                alertDialog.show();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(LoginActivity.this);
+                    alert.setView(confirmDialog);
+                    alert.setCancelable(true);
+                    AppCompatButton buttonConfirm = (AppCompatButton) confirmDialog.findViewById(R.id.buttonreset1);
+                    forgot_phonenumberET = (EditText) confirmDialog.findViewById(R.id.forg_editTextphone_id);
+                    final AlertDialog alertDialog = alert.create();
+                    alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    alertDialog.show();
 
-                buttonConfirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                      phonenum=forgot_phonenumberET.getText().toString();
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.FORGOT_URL,
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-
-                                        alertDialog.dismiss();
-
-                                        try {
-                                            JSONObject jsonResponse = new JSONObject(response);
-                                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
-
-                                                forgotpass();
-                                               // Toast.makeText(LoginActivity.this,jsonResponse.getString(Config.KEY_OTP), Toast.LENGTH_LONG).show();
-
-                                            } else {
-                                              //  Toast.makeText(LoginActivity.this, "Phone number not registered", Toast.LENGTH_LONG).show();
-
-                                                SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
-                                                        //     .setButtonText("Please click BACK again to exit")
-                                                        //     .setButtonIconResource(R.drawable.ic_undo)
-                                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
-                                                        //     .setProgressBarColor(Color.WHITE)
-                                                        .setText("The mobile number you have entered is not registered")
-                                                        .setDuration(Style.DURATION_LONG)
-                                                        .setFrame(Style.FRAME_STANDARD)
-                                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
-                                                        .setAnimations(Style.ANIMATIONS_POP).show();
+                    buttonConfirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
 
+                            phonenum = forgot_phonenumberET.getText().toString();
+                            if (isPhoneValid(phonenum)) {
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.FORGOT_URL,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+
+                                                alertDialog.dismiss();
+
+                                                try {
+                                                    JSONObject jsonResponse = new JSONObject(response);
+                                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                                        forgotpass();
+                                                        // Toast.makeText(LoginActivity.this,jsonResponse.getString(Config.KEY_OTP), Toast.LENGTH_LONG).show();
+
+                                                    } else {
+                                                        //  Toast.makeText(LoginActivity.this, "Phone number not registered", Toast.LENGTH_LONG).show();
+
+                                                        SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                                //     .setButtonText("Please click BACK again to exit")
+                                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                                //     .setProgressBarColor(Color.WHITE)
+                                                                .setText("Mobile number not registered")
+                                                                .setDuration(Style.DURATION_LONG)
+                                                                .setFrame(Style.FRAME_STANDARD)
+                                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                                .setAnimations(Style.ANIMATIONS_POP).show();
 
 
-                                                //   confirmotp();
+                                                        //   confirmotp();
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
                                             }
-
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                },
-                                new Response.ErrorListener() {
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                alertDialog.dismiss();
+                                                Toast.makeText(LoginActivity.this, "error2", Toast.LENGTH_LONG).show();
+                                            }
+                                        }) {
                                     @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        alertDialog.dismiss();
-                                        Toast.makeText(LoginActivity.this, "error2", Toast.LENGTH_LONG).show();
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        //Adding the parameters otp and username
+                                        params.put(Config.KEY_PHONE, phonenum);
+                                        return params;
                                     }
-                                }) {
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                Map<String, String> params = new HashMap<String, String>();
-                                //Adding the parameters otp and username
-                                params.put(Config.KEY_PHONE, phonenum);
-                                return params;
+                                };
+                                //Adding the request to the queue
+                                requestQueue.add(stringRequest);
                             }
-                        };
-                        //Adding the request to the queue
-                        requestQueue.add(stringRequest);
-                    }
 
-                });
+                            else
+                                forgot_phonenumberET.setError("Invalid phone number");
 
+                        }
+
+                    });
+
+                }
             }
         });
 
@@ -195,102 +205,166 @@ public class LoginActivity extends AppCompatActivity {
                 phone = phoneET.getText().toString();
                 password = passwordET.getText().toString();
                 final String password = passwordET.getText().toString();
-                if (phone.length() == 10 & password.length() >= 8) {
+
+                if (isOnline()) {
 
 
-                    final Dialog progressDialog = new Dialog(LoginActivity.this);
-                    progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    progressDialog.setContentView(R.layout.custom_dialog_progress_loggingin);
-                    progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                    progressDialog.setCancelable(false);
-                    progressDialog.show();
+                    if (!(phone.length() == 10))
+                    {
+                        //  phoneET.setError("Invalid phone number");
 
-                //   final ProgressDialog loading = ProgressDialog.show(LoginActivity.this, "Logging In", "Please wait...", false, false);
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.LOGIN_URL,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                        //           loading.dismiss();
-                                  progressDialog.dismiss();
+                        Crouton.makeText(LoginActivity.this, "Please enter a valid phone number", de.keyboardsurfer.android.widget.crouton.Style.INFO).show();
 
-                                    try {
+                    /*    SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                //     .setButtonText("Please click BACK again to exit")
+                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                //     .setProgressBarColor(Color.WHITE)
+                                .setText("Invalid phonenumber")
+                                .setDuration(Style.DURATION_VERY_SHORT)
+                                .setFrame(Style.FRAME_STANDARD)
+                                .setGravity(Gravity.CENTER)
+                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                .setAnimations(Style.ANIMATIONS_FADE).show();
 
-                                        JSONObject jsonResponse = new JSONObject(response);
-                                        if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+*
+                    }
+
+                    else if(!(password.length() >= 8))
+                    {
+                      //  passwordET.setError("Invalid password");
 
 
-                                            session.createLoginSession(password, phone);
-                                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                                            startActivity(intent);
-                                            finish();
+                        Crouton.makeText(LoginActivity.this, "Please enter a valid password", de.keyboardsurfer.android.widget.crouton.Style.INFO).show();
 
+
+/*
+                        SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                //     .setButtonText("Please click BACK again to exit")
+                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                //     .setProgressBarColor(Color.WHITE)
+                                .setText("Invalid password")
+                                .setDuration(Style.DURATION_VERY_SHORT)
+                                .setFrame(Style.FRAME_STANDARD)
+                                .setGravity(Gravity.CENTER)
+                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                .setAnimations(Style.ANIMATIONS_FADE).show();
+*/
+
+
+
+
+
+                    }
+
+                    else if (phone.length() == 10 & password.length() >= 8) {
+
+
+                        final Dialog progressDialog = new Dialog(LoginActivity.this);
+                        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        progressDialog.setContentView(R.layout.custom_dialog_progress_loggingin);
+                        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        progressDialog.setCancelable(false);
+                        progressDialog.show();
+
+                        //   final ProgressDialog loading = ProgressDialog.show(LoginActivity.this, "Logging In", "Please wait...", false, false);
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.LOGIN_URL,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        //           loading.dismiss();
+                                        progressDialog.dismiss();
+
+                                        try {
+
+                                            JSONObject jsonResponse = new JSONObject(response);
+                                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+
+                                                JSONArray det=jsonResponse.getJSONArray("details");
+                                                JSONObject usr=det.getJSONObject(0);
+                                                String name=usr.getString("cust_username");
+                                                //wallet amount
+                                                //customer type - 2 rate
+
+                                                session.createLoginSession(password, phone,name);
+                                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                                                startActivity(intent);
+                                                finish();
+
+                                            } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("not verified")) {
+
+                                                // if user not verified phonenumber
+
+                                                otpnew = jsonResponse.getString(Config.KEY_OTP);
+                                                confirmotp();
+
+
+                                            } else {
+                                                //If not successful user may already have registered
+
+
+                                                SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                        //     .setButtonText("Please click BACK again to exit")
+                                                        //     .setButtonIconResource(R.drawable.ic_undo)
+                                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                        //     .setProgressBarColor(Color.WHITE)
+                                                        .setText("Invalid credentials")
+                                                        .setDuration(Style.DURATION_LONG)
+                                                        .setFrame(Style.FRAME_STANDARD)
+                                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                        .setAnimations(Style.ANIMATIONS_POP).show();
+
+                                                //  Crouton.makeText(LoginActivity.this, "Invalid credentials", de.keyboardsurfer.android.widget.crouton.Style.ALERT).show();
+
+
+                                                // Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_LONG).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
-                                        else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("not verified"))
-                                        {
-
-                                            // if user not verified phonenumber
-
-                                            otpnew=jsonResponse.getString(Config.KEY_OTP);
-                                            confirmotp();
-
-
-
-
-                                        }
-
-
-                                        else {
-                                            //If not successful user may already have registered
-
-                                            SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
-                                                    //     .setButtonText("Please click BACK again to exit")
-                                                    //     .setButtonIconResource(R.drawable.ic_undo)
-                                                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
-                                                    //     .setProgressBarColor(Color.WHITE)
-                                                    .setText("Invalid credentials")
-                                                    .setDuration(Style.DURATION_LONG)
-                                                    .setFrame(Style.FRAME_STANDARD)
-                                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
-                                                    .setAnimations(Style.ANIMATIONS_POP).show();
-
-
-
-
-
-                                           // Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_LONG).show();
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
                                     }
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                  // loading.dismiss();
-                                    progressDialog.dismiss();
-                                    //
-                                    Toast.makeText(LoginActivity.this, "error1", Toast.LENGTH_LONG).show();
-                                }
-                            }) {
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> params = new HashMap<>();
-                            //Adding the parameters to the request
-                            params.put(Config.KEY_PHONE, phone);
-                            params.put(Config.KEY_PASSWORD, password);
-                            return params;
-                        }
-                    };
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        // loading.dismiss();
+                                        progressDialog.dismiss();
+                                        //
+                                        Toast.makeText(LoginActivity.this, "error1", Toast.LENGTH_LONG).show();
+                                    }
+                                }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> params = new HashMap<>();
+                                //Adding the parameters to the request
+                                params.put(Config.KEY_PHONE, phone);
+                                params.put(Config.KEY_PASSWORD, password);
+                                return params;
+                            }
+                        };
 
-                    //Adding request the the queue
-                    requestQueue.add(stringRequest);
-                } else {
-                    Snackbar snackbar = Snackbar
-                            .make(loginbtn, "Invalid email or password", Snackbar.LENGTH_LONG);
+                        //Adding request the the queue
+                        requestQueue.add(stringRequest);
+                    } else {
 
-                    snackbar.show();
+                        /*
+                        SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                //     .setButtonText("Please click BACK again to exit")
+                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                //     .setProgressBarColor(Color.WHITE)
+                                .setText("Invalid username or password")
+                                .setDuration(Style.DURATION_LONG)
+                                .setFrame(Style.FRAME_STANDARD)
+                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                .setAnimations(Style.ANIMATIONS_POP).show();
+                                */
+
+                        Crouton.makeText(LoginActivity.this, "Please enter a valid password", de.keyboardsurfer.android.widget.crouton.Style.INFO).show();
+
+                    }
                 }
             }
         });
@@ -306,7 +380,7 @@ public class LoginActivity extends AppCompatActivity {
                 //  (usernameET).setCompoundDrawablesWithIntrinsicBounds(R.drawable.txtovr, 0, 0, 0);
                 //  (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 phoneET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
-                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
                 return false;
 
             }
@@ -318,7 +392,7 @@ public class LoginActivity extends AppCompatActivity {
                 passwordET.setFocusable(true);
                 passwordET.setCursorVisible(true);
                 passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
-                phoneET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                phoneET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
 
 
                 if (isPhoneValid(phoneET.getText().toString()))
@@ -342,7 +416,7 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 passwordET.setCursorVisible(true);
                 passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_selected));
-                phoneET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                phoneET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
 
                 if (isPhoneValid(phoneET.getText().toString()))
                 {
@@ -364,18 +438,14 @@ public class LoginActivity extends AppCompatActivity {
         passwordET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 passwordET.setCursorVisible(false);
-                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+                passwordET.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edittext_shape_rounded));
                 if (passwordET.getText().toString().length()>=8)
                 {
                     (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.smalltick, 0);
 
-
                 }
                 else
                     (passwordET).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-
-
 
                 return false;
             }
@@ -433,78 +503,85 @@ public class LoginActivity extends AppCompatActivity {
                 String f_pass = forgot_PassET.getText().toString();
                 final String f_confpass = forgot_ConfET.getText().toString();
 
+
                 if (passwordvalid(f_pass)) {
-                    if (!f_pass.equals(f_confpass)) {
-                        forgot_ConfET.setError("Passwords doesn't match");
-                 //       Toast.makeText(LoginActivity.this,"Passwords doesn't match",Toast.LENGTH_LONG).show();
-                    } else {
 
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.FORGOT2_URL,
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
+                    if (passwordvalid(f_pass)) {
+                        if (!f_pass.equals(f_confpass)) {
+                            forgot_ConfET.setError("Passwords doesn't match");
+                            //       Toast.makeText(LoginActivity.this,"Passwords doesn't match",Toast.LENGTH_LONG).show();
+                        } else {
 
-                                        try {
-                                            JSONObject jsonResponse = new JSONObject(response);
-                                            if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.FORGOT2_URL,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
 
-                                                alertDialog.dismiss();
-                                            //   Toast.makeText(LoginActivity.this, "Password Reset Successfull", Toast.LENGTH_LONG).show();
+                                            try {
+                                                JSONObject jsonResponse = new JSONObject(response);
+                                                if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
 
-                                                SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
-                                                        //     .setButtonText("Please click BACK again to exit")
-                                                        //     .setButtonIconResource(R.drawable.ic_undo)
-                                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
-                                                        //     .setProgressBarColor(Color.WHITE)
-                                                        .setText("Password reset successful")
-                                                        .setDuration(Style.DURATION_LONG)
-                                                        .setFrame(Style.FRAME_STANDARD)
-                                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
-                                                        .setAnimations(Style.ANIMATIONS_POP).show();
+                                                    alertDialog.dismiss();
+                                                    //   Toast.makeText(LoginActivity.this, "Password Reset Successfull", Toast.LENGTH_LONG).show();
+
+                                                    SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                            //     .setButtonText("Please click BACK again to exit")
+                                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                            //     .setProgressBarColor(Color.WHITE)
+                                                            .setText("Password reset successful")
+                                                            .setDuration(Style.DURATION_LONG)
+                                                            .setFrame(Style.FRAME_STANDARD)
+                                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
+                                                            .setAnimations(Style.ANIMATIONS_POP).show();
 
 
+                                                } else {
+                                                    SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                            //     .setButtonText("Please click BACK again to exit")
+                                                            //     .setButtonIconResource(R.drawable.ic_undo)
+                                                            //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                            //     .setProgressBarColor(Color.WHITE)
+                                                            .setText("Wrong OTP")
+                                                            .setDuration(Style.DURATION_LONG)
+                                                            .setFrame(Style.FRAME_STANDARD)
+                                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                            .setAnimations(Style.ANIMATIONS_POP).show();
+                                                }
 
-                                            } else {
-                                                SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
-                                                        //     .setButtonText("Please click BACK again to exit")
-                                                        //     .setButtonIconResource(R.drawable.ic_undo)
-                                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
-                                                        //     .setProgressBarColor(Color.WHITE)
-                                                        .setText("Wrong OTP")
-                                                        .setDuration(Style.DURATION_LONG)
-                                                        .setFrame(Style.FRAME_STANDARD)
-                                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
-                                                        .setAnimations(Style.ANIMATIONS_POP).show();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
                                             }
 
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
                                         }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            alertDialog.dismiss();
+                                            Toast.makeText(LoginActivity.this, "error2", Toast.LENGTH_LONG).show();
+                                        }
+                                    }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<String, String>();
+                                    //Adding the parameters otp and username
+                                    params.put(Config.KEY_OTP, f_otp);
+                                    params.put(Config.KEY_PASSWORD, f_confpass);
+                                    params.put(Config.KEY_PHONE, phonenum);
 
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        alertDialog.dismiss();
-                                        Toast.makeText(LoginActivity.this, "error2", Toast.LENGTH_LONG).show();
-                                    }
-                                }) {
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                Map<String, String> params = new HashMap<String, String>();
-                                //Adding the parameters otp and username
-                                params.put(Config.KEY_OTP, f_otp);
-                                params.put(Config.KEY_PASSWORD, f_confpass);
-                                params.put(Config.KEY_PHONE, phonenum);
+                                    return params;
+                                }
+                            };
 
-                                return params;
-                            }
-                        };
-
-                        //Adding the request to the queue
-                        requestQueue.add(stringRequest);
+                            //Adding the request to the queue
+                            requestQueue.add(stringRequest);
+                        }
                     }
+                }
+                else
+                {
+                    forgot_PassET.setError("Invalid password");
                 }
             }
         });
@@ -518,13 +595,18 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean passwordvalid(String f_pass) {
 
-        if (f_pass.length()>=8)
-        {
-            return  true;
-        }
-        else
-            return false;
+            Pattern p = Pattern.compile("[^A-Za-z0-9]");
+            Matcher m = p.matcher(f_pass);
+            // boolean b = m.matches();
+            boolean b = m.find();
 
+            if (f_pass.length()<8 || b ) {
+
+                return false;
+
+            }
+
+            return true;
     }
 
 
@@ -567,7 +649,13 @@ public class LoginActivity extends AppCompatActivity {
                                     if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
                                         //Asking user to confirm otp
 
-                                        session.createLoginSession(password, phone);
+                                        JSONArray det=jsonResponse.getJSONArray("details");
+                                        JSONObject usr=det.getJSONObject(0);
+                                        String name=usr.getString("cust_username");
+                                        //wallet amount
+                                        //customer type - 2 rate
+
+                                        session.createLoginSession(password, phone,name);
                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                                         startActivity(intent);
@@ -575,7 +663,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                     } else {
-                                       // Toast.makeText(LoginActivity.this, "Wrong OTP", Toast.LENGTH_LONG).show();
+                                        // Toast.makeText(LoginActivity.this, "Wrong OTP", Toast.LENGTH_LONG).show();
 
                                         SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
                                                 //     .setButtonText("Please click BACK again to exit")
@@ -633,23 +721,25 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public static boolean isPhoneValid(String phone) {
-            if (phone.length()==10)
-            {
-                return true;
-            }
-            else
-                return false;
-
+        if (phone.length()==10)
+        {
+            return true;
         }
+        else
+            return false;
+
+    }
 
 
 
     public void onclickhandler(View view) {
         if (view == findViewById(R.id.regbtn_id)) {
 
-            Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            startActivity(intent);
+            if (isOnline()) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivity(intent);
+            }
 
         } else if (view == findViewById(R.id.indoorIMG_iid)) {
 
@@ -657,7 +747,32 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isOnline() {
+        ConnectivityManager conMgr = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
+            //  Toast.makeText(HomeActivity.this, "No Internet Connection!", Toast.LENGTH_LONG).show();
+
+            SuperActivityToast.create(LoginActivity.this, new Style(), Style.TYPE_STANDARD)
+                    //     .setButtonText("Please click BACK again to exit")
+                    //     .setButtonIconResource(R.drawable.ic_undo)
+                    //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                    //     .setProgressBarColor(Color.WHITE)
+                    .setText("No Internet connection available")
+                    .setDuration(Style.DURATION_LONG)
+                    .setFrame(Style.FRAME_STANDARD)
+                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                    .setAnimations(Style.ANIMATIONS_FADE).show();
+
+
+            return false;
+        }
+        return true;
+    }
 
 
 
 }
+
+

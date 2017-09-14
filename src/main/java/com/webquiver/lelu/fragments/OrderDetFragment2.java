@@ -26,6 +26,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.webquiver.lelu.HomeActivity;
 import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.ItemActivity2;
@@ -334,7 +337,7 @@ public class OrderDetFragment2 extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         //    loading.dismiss();
-                        Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+                    //    Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                         lyt.setVisibility(View.VISIBLE);
 
@@ -352,7 +355,22 @@ public class OrderDetFragment2 extends Fragment {
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
-                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                          //      Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+
+
+
+                                SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_STANDARD)
+                                        //     .setButtonText("Please click BACK again to exit")
+                                        //     .setButtonIconResource(R.drawable.ic_undo)
+                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                        //     .setProgressBarColor(Color.WHITE)
+                                        .setText("You haven't placed any orders yet")
+                                        .setDuration(Style.DURATION_LONG)
+                                        .setFrame(Style.FRAME_STANDARD)
+                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                        .setAnimations(Style.ANIMATIONS_POP).show();
+
+
 
                             } else {
 
@@ -418,11 +436,12 @@ public class OrderDetFragment2 extends Fragment {
 
                 ordrSTATUS.setText(sp[0] + " on " + sp[1]);
                 currentSTATUS.setText(sp[0]);
-                currentstatus_date.setText("Order " + sp[0] + " on" + sp[1]);
+                currentstatus_date.setText("Order " + sp[0] + " on " + sp[1]);
             }
 
             else
             {
+
                 ordrSTATUS.setText("Order placed on "+tt.getString("op_date"));
                 currentSTATUS.setVisibility(View.INVISIBLE);
                 currentstatus_date.setVisibility(View.INVISIBLE);
@@ -472,10 +491,6 @@ public class OrderDetFragment2 extends Fragment {
                 }
 
             */
-
-
-
-
 
 
         } catch (JSONException e) {

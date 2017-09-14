@@ -13,6 +13,7 @@ public class ODRItem
     private float RATING;
     private String DATE;
     private String NAME;
+    private String IMG;
 
     private int NumberOfProducts;
 
@@ -76,6 +77,17 @@ public class ODRItem
     public void setNAME(String NAME) {
         this.NAME = NAME;
     }
+
+
+    public String getIMG() {
+        return IMG;
+    }
+    public void setIMG(String IMG) {
+        this.IMG = IMG;
+    }
+
+
+
 
 
     public int getNumberOfProducts() {

@@ -62,6 +62,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -137,8 +138,6 @@ public class RegisterActivity extends AppCompatActivity {
         regbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
 
                 register();
 
@@ -370,7 +369,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
         placeET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                // placeET.setFocusable(true);
@@ -385,6 +383,8 @@ public class RegisterActivity extends AppCompatActivity {
                 phone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 pass.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
                 email.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.regedittext_shape_rounded));
+
+                placeET.setSelection(0);
 
                 smalltick();
 
@@ -466,7 +466,7 @@ public class RegisterActivity extends AppCompatActivity {
             String data = "";
 
             // Obtain browser key from https://code.google.com/apis/console
-            String key = "key=AIzaSyBKC5T0UivrnygT6wwuwHXJ4K9ix7u8_bA";
+            String key = "key=AIzaSyB7cqClBgl_qCGYWKRxApmx8mkd8w61zWc";
 
             String input="";
 
@@ -546,18 +546,20 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<HashMap<String, String>> result) {
 
+
             String[] from = new String[] { "description"};
             int[] to = new int[] { android.R.id.text1 };
 
             // Creating a SimpleAdapter for the AutoCompleteTextView
-            SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), result, android.R.layout.simple_list_item_2, from, to);
+            SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), result, android.R.layout.two_line_list_item, from, to);
 
             // Setting the adapter
             placeET.setAdapter(adapter);
 
+
+
         }
     }
-
 
     public void onclickhandler(View view) {
         if (view == findViewById(R.id.loginbtn2_id)) {
@@ -750,99 +752,125 @@ public class RegisterActivity extends AppCompatActivity {
             {
                 if(phonevalidation(phonestring))
                 {
-                  if(companyvalidation(companynamestring))
-                  {
 
-              //        final ProgressDialog loading = ProgressDialog.show(this, "Registering", "Please wait...", false, false);
+                    if(emailvalidation(emailstring)) {
 
-                      final Dialog progressDialog = new Dialog(RegisterActivity.this);
-                      progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                      progressDialog.setContentView(R.layout.custom_dialog_progress_register);
-                      progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                      progressDialog.setCancelable(false);
-                      progressDialog.show();
+                        if (companyvalidation(companynamestring)) {
 
+                            if (placevalidation(placestring)) {
 
+                                //        final ProgressDialog loading = ProgressDialog.show(this, "Registering", "Please wait...", false, false);
 
-                      StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.REGISTER_URL,
-                              new Response.Listener<String>() {
-                                  @Override
-                                  public void onResponse(String response) {
-                            //          loading.dismiss();
+                                final Dialog progressDialog = new Dialog(RegisterActivity.this);
+                                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                progressDialog.setContentView(R.layout.custom_dialog_progress_register);
+                                progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
 
 
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.REGISTER_URL,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                //          loading.dismiss();
+                                                progressDialog.dismiss();
 
-                                      try {
-                                          //Creating the json object from the response
-                                          JSONObject jsonResponse = new JSONObject(response);
-                                          //If it is success
-                                          if(jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")){
-                                              //Asking user to confirm otp
-                                              //   Toast.makeText(RegisterActivity.this,jsonResponse.getString(Config.KEY_OTP), Toast.LENGTH_LONG).show();
-
-                                              confirmOtp();
-                                          }else{
-                                              //If not successful user may already have registered
-                                          //    Toast.makeText(RegisterActivity.this, "Username or Phone number already registered", Toast.LENGTH_LONG).show();
-
-                                              SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_STANDARD)
-                                                      //     .setButtonText("Please click BACK again to exit")
-                                                      //     .setButtonIconResource(R.drawable.ic_undo)
-                                                      //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
-                                                      //     .setProgressBarColor(Color.WHITE)
-                                                      .setText("Mobile number already registered")
-                                                      .setDuration(Style.DURATION_LONG)
-                                                      .setFrame(Style.FRAME_STANDARD)
-                                                      .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
-                                                      .setAnimations(Style.ANIMATIONS_POP).show();
+                                                try {
+                                                    //Creating the json object from the response
+                                                    JSONObject jsonResponse = new JSONObject(response);
+                                                    //If it is success
+                                                    if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("Success")) {
+                                                        //Asking user to confirm otp
+                                                        //   Toast.makeText(RegisterActivity.this,jsonResponse.getString(Config.KEY_OTP), Toast.LENGTH_LONG).show();
 
 
 
+                                                        confirmOtp();
+                                                    } else {
+                                                        //If not successful user may already have registered
+                                                        //    Toast.makeText(RegisterActivity.this, "Username or Phone number already registered", Toast.LENGTH_LONG).show();
+
+                                                        SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_STANDARD)
+                                                                //     .setButtonText("Please click BACK again to exit")
+                                                                //     .setButtonIconResource(R.drawable.ic_undo)
+                                                                //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                                                //     .setProgressBarColor(Color.WHITE)
+                                                                .setText("Mobile number already registered")
+                                                                .setDuration(Style.DURATION_LONG)
+                                                                .setFrame(Style.FRAME_STANDARD)
+                                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                                                .setAnimations(Style.ANIMATIONS_POP).show();
 
 
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                //   loading.dismiss();
+                                                //
+                                                progressDialog.dismiss();
+                                                Toast.makeText(RegisterActivity.this, "error1", Toast.LENGTH_LONG).show();
+                                            }
+                                        }) {
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<>();
+                                        //Adding the parameters to the request
+                                        params.put(Config.KEY_USERNAME, username);
+                                        params.put(Config.KEY_PASSWORD, password);
+                                        params.put(Config.KEY_PHONE, phonestring);
+                                        params.put(Config.KEY_COMPANY, companynamestring);
+                                        params.put(Config.KEY_EMAIL, emailstring);
+                                        params.put(Config.KEY_PLACE, placestring);
+                                        return params;
+                                    }
+                                };
 
+                                //Adding request the the queue
+                                requestQueue.add(stringRequest);
+                            }
+                            else {
+                                Crouton.makeText(RegisterActivity.this, "Invalid place", de.keyboardsurfer.android.widget.crouton.Style.INFO).show();
 
-                                          }
-                                      } catch (JSONException e) {
-                                          e.printStackTrace();
-                                      }
-                                  }
-                              },
-                              new Response.ErrorListener() {
-                                  @Override
-                                  public void onErrorResponse(VolleyError error) {
-                                   //   loading.dismiss();
-                                      //
-                                      Toast.makeText(RegisterActivity.this,"error1",Toast.LENGTH_LONG).show();
-                                  }
-                              }) {
-                          @Override
-                          protected Map<String, String> getParams() throws AuthFailureError {
-                              Map<String, String> params = new HashMap<>();
-                              //Adding the parameters to the request
-                              params.put(Config.KEY_USERNAME, username);
-                              params.put(Config.KEY_PASSWORD, password);
-                              params.put(Config.KEY_PHONE, phonestring);
-                              params.put(Config.KEY_COMPANY, companynamestring);
-                              params.put(Config.KEY_EMAIL, emailstring);
-                              params.put(Config.KEY_PLACE, placestring);
-                              return params;
-                          }
-                      };
+                            }
 
-                      //Adding request the the queue
-                      requestQueue.add(stringRequest);
+                        } else {
+                            Crouton.makeText(RegisterActivity.this, "Invalid company name", de.keyboardsurfer.android.widget.crouton.Style.INFO).show();
 
+                        }
+                    }
+                    else {
+                        Crouton.makeText(RegisterActivity.this, "Invalid email address", de.keyboardsurfer.android.widget.crouton.Style.INFO).show();
 
+                    }
+                }
+                else
+                {
+                    Crouton.makeText(RegisterActivity.this, "Invalid phone number", de.keyboardsurfer.android.widget.crouton.Style.INFO).show();
 
-                  }
                 }
             }
+
+            else
+            {
+                Crouton.makeText(RegisterActivity.this, "Invalid password", de.keyboardsurfer.android.widget.crouton.Style.INFO).show();
+
+            }
+
+
+
         }
         else
         {
            // Toast.makeText(this, "Please fill all fields and retry", Toast.LENGTH_SHORT).show();
 
+            /*
             SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_STANDARD)
                     //     .setButtonText("Please click BACK again to exit")
                     //     .setButtonIconResource(R.drawable.ic_undo)
@@ -853,6 +881,12 @@ public class RegisterActivity extends AppCompatActivity {
                     .setFrame(Style.FRAME_STANDARD)
                     .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
                     .setAnimations(Style.ANIMATIONS_POP).show();
+*/
+
+            Crouton.makeText(RegisterActivity.this, "Please fill all fields and retry", de.keyboardsurfer.android.widget.crouton.Style.INFO).show();
+
+
+
 
 
         }
@@ -882,9 +916,19 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
     }
 
-    public static boolean passwordvalidation(String pass) {
-        if (pass.length()<8)
+    public boolean passwordvalidation(String pass) {
+
+        Pattern p = Pattern.compile("[^A-Za-z0-9]");
+        Matcher m = p.matcher(pass);
+        // boolean b = m.matches();
+        boolean b = m.find();
+
+        if (pass.length()<8 || b ) {
+
+
             return false;
+
+        }
 
        return true;
     }
@@ -910,14 +954,17 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
     }
 
-    public static boolean namevalidation(String company) {
+    public boolean namevalidation(String company) {
 
         if (company.length()>=2)
         {
             return true;
         }
-        else
+        else {
+
+
             return false;
+        }
     }
 
 

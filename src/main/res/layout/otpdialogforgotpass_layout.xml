@@ -13,6 +13,7 @@
         android:hint="Phone Number"
         style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:textAlignment="center"
+        android:maxLength="10"
         android:layout_height="wrap_content"
         android:inputType="phone" />
 

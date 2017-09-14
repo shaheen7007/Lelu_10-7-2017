@@ -123,9 +123,9 @@
                 android:layout_width="match_parent"
                 android:textAlignment="center"
                 fontPath="fonts/latoregular.ttf"
-                android:hint="Password"
+                android:hint="Password (8 chars)"
+                android:maxLength="8"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
-
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="25dp"
@@ -145,9 +145,9 @@
                 fontPath="fonts/latoregular.ttf"
 
                 android:textAlignment="center"
-                android:inputType="number"
+                android:inputType="phone"
+                android:maxLength="10"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
-
                 android:hint="Phone Number"
                 android:cursorVisible="false"
                 android:layout_width="match_parent"

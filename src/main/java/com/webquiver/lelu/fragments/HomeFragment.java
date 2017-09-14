@@ -136,7 +136,7 @@ public class HomeFragment extends android.app.Fragment {
 
 
                 if (isOnline()) {
-                    Toast.makeText(getActivity(), String.valueOf(names.get(position)), Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(getActivity(), String.valueOf(names.get(position)), Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(getActivity(), ItemActivity.class);
                     //  intent.putExtra("name",String.valueOf(names.get(position)));
@@ -175,7 +175,11 @@ public class HomeFragment extends android.app.Fragment {
                         String jsonstring=response.toString();
                         prefEdit.putString(Config.JSONSTRING,jsonstring);
                         prefEdit.apply();
-                        showGrid(response);
+                        try {
+                            showGrid(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -189,7 +193,12 @@ public class HomeFragment extends android.app.Fragment {
                             e.printStackTrace();
                         }
                         progressBar.setVisibility(View.INVISIBLE);
-                        showGrid(jsonArray);
+                        if(!(sharedPreferences.getString(Config.JSONSTRING, "NULL").equals("NULL")))
+                            try {
+                                showGrid(jsonArray);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
 //                        Toast.makeText(getActivity(),"No response from api",Toast.LENGTH_LONG).show();
 
@@ -204,7 +213,7 @@ public class HomeFragment extends android.app.Fragment {
      }
 
 
-    private void showGrid(JSONArray jsonArray) {
+    private void showGrid(JSONArray jsonArray) throws JSONException{
 
         for (int i = 0; i < jsonArray.length(); i++) {
 

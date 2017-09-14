@@ -32,6 +32,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -92,9 +93,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     public static Activity fa;
-
-
-
 
 
 /*
@@ -198,12 +196,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     //api
     public static final String DATA_URL = "https://api.myjson.com/bins/xyser";
-    public static final String BANNER_URL = "http://192.168.1.2:8000/get-inventory";
-    public static final String TAG_IMAGE_URL = "i_image";
+    public static final String BANNER_URL = "https://api.myjson.com/bins/1f0fmd";
+    public static final String TAG_IMAGE_URL = "image";
     //GridView Object
     private ExpandableHeightGridView gridView;
 
     private ArrayList<String> banimages;
+    private ArrayList<String> categnames;
+    private ArrayList<String> categids;
 
     LinearLayout categorylayout;
     DrawerLayout mDrawerLayout;
@@ -253,6 +253,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+//check wheather cartactivity is running or not
+        SharedPreferences sp = getSharedPreferences("OURINFO", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean("active", false);
+        ed.commit();
+
+
+
+
+
        sharedPreferences = getSharedPreferences(BANNER_PREFERENCE, MODE_PRIVATE);
         pref_numberss = this.getSharedPreferences(NUM_PREFERENCE, MODE_PRIVATE);
         editor_num_pref=pref_numberss.edit();
@@ -278,6 +288,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
       //  progressBar=(ProgressBar)findViewById(R.id.prog_id);
 
         banimages = new ArrayList<>();
+        categnames = new ArrayList<>();
+        categids = new ArrayList<>();
 
         searchhistory = this.getSharedPreferences(Config.SearchPref, Context.MODE_PRIVATE);
         search_historyEditor=searchhistory.edit();
@@ -413,6 +425,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 */
         getData();
+
+        getcategories();
+
 
 
 
@@ -580,6 +595,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.nav_account) {
 
 
+            Intent intent = new Intent(HomeActivity.this, MyAccountActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent);
+
+
+
+
+
         }
 
 
@@ -646,7 +669,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL")));
 
         mSearchView.openSearch();
-
 
 
         if (searchhistory.getString(Config.numofhistory, "NULL").equals("NULL")) {
@@ -725,7 +747,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     startActivity(intent);
                  //   finish();
-
                     int num=Integer.parseInt(searchhistory.getString(Config.numofhistory,"NULL"));
 
                     if (string.equals(searchhistory.getString(Config.first_suggestion,"NULL")))
@@ -783,7 +804,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
+                //        Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
 
                         try {
 
@@ -797,7 +818,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
-                                Toast.makeText(getApplicationContext(), "Failed_num", Toast.LENGTH_LONG).show();
+                        //        Toast.makeText(getApplicationContext(), "Failed_num", Toast.LENGTH_LONG).show();
 
                                 cartnum.setVisibility(View.INVISIBLE);
 
@@ -882,11 +903,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-
     //search
-
-
 
 
 
@@ -966,51 +983,104 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
         //  init();
 
-        mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this,searchhistory.getString(Config.first_suggestion,"NULL"),searchhistory.getString(Config.second_suggestion,"NULL"),searchhistory.getString(Config.third_suggestion,"NULL"), searchnames));
+        searchsugg();
 
+    }
 
+    public void searchsugg() {
+        mSearchView.setSuggestionBuilder(new SampleSuggestionsBuilder(this, searchhistory.getString(Config.first_suggestion, "NULL"), searchhistory.getString(Config.second_suggestion, "NULL"), searchhistory.getString(Config.third_suggestion, "NULL"), searchnames));
     }
 
 
 
     public void showsettings(View v) {
 
-        //Creating the instance of PopupMenu
-        PopupMenu popup = new PopupMenu(HomeActivity.this, v);
-        //Inflating the Popup using xml file
-        popup.getMenuInflater().inflate(R.menu.actions, popup.getMenu());
+        if (pref.getString("usertype","null").equals("privilaged")) {
 
-        //registering popup with OnMenuItemClickListener
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
+            //Creating the instance of PopupMenu
+            final PopupMenu popup = new PopupMenu(HomeActivity.this, v);
+            //Inflating the Popup using xml file
+            popup.getMenuInflater().inflate(R.menu.actions, popup.getMenu());
 
-                String itemname=item.getTitle().toString();
-                if (itemname.equals("Retail Price"))
-                {
+            //registering popup with OnMenuItemClickListener
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
 
-                    Toast.makeText(HomeActivity.this,"Retail Price",Toast.LENGTH_LONG).show();
+                    String itemname = item.getTitle().toString();
+                    if (itemname.equals("Retail Price")) {
 
+                        if (item.isChecked())
+                            item.setChecked(false);
+                        else
+                            item.setChecked(true);
 
+                        Toast.makeText(HomeActivity.this, "Retail Price", Toast.LENGTH_LONG).show();
+
+                    }
+
+                    if (itemname.equals("Wholesale Price")) {
+
+                        if (item.isChecked())
+                            item.setChecked(false);
+                        else
+                            item.setChecked(true);
+
+                        Toast.makeText(HomeActivity.this, "Wholesale Price", Toast.LENGTH_LONG).show();
+
+                    }
+
+                    return true;
                 }
+            });
 
-                if (itemname.equals("Wholesale Price"))
-                {
+            popup.show();//showing popup menu
 
-                    Toast.makeText(HomeActivity.this,"Wholesale Price",Toast.LENGTH_LONG).show();
+        }
 
 
+    }
+
+
+    public void getcategories() {
+
+        categnames.clear();
+        categids.clear();
+
+        JsonArrayRequest bannerjsonArrayRequest = new JsonArrayRequest(Config.GET_CATEG_URL,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        //Dismissing the progressdialog on response
+                        //                       loading.dismiss();
+
+                        //                  progressBar.setVisibility(View.INVISIBLE);
+
+                        addcateg(response);
+
+
+                    }
+
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //      Toast.makeText(HomeActivity.this,"No response from api",Toast.LENGTH_LONG).show();
+                        //set from preference
+
+                    }
                 }
+        );
 
-                return true;
-            }
-        });
+        //Creating a request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        //Adding our request to the queue
+        requestQueue.add(bannerjsonArrayRequest);
 
-        popup.show();//showing popup menu
+
     }
 
 
     public void showcategories(View v) {
-
 
         //Creating the instance of PopupMenu
         PopupMenu popup = new PopupMenu(HomeActivity.this, v);
@@ -1067,14 +1137,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 */
 
 
+    Menu menu=popup.getMenu();
 
-        Menu menu=popup.getMenu();
-        menu.add("hai");
-        menu.add("hello");
-        menu.add("hello=");
-        menu.add("hello=l");
-        menu.add("hello=la");
+        for (int i=0;i<categnames.size();i++) {
 
+            menu.add(categnames.get(i));
+
+        }
 
 
 
@@ -1083,21 +1152,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             public boolean onMenuItemClick(MenuItem item) {
 
                 String itemname=item.getTitle().toString();
-                if (itemname.equals("hai"))
-                {
 
-                    Toast.makeText(HomeActivity.this,"hai",Toast.LENGTH_LONG).show();
-
-
-                }
-
-                if (itemname.equals("hello"))
-                {
-
-                    Toast.makeText(HomeActivity.this,"hello",Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+                intent.putExtra("searchterm",itemname);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivity(intent);
 
 
-                }
+
+
+
+
+
+
+
+
+
+
+
 
                 return true;
             }
@@ -1119,6 +1191,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
         getall();
+        searchsugg();
 
 
     }
@@ -1126,6 +1199,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
         getall();
+        searchsugg();
 
 
     }
@@ -1137,6 +1211,40 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+
+    public void onEvent(SearchActivity.HelloWorldEvent event){
+
+
+        searchsugg();
+
+
+    }
+
+
+
+    public void addcateg(JSONArray jsonArray)
+    {
+
+        for(int i = 0; i<jsonArray.length(); i++){
+
+            JSONObject obj = null;
+            try {
+
+                obj = jsonArray.getJSONObject(i);
+                categnames.add(obj.getString("categ_name"));
+                categids.add(obj.getString("product_id"));
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+
+            }
+        }
+
+
+
+    }
+
+
 
 
 

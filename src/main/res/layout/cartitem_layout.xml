@@ -23,8 +23,8 @@
 
         <com.android.volley.toolbox.NetworkImageView
             android:layout_width="70dp"
-            android:background="#000"
-            android:scaleType="fitXY"
+
+            android:scaleType="fitCenter"
             android:id="@+id/cartItemImage_id"
             android:layout_height="match_parent" />
 

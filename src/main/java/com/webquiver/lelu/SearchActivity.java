@@ -42,6 +42,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
+
 public class SearchActivity extends AppCompatActivity {
 
 
@@ -89,8 +91,10 @@ public class SearchActivity extends AppCompatActivity {
         fa = this;
 
 
-        b=getIntent().getExtras();
+        EventBus.getDefault().post(new HelloWorldEvent(""));       //search history update
 
+
+        b=getIntent().getExtras();
 
 
         //bottom sheet
@@ -110,7 +114,7 @@ public class SearchActivity extends AppCompatActivity {
                 if (menuItem.getNumericShortcut()=='1') {
                     bundle.putString("rate1", "100");
                     bundle.putString("rate2", "200");
-                    Toast.makeText(SearchActivity.this,"1",Toast.LENGTH_LONG).show();
+               //     Toast.makeText(SearchActivity.this,"1",Toast.LENGTH_LONG).show();
 
                 }
 
@@ -456,6 +460,20 @@ public class SearchActivity extends AppCompatActivity {
 
 
     }
+
+
+    public class HelloWorldEvent {             //event to update cartnum
+        public final String message;
+
+        public HelloWorldEvent(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
 
 
 

@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,6 +26,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.webquiver.lelu.ItemActivity;
 import com.webquiver.lelu.R;
 import com.webquiver.lelu.adapters.CartAdapter;
@@ -35,11 +37,9 @@ import com.webquiver.lelu.classes.CartItem;
 import com.webquiver.lelu.classes.Config;
 import com.webquiver.lelu.classes.ODRItem;
 import com.webquiver.lelu.classes.SessionManagement;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -261,7 +261,18 @@ public class OrderFragment extends Fragment {
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
-                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+                             //   Toast.makeText(getActivity(), "Failed", Toast.LENGTH_LONG).show();
+
+                                SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_STANDARD)
+                                        //     .setButtonText("Please click BACK again to exit")
+                                        //     .setButtonIconResource(R.drawable.ic_undo)
+                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                        //     .setProgressBarColor(Color.WHITE)
+                                        .setText("You haven't placed any orders yet")
+                                        .setDuration(Style.DURATION_LONG)
+                                        .setFrame(Style.FRAME_STANDARD)
+                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                        .setAnimations(Style.ANIMATIONS_POP).show();
 
                             } else {
 
@@ -308,14 +319,21 @@ public class OrderFragment extends Fragment {
                 JSONObject tt = arr.getJSONObject(i);
                 ODRItem C_item5 = new ODRItem();
                 C_item5.setODR_ID(tt.getString("order_place_id"));
-              //  C_item5.setNAME(tt.getString("order_place_id"));
+              // C_item5.setNAME(tt.getString("order_place_id"));
                 C_item5.setSTATUS(tt.getString("op_status"));
 
                 C_item5.setFEEDBACK(tt.getString("op_feedback"));
                 C_item5.setRATING(Float.parseFloat(tt.getString("op_rating")));
 
                 JSONArray prod=tt.getJSONArray("products");
+
+
+                JSONObject kk = prod.getJSONObject(0);
                 C_item5.setNumberOfProducts(prod.length());
+
+
+                C_item5.setNAME(kk.getString("i_name"));
+                C_item5.setIMG(kk.getString("i_image"));
 
 
              /*

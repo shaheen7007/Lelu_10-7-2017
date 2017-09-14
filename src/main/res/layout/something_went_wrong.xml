@@ -11,15 +11,17 @@
         android:text="Something went wrong"
         style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_width="match_parent"
+        fontPath="fonts/latoregular.ttf"
         android:textAlignment="center"
         android:layout_height="wrap_content" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/buttonretry"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:layout_gravity="center"
         android:layout_marginTop="24dp"
         android:textAllCaps="false"
         android:background="@color/colorPrimary"

@@ -14,8 +14,8 @@ public class Config {
 
 
     //BASE URL
-    public static final String BASE_URL = "http://192.168.1.2:8000/";
-    public static final String BASE_URLwithoutslash = "http://192.168.1.2:8000";
+    public static final String BASE_URL = "http://192.168.1.7:8000/";
+    public static final String BASE_URLwithoutslash = "http://192.168.1.7:8000";
 
 
 

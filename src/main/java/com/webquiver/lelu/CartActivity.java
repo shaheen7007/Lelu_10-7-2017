@@ -1,5 +1,6 @@
 package com.webquiver.lelu;
 
+        import android.app.Activity;
         import android.app.Fragment;
         import android.app.FragmentManager;
         import android.app.FragmentTransaction;
@@ -19,6 +20,7 @@ package com.webquiver.lelu;
 
 public class CartActivity extends AppCompatActivity {
 
+    public static Activity fa;
 
     @Override
     public void onBackPressed() {
@@ -67,6 +69,13 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_cart);
+
+
+
+        fa=this;
+
+
+
 
         //fragment
         Fragment fr = null;

@@ -58,6 +58,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by WebQuiver 04 on 7/24/2017.
@@ -103,8 +104,16 @@ public class CartFragment extends android.app.Fragment {
         container.removeAllViews();
 
 
+
         View rootView = inflater.inflate(
                 R.layout.cart_frag, container, false);
+       //apply font
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/latoregular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
 
         movieList= new ArrayList<CartItem>();
         listView = (ListView) rootView.findViewById(R.id.cartlist);
@@ -120,7 +129,7 @@ lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
 
 try {
     EventBus.getDefault().register(this);
-    Toast.makeText(getActivity(), "try", Toast.LENGTH_SHORT).show();
+//    Toast.makeText(getActivity(), "try", Toast.LENGTH_SHORT).show();
 }
 catch (Exception e)
 {
@@ -340,7 +349,7 @@ catch (Exception e)
                         continu.setVisibility(View.VISIBLE);
                         loading.dismiss();
                         alertDialog.dismiss();
-                        Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+                  //      Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                         try {
 
@@ -456,13 +465,13 @@ catch (Exception e)
                 C_item5.setNAME(tt.getString("i_name"));
                 //C_item5.setDESC("default");
                 C_item5.setQUANTITY(Integer.parseInt(tt.getString("cp_qty")));
-                C_item5.setREALPRICE(tt.getString("i_retailPrice"));
-                C_item5.setPRICE(tt.getString("i_salesPrice"));
+                C_item5.setREALPRICE(tt.getString("i_salesPrice"));
+                C_item5.setPRICE(tt.getString("i_retailPrice"));
                 C_item5.setIMAGE_URL(tt.getString("i_image"));
                 C_item5.setPRODUCT_ID(tt.getString("cp_code"));
 
-                bigtotal= bigtotal + Double.parseDouble(tt.getString("i_salesPrice"))*Double.parseDouble(tt.getString("cp_qty"));             //change
-                total=total + Double.parseDouble(tt.getString("i_retailPrice"))*Double.parseDouble(tt.getString("cp_qty"));
+                total= total + Double.parseDouble(tt.getString("i_salesPrice"))*Double.parseDouble(tt.getString("cp_qty"));             //change
+                bigtotal=bigtotal + Double.parseDouble(tt.getString("i_retailPrice"))*Double.parseDouble(tt.getString("cp_qty"));
 
                 movieList.add(C_item5);
 
@@ -486,6 +495,7 @@ catch (Exception e)
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+
     }
 
 
@@ -498,6 +508,19 @@ catch (Exception e)
 
 
     }
+
+
+    public void onEvent(ItemActivity.HelloWo event){
+
+        getall();
+
+    }
+    public void onEvent(ItemActivity2.HelloWo event){
+
+        getall();
+
+    }
+
 
 
 

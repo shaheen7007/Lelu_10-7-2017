@@ -58,7 +58,6 @@ import java.util.Map;
  */
 
 public class OrderAdapter extends BaseAdapter
-
 {
     int flag;
 
@@ -73,6 +72,9 @@ public class OrderAdapter extends BaseAdapter
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
     TextView WriteReview;
+
+    Double grandtotal;
+
     TextView close;
 
     RatingBar ratingBar;
@@ -84,8 +86,7 @@ public class OrderAdapter extends BaseAdapter
 
 
 
-
-    TextView addr,A_OID,A_ADR1,A_PLACE,A_DIST,A_STATE,A_PIN;
+    TextView addr,A_OID,A_ADR1,A_PLACE,A_DIST,A_STATE,A_PIN,gradtotalTXT;
 
 
     public OrderAdapter(Activity activity, List<ODRItem> cartitems) {
@@ -172,7 +173,6 @@ public class OrderAdapter extends BaseAdapter
                                                 .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
                                                 .setAnimations(Style.ANIMATIONS_POP).show();
                                         */
-
                                         cartitems.get(position).setRATING(ratingBar.getRating());
                                         notifyDataSetChanged();
 
@@ -252,6 +252,11 @@ public class OrderAdapter extends BaseAdapter
                A_PIN=(TextView)confirmDialog.findViewById(R.id.ADDR_pin_id);
                A_DIST=(TextView)confirmDialog.findViewById(R.id.ADDR_district_id);
                A_STATE=(TextView)confirmDialog.findViewById(R.id.ADDR_state_id);
+
+                gradtotalTXT=(TextView)confirmDialog.findViewById(R.id.grandtotaltxt_id);
+
+
+
 
                 try {
                     showODR(pref.getString(GET_ODR_JSON_STRING,"NULL"),position);
@@ -454,14 +459,14 @@ public class OrderAdapter extends BaseAdapter
 
         if (m.getNumberOfProducts() == 1) {
 
-            Order_name.setText("P Name");
-            thumbNail.setImageUrl("http://ecx.images-amazon.com/images/I/5169e67lGUL._SY355_.jpg", imageLoader);
+            Order_name.setText(m.getNAME());
+            thumbNail.setImageUrl(Config.BASE_URLwithoutslash+m.getIMG(), imageLoader);
 
         } else {
 
             viewdet.setVisibility(View.VISIBLE);
             Order_name.setText(String.valueOf(m.getNumberOfProducts()) + " items");
-            thumbNail.setImageUrl("http://www.ajrockguitar.com/images/order.jpg", imageLoader);
+            thumbNail.setImageUrl("http://jaypeeplus.com/media/wysiwyg/client/bluk_order01.png", imageLoader);
 
         }
         Order_ID.setText("Order id #" + m.getODR_ID());
@@ -633,7 +638,18 @@ public class OrderAdapter extends BaseAdapter
 
                             } else if (jsonResponse.getString(Config.TAG_RESPONSE).equalsIgnoreCase("failed")) {
 
-                                Toast.makeText(activity, "Failed", Toast.LENGTH_LONG).show();
+                             //   Toast.makeText(activity, "Failed", Toast.LENGTH_LONG).show();
+
+                                SuperActivityToast.create(activity, new Style(), Style.TYPE_STANDARD)
+                                        //     .setButtonText("Please click BACK again to exit")
+                                        //     .setButtonIconResource(R.drawable.ic_undo)
+                                        //      .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                                        //     .setProgressBarColor(Color.WHITE)
+                                        .setText("You haven't placed any orders yet")
+                                        .setDuration(Style.DURATION_LONG)
+                                        .setFrame(Style.FRAME_STANDARD)
+                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                        .setAnimations(Style.ANIMATIONS_POP).show();
 
                             } else {
 
@@ -679,6 +695,9 @@ public class OrderAdapter extends BaseAdapter
 
                 JSONObject tt = arr.getJSONObject(pos);
 
+                grandtotal=0.00;
+
+
                 addr.setText(tt.getString("ca_name"));
                 A_ADR1.setText(tt.getString("ca_house"));
                 A_PLACE.setText(tt.getString("ca_street"));
@@ -704,12 +723,16 @@ public class OrderAdapter extends BaseAdapter
                 for (int j = 0; j < prod.length(); j++) {
                     CartItem Item_item = new CartItem();
                     JSONObject ss = prod.getJSONObject(j);
-                    Item_item.setNAME(ss.getString("i_name"));                         //change
-                    Item_item.setPRICE(ss.getString("i_salesPrice"));
+                    Item_item.setNAME(ss.getString("i_name"));
+                    Item_item.setPRICE("\u20B9 "+ss.getString("i_salesPrice"));
                     Item_item.setQUANTITY(ss.getInt("opp_qty"));
                     Item_item.setIMAGE_URL(ss.getString("i_image"));
                     movieList.add(Item_item);
+
+                    grandtotal=grandtotal+Double.parseDouble(ss.getString("i_salesPrice"))*ss.getInt("opp_qty");
                 }
+
+                gradtotalTXT.setText("\u20B9 "+String.valueOf(grandtotal));
 
 
              /*

@@ -212,7 +212,7 @@ public class WishListFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         loading.dismiss();
-                        Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+                    //    Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                         try {
 

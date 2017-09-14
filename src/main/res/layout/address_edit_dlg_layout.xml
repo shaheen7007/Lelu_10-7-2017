@@ -70,6 +70,7 @@
     <EditText
         android:id="@+id/ADR_PhoneET"
         android:hint="Phone"
+        android:maxLength="10"
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
