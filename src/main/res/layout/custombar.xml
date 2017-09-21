@@ -20,7 +20,6 @@
         android:background="?attr/actionBarItemBackground"
         android:layout_width="@dimen/menuitem3custbar_width"
         android:layout_height="@dimen/menuitem4custbar_height"
-        android:onClick="showsettings"
         android:layout_marginLeft="19dp"
         android:scaleType="fitCenter"
         android:layout_marginRight="12dp"

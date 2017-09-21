@@ -384,7 +384,9 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
                                                 Bundle bundle = new Bundle();
                                                 bundle.putString("p", "999");
-                                                OrderDetFragment2 showSelectedADDR = new OrderDetFragment2();
+                                                bundle.putString("total", String.valueOf(totalpayable));
+                                                bundle.putString("numofitems", String.valueOf(numofitems));
+                                                OrderPlacedSuccessfuly showSelectedADDR = new OrderPlacedSuccessfuly();
                                                 showSelectedADDR.setArguments(bundle);
                                                 FragmentManager fm = null;
                                                 fm = getFragmentManager();

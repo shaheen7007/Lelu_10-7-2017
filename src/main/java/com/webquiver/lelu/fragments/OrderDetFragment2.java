@@ -86,8 +86,6 @@ public class OrderDetFragment2 extends Fragment {
 
         lyt=(LinearLayout)rootView.findViewById(R.id.lyt);
 
-
-
         rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
         rootView.setOnKeyListener(new View.OnKeyListener() {
@@ -173,14 +171,11 @@ public class OrderDetFragment2 extends Fragment {
                     }
                     catch (Exception e)
                     {
-                        Toast.makeText(getActivity(), "ctch", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(getActivity(), "ctch", Toast.LENGTH_SHORT).show();
                     }
                     Intent intent=new Intent(getActivity(),HomeActivity.class);
                     getActivity().startActivity(intent);
                     getActivity().finish();
-
-
-
 
 
 
@@ -214,7 +209,6 @@ public class OrderDetFragment2 extends Fragment {
         Bundle b=getArguments();
 
         poss=Integer.parseInt(b.getString("p","999"));
-
 
         ordrID=(TextView)rootView.findViewById(R.id.TRCK_OID);
         ordrSTATUS=(TextView)rootView.findViewById(R.id.TRCK_STATUS);
@@ -336,8 +330,8 @@ public class OrderDetFragment2 extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //    loading.dismiss();
-                    //    Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+                        //    loading.dismissr();
+                    //   Toast.makeText(getActivity(),response, Toast.LENGTH_LONG).show();
 
                         lyt.setVisibility(View.VISIBLE);
 
@@ -447,6 +441,7 @@ public class OrderDetFragment2 extends Fragment {
                 currentstatus_date.setVisibility(View.INVISIBLE);
                 line.setVisibility(View.INVISIBLE);
                 secondtick.setVisibility(View.INVISIBLE);
+
 
             }
 

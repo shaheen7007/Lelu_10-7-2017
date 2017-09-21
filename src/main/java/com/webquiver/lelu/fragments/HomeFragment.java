@@ -64,7 +64,6 @@ public class HomeFragment extends android.app.Fragment {
 
     //sharedprefference
     private SharedPreferences sharedPreferences;
-    SharedPreferences pref;
     public static final String HOME_PREFERENCE = "HOME_DATA";
 
 
@@ -81,7 +80,8 @@ public class HomeFragment extends android.app.Fragment {
     public static final String TAG_NAME = "i_name";
     public static final String TAG_COLOR = "categ_name";
     public static final String TAG_ID = "inv_id";
-    public static final String TAG_PRICE = "i_salesPrice";
+    public static final String TAG_PRICE_RETAIL = "i_salesPrice";
+    public static final String TAG_PRICE_WHOLESALE = "i_retailPrice";
 
     //GridView Object
     private ExpandableHeightGridView gridView;
@@ -99,6 +99,7 @@ public class HomeFragment extends android.app.Fragment {
     TextView cartnum;
 
 
+    private SharedPreferences pref;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -108,6 +109,8 @@ public class HomeFragment extends android.app.Fragment {
 
         progressBar=(ProgressBar)rootView.findViewById(R.id.progbar_id);
         sharedPreferences = this.getActivity().getSharedPreferences(HOME_PREFERENCE, MODE_PRIVATE);
+
+        pref = getActivity().getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
 
 
         gridView = (ExpandableHeightGridView) rootView.findViewById(R.id.grid);
@@ -225,7 +228,12 @@ public class HomeFragment extends android.app.Fragment {
                 images.add(obj.getString(TAG_IMAGE_URL));
                 names.add(obj.getString(TAG_NAME));
                 ids.add(obj.getString(TAG_ID));
-                prices.add(obj.getString(TAG_PRICE));
+                if (pref.getString("pricetype","null").equals("retail")||pref.getString("pricetype","null").equals("null")) {
+                    prices.add(obj.getString(TAG_PRICE_RETAIL));
+                }
+                else
+                    prices.add(obj.getString(TAG_PRICE_WHOLESALE));
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

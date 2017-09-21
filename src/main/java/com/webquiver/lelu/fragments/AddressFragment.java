@@ -343,6 +343,8 @@ public class AddressFragment extends android.app.Fragment {
                                         loading.dismiss();
                                         alertDialog.dismiss();
 
+                                        Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
+
                                         try {
 
                                             JSONObject jsonResponse = new JSONObject(response);
@@ -350,21 +352,20 @@ public class AddressFragment extends android.app.Fragment {
 
                                                 Bundle bundle = new Bundle();
                                                 bundle.putString("p", "999");
+                                                bundle.putString("total", String.valueOf(totalpayable));
+                                                bundle.putString("numofitems", String.valueOf(numofitems));
                                                 EventBus.getDefault().post(new HelloWorldEvent(""));
 
-                                                OrderDetFragment2 showSelectedADDR = new OrderDetFragment2();
+                                                OrderPlacedSuccessfuly showSelectedADDR = new OrderPlacedSuccessfuly();
                                                 showSelectedADDR.setArguments(bundle);
                                                 FragmentManager fm = null;
                                                 fm = getFragmentManager();
                                                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                                                 fragmentTransaction.replace(R.id.cart_FL, showSelectedADDR);
                                                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                                                fragmentTransaction.addToBackStack("ord");
                                                 fragmentTransaction.commit();
 
-
                                             } else {
-
                                                 Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
                                             }
                                         } catch (JSONException e) {
@@ -390,9 +391,6 @@ public class AddressFragment extends android.app.Fragment {
                                                 .setFrame(Style.FRAME_STANDARD)
                                                 .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
                                                 .setAnimations(Style.ANIMATIONS_SCALE).show();
-
-
-
 
                                         //
                                         //     Toast.makeText(getActivity(), "error1", Toast.LENGTH_LONG).show();

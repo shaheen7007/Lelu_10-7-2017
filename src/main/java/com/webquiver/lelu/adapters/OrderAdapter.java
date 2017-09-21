@@ -140,14 +140,12 @@ public class OrderAdapter extends BaseAdapter
 
         movieList=new ArrayList<CartItem>();
 
-
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
 
             @Override
             public void onRatingChanged(final RatingBar ratingBar, float rating, boolean fromUser) {
 
                 final String rateValue = String.valueOf(ratingBar.getRating());
-
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.ODR_RATING_URL,
                         new Response.Listener<String>() {
@@ -476,7 +474,6 @@ public class OrderAdapter extends BaseAdapter
 
             ratingBar.setRating(m.getRATING());
            // ratingBar.setIsIndicator(true);
-
 
         //rating and feedback only once
         if (!(m.getFEEDBACK().equals("")))

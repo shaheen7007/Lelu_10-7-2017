@@ -95,6 +95,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public static Activity fa;
 
 
+    PopupMenu popup;
 /*
     public void onBackPressed()
     {
@@ -218,6 +219,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences sharedPreferences;
 
     private SharedPreferences pref;
+    private SharedPreferences.Editor editor_pref;
     RequestQueue requestQueue_cart;
    public TextView cartnum;
     public static final String BANNER_PREFERENCE = "BANNER_DATA";
@@ -253,6 +255,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
+
+
 //check wheather cartactivity is running or not
         SharedPreferences sp = getSharedPreferences("OURINFO", MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
@@ -281,7 +286,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         requestQueue_cart=Volley.newRequestQueue(getApplicationContext());
         pref = this.getSharedPreferences(SessionManagement.PREF_NAME, Context.MODE_PRIVATE);
-
+        editor_pref=pref.edit();
 
         final ImageView search = (ImageView) findViewById(R.id.search);
 
@@ -316,7 +321,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //fragment
         fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.frag_container, HomeFragment.getInstance());
+        fragmentTransaction.replace(R.id.frag_container, HomeFragment.getInstance(),"homefrag");
         fragmentTransaction.commit();
 
 
@@ -334,6 +339,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         View customView = li.inflate(R.layout.custombar, null);
         ab.setCustomView(customView);
         ab.setDisplayShowCustomEnabled(true);
+
+        ImageView settingsbtn=(ImageView)customView.findViewById(R.id.optionsitem);
+        settingsbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showsettings();
+            }
+        });
+
+        editor_pref.putString("pricetype",pref.getString("pricetype","null"));
+        editor_pref.commit();
+
+        popup = new PopupMenu(this,settingsbtn);
+        popup.getMenuInflater().inflate(R.menu.actions, popup.getMenu());
 
 
         cartnum=(TextView)findViewById(R.id.numbercart_home_id) ;
@@ -379,7 +398,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                    // LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                   ///  params.setMargins(30, 20, 30, 0);
                   //  layout.setLayoutParams(params);
-
 
                 } else if (verticalOffset == 0) {
 
@@ -520,6 +538,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         NUM_PAGES =banimages.size();
 
+            /*
     // Auto start of viewpager
         final Handler handler = new Handler();
             final Runnable Update = new Runnable() {
@@ -537,6 +556,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             handler.post(Update);
         }
     }, 7000, 7000);
+
+            */
 
     // Pager listener over indicator
          indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -623,12 +644,87 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void onclickhandler(View view) {
         if (view == findViewById(R.id.indoorTXT_id)) {
 
-            Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+
+            String itemname="Indoor";
+
+            Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+            intent.putExtra("searchterm",itemname);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent);
+
+
+
+
 
         } else if (view == findViewById(R.id.indoorIMG_iid)) {
-            Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+
+            String itemname="Indoor";
+            Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+            intent.putExtra("searchterm",itemname);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent);
 
         }
+
+        if (view == findViewById(R.id.outdoorTXT_id)) {
+
+            //  Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+
+            String itemname="Outdoor";
+
+            Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+            intent.putExtra("searchterm",itemname);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent);
+
+
+
+
+
+        } else if (view == findViewById(R.id.outdoorIMG_id)) {
+            //   Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+
+            String itemname="Outdoor";
+            Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+            intent.putExtra("searchterm",itemname);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent);
+
+        }
+
+        if (view == findViewById(R.id.newbornIMG_id)) {
+
+            //  Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+
+            String itemname="NewBorn";
+
+            Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+            intent.putExtra("searchterm",itemname);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent);
+
+
+
+
+
+        } else if (view == findViewById(R.id.newbornTXT_id)) {
+            //   Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
+
+            String itemname="NewBorn";
+            Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+            intent.putExtra("searchterm",itemname);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent);
+
+        }
+
+
+
+
+
+
 
         else if (view == findViewById(R.id.homenav_id)) {
 
@@ -993,39 +1089,64 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    public void showsettings(View v) {
+    public void showsettings() {
 
-        if (pref.getString("usertype","null").equals("privilaged")) {
+        if (pref.getString("usertype","null").equals("null")) {        //change
 
-            //Creating the instance of PopupMenu
-            final PopupMenu popup = new PopupMenu(HomeActivity.this, v);
-            //Inflating the Popup using xml file
-            popup.getMenuInflater().inflate(R.menu.actions, popup.getMenu());
+            if (pref.getString("pricetype",null).equals("retail"))
+                popup.getMenu().getItem(1).setChecked(true);
+            if (pref.getString("pricetype",null).equals("wholesale"))
+                popup.getMenu().getItem(0).setChecked(true);
 
-            //registering popup with OnMenuItemClickListener
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
 
                     String itemname = item.getTitle().toString();
                     if (itemname.equals("Retail Price")) {
 
+                        editor_pref.putString("pricetype","retail");
+                        editor_pref.commit();
+
+                        //fragment
+
+                        Fragment frg = null;
+                        frg = getFragmentManager().findFragmentByTag("homefrag");
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(frg);
+                        ft.attach(frg);
+                        ft.commit();
+
                         if (item.isChecked())
                             item.setChecked(false);
                         else
                             item.setChecked(true);
 
-                        Toast.makeText(HomeActivity.this, "Retail Price", Toast.LENGTH_LONG).show();
+                        Toast.makeText(HomeActivity.this, "Retail Price", Toast.LENGTH_SHORT).show();
 
                     }
 
                     if (itemname.equals("Wholesale Price")) {
 
+                        editor_pref.putString("pricetype","wholesale");
+                        editor_pref.commit();
+
+
+
+                        //fragment
+                        Fragment frg = null;
+                        frg = getFragmentManager().findFragmentByTag("homefrag");
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(frg);
+                        ft.attach(frg);
+                        ft.commit();
+
+
                         if (item.isChecked())
                             item.setChecked(false);
                         else
                             item.setChecked(true);
 
-                        Toast.makeText(HomeActivity.this, "Wholesale Price", Toast.LENGTH_LONG).show();
+                        Toast.makeText(HomeActivity.this, "Wholesale Price", Toast.LENGTH_SHORT).show();
 
                     }
 

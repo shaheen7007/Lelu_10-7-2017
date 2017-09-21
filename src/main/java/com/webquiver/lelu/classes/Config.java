@@ -79,9 +79,6 @@ public class Config {
     public static final String KEY_CA_ID = "ca_id";
 
 
-
-
-
     //keys of cart
     public static final String KEY_CART_ProdId = "prod_code";
     public static final String KEY_CART_ProdQty = "qty";

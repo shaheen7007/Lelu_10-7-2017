@@ -93,6 +93,7 @@ public class SessionManagement {
 
         user.put(KEY_PHONE, pref.getString(KEY_PHONE, null));
 
+
         // return user
         return user;
     }
