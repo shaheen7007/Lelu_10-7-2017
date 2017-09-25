@@ -93,7 +93,7 @@ public class OrderPlacedSuccessfuly extends Fragment {
                 Log.i("test", "keyCode: " + keyCode);
                 if( keyCode == KeyEvent.KEYCODE_BACK ) {
 
-                    Toast.makeText(getActivity(), "bck", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(getActivity(), "bck", Toast.LENGTH_SHORT).show();
 
                     if (poss==999) {
 

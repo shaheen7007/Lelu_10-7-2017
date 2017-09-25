@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-   
+
     android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/menuitem"
+        android:layout_height="match_parent">
 
     <ImageView android:src="@drawable/menu"
         android:background="?attr/actionBarItemBackground"
         android:layout_width="@dimen/menuitem1custbar_width"
+        android:id="@+id/menuitem_img_id"
         android:layout_height="@dimen/menuitem1custbar_height"
         android:scaleType="fitCenter"
         android:clickable="true"
         android:focusable="true"
         android:layout_marginTop="18dp"
-        android:id="@+id/menuitem"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"/>
+    </LinearLayout>
 
     <ImageView android:src="@drawable/options"
         android:background="?attr/actionBarItemBackground"
@@ -47,16 +53,13 @@
         android:background="?attr/actionBarItemBackground"
         android:layout_width="@dimen/menuitem2custbar_width"
         android:layout_marginLeft="22dp"
-
-
+        android:onClick="onclickhandler"
         android:clickable="true"
         android:focusable="true"
-
         android:layout_height="@dimen/menuitem2custbar_height"
         android:scaleType="fitCenter"
         android:layout_marginTop="18dp"
         android:id="@+id/notificationitem"
-
         android:layout_toLeftOf="@+id/cartitem"
         android:layout_alignParentTop="true"/>
 

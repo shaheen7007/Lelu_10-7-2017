@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_notification"
+    android:background="@color/colorgrey2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.webquiver.lelu.NotificationActivity">
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:background="@color/colorPrimary"
+        android:layout_height="50dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/menuitem"
+            android:layout_height="match_parent">
+            <ImageView android:src="@drawable/back_btn"
+                android:background="?attr/actionBarItemBackground"
+                android:layout_width="@dimen/backbtn_width"
+                android:layout_marginLeft="10dp"
+                android:layout_height="@dimen/backbtn_height"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:id="@+id/bk_id" />
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Notifications"
+            android:textColor="#fff"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/homeitem"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@+id/listview"
+        android:divider="@null"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

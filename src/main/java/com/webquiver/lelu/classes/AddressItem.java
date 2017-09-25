@@ -24,8 +24,8 @@ public class AddressItem
     this.DISTRICT = DISTRICT;
     this.PINCODE = PINCODE;
     this.STATE = STATE;
-        this.PHONE=PHONE;
-        this.ID=ID;
+    this.PHONE=PHONE;
+    this.ID=ID;
    }
     public AddressItem() {
 

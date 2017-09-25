@@ -106,12 +106,12 @@
                             android:src="@drawable/address_tick"
                             android:layout_height="40dp" />
             <View
-                android:layout_width=".2dp"
+                android:layout_width=".18dp"
                 android:layout_height="250dp"
                 android:id="@+id/line_id"
                 android:layout_below="@+id/img_tick"
                android:layout_marginLeft="20dp"
-                android:background="#494747"
+                android:background="#535151"
                 >
             </View>
 

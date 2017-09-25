@@ -85,6 +85,7 @@ public class OrderAdapter extends BaseAdapter
     String GET_ODR_JSON_STRING="get_odr_jsonstring";
 
 
+    float rating_temp;
 
     TextView addr,A_OID,A_ADR1,A_PLACE,A_DIST,A_STATE,A_PIN,gradtotalTXT;
 
@@ -313,6 +314,8 @@ public class OrderAdapter extends BaseAdapter
                     public void onClick(View v) {
                         final EditText new_QTY = (EditText) confirmDialog.findViewById(R.id.qtyET_DLG);
 
+
+
                         if (new_QTY.getText().toString().equals("")) {
 
                             new_QTY.setError("please write review and submit");
@@ -509,7 +512,9 @@ public class OrderAdapter extends BaseAdapter
         }
         else
     {
+
         ratingBar.setIsIndicator(true);
+
     }
 
 
@@ -721,12 +726,12 @@ public class OrderAdapter extends BaseAdapter
                     CartItem Item_item = new CartItem();
                     JSONObject ss = prod.getJSONObject(j);
                     Item_item.setNAME(ss.getString("i_name"));
-                    Item_item.setPRICE("\u20B9 "+ss.getString("i_salesPrice"));
+                    Item_item.setPRICE("\u20B9 "+ss.getString("i_retailPrice"));
                     Item_item.setQUANTITY(ss.getInt("opp_qty"));
                     Item_item.setIMAGE_URL(ss.getString("i_image"));
                     movieList.add(Item_item);
 
-                    grandtotal=grandtotal+Double.parseDouble(ss.getString("i_salesPrice"))*ss.getInt("opp_qty");
+                    grandtotal=grandtotal+Double.parseDouble(ss.getString("i_retailPrice"))*ss.getInt("opp_qty");
                 }
 
                 gradtotalTXT.setText("\u20B9 "+String.valueOf(grandtotal));

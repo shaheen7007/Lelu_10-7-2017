@@ -14,18 +14,18 @@ public class Config {
 
 
     //BASE URL
-    public static final String BASE_URL = "http://192.168.1.7:8000/";
-    public static final String BASE_URLwithoutslash = "http://192.168.1.7:8000";
+    public static final String BASE_URL = "http://ghomes.webquiver.in/";
+    public static final String BASE_URLwithoutslash = "http://ghomes.webquiver.in";
 
 
 
 
     //URLs to register.php and confirm.php file
-    public static final String REGISTER_URL = "http://lelu.webquiver.in/customer_signup";
-    public static final String LOGIN_URL = "http://lelu.webquiver.in/customer_login";
-    public static final String CONFIRM_URL = "http://lelu.webquiver.in/verify_otp";
-    public static final String FORGOT_URL = "http://lelu.webquiver.in/forget_pass";
-    public static final String FORGOT2_URL = "http://lelu.webquiver.in/otp_forget_pass";
+    public static final String REGISTER_URL = BASE_URL+"customer_signup";
+    public static final String LOGIN_URL = BASE_URL+"customer_login";
+    public static final String CONFIRM_URL = BASE_URL+"verify_otp";
+    public static final String FORGOT_URL = BASE_URL+"forget_pass";
+    public static final String FORGOT2_URL = BASE_URL+"otp_forget_pass";
 
 
 
@@ -40,6 +40,9 @@ public class Config {
     //urls CART
     public static final String CART_GET_URL = BASE_URL+"get_cart";
     public static final String CART_ADD_URL = BASE_URL+"add_cart";
+    public static final String CART_DEL_URL = BASE_URL+"del_cart";
+    public static final String CART_UPDATE_URL = BASE_URL+"update_cart";
+
 
 
 
@@ -82,9 +85,6 @@ public class Config {
     //keys of cart
     public static final String KEY_CART_ProdId = "prod_code";
     public static final String KEY_CART_ProdQty = "qty";
-
-
-
 
 
 
@@ -133,17 +133,17 @@ public class Config {
 
     //url item
 
-    public static final String SINGLE_PROD_GET_URL=BASE_URL+"get_single_inventory/";
+    public static final String SINGLE_PROD_GET_URL=BASE_URL+"get_single_inventory";
     public static final String SINGLE_PROD_Id = "inv_id";
 
 
     //urls search
-    public static final String SEARCH_RESULTS_URL = BASE_URL+"search_all_product/";
-    public static final String SEARCH_HISTORY_URL = BASE_URL+"search_product/";
+    public static final String SEARCH_RESULTS_URL = BASE_URL+"search_all_product";
+    public static final String SEARCH_HISTORY_URL = BASE_URL+"search_product";
 
 
    // products list urls
-   public static final String TOP_SELLING_URL=BASE_URL+"get-inventory/";
+   public static final String TOP_SELLING_URL=BASE_URL+"get-inventory";
 
 
 
@@ -155,11 +155,24 @@ public class Config {
 
 
     //urls filter
-    public static final String SEARCH_FILTER_URL=BASE_URL+"filter_by_price/";
+    public static final String SEARCH_FILTER_URL=BASE_URL+"filter_by_price";
 
-    public static final String SEARCH_SORT_URL=BASE_URL+"order_by_price/";
+    public static final String SEARCH_SORT_URL=BASE_URL+"order_by_price";
 
-    public static final String GET_CATEG_URL=BASE_URL+"get_category/";
+    public static final String GET_CATEG_URL=BASE_URL+"get_category";
+
+
+
+
+    //NOTIFICATION
+
+
+    public static final String NOTIF_URL=BASE_URL+"get_notification";
+
+
+
+
+
 
 
 

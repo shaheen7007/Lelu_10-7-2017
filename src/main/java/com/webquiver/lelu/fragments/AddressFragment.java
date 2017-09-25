@@ -343,7 +343,7 @@ public class AddressFragment extends android.app.Fragment {
                                         loading.dismiss();
                                         alertDialog.dismiss();
 
-                                        Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
+                                 //       Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
 
                                         try {
 
@@ -1337,7 +1337,7 @@ public class AddressFragment extends android.app.Fragment {
                                             @Override
                                             public void onResponse(String response) {
                                                 loading.dismiss();
-                                                Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+                                           //     Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                                                 try {
 

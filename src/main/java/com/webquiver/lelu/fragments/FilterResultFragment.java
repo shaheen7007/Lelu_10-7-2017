@@ -1,5 +1,6 @@
 package com.webquiver.lelu.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ public class FilterResultFragment extends android.app.Fragment {
     public static final String HOME_PREFERENCE = "HOME_DATA";
 
 
+
     ProgressBar progressBar;
 
 
@@ -86,6 +88,9 @@ public class FilterResultFragment extends android.app.Fragment {
     public static final String TAG_ID = "inv_id";
     public static final String TAG_PRICE = "i_salesPrice";
 
+    SharedPreferences searchhistory;
+    SharedPreferences.Editor search_historyEditor;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -99,6 +104,10 @@ public class FilterResultFragment extends android.app.Fragment {
         gridView = (ExpandableHeightGridView) rootView.findViewById(R.id.grid);
         filterbtn=(TextView)rootView.findViewById(R.id.filterBT_id);
 
+        searchhistory = getActivity().getSharedPreferences(Config.SearchPref, Context.MODE_PRIVATE);
+        search_historyEditor=searchhistory.edit();
+
+
         gridView.setExpanded(true);
 
 
@@ -106,7 +115,7 @@ public class FilterResultFragment extends android.app.Fragment {
 
         if (b!=null) {
 
-            term = String.valueOf(b.getString("searchterm", "null"));
+            term = searchhistory.getString("searchterm","null");
             rate1 = String.valueOf(b.getString("rate1", "null"));
             rate2 = String.valueOf(b.getString("rate2", "null"));
 
@@ -337,7 +346,7 @@ public class FilterResultFragment extends android.app.Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //   Toast.makeText(getApplicationContext(),response, Toast.LENGTH_LONG).show();
+                          // Toast.makeText(getActivity(),response, Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.INVISIBLE);
                         //Dismissing the progressdialog on response
                         //         loading.dismiss();

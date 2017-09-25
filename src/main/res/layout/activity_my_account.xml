@@ -9,7 +9,7 @@
     tools:context="com.webquiver.lelu.MyAccountActivity">
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:background="@color/colorPrimary"
         android:layout_height="50dp">
@@ -43,7 +43,7 @@
     </RelativeLayout>
 
 
-<LinearLayout
+    <LinearLayout
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:padding="10dp"

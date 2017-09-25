@@ -247,7 +247,7 @@ public class CartAdapter extends BaseAdapter {
                         //Adding the parameters to the request
                         params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
                         params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
-                        params.put(Config.KEY_CART_ProdQty, String.valueOf(cartitems.get(position).getQUANTITY()+1));
+                        params.put(Config.KEY_CART_ProdQty, String.valueOf(1));
                         return params;
                     }
                 };
@@ -286,11 +286,6 @@ public class CartAdapter extends BaseAdapter {
                                         cartitems.get(position).setQUANTITY(cartitems.get(position).getQUANTITY()-1);
                                         getView(position, finalConvertView,parent);
                                         EventBus.getDefault().post(new HelloWorldEvent(String.valueOf(cartitems.get(position).getQUANTITY()+1)));
-
-
-
-
-
 
 
 //     Toast.makeText(activity,"Quantity updated",Toast.LENGTH_SHORT).show();
@@ -333,7 +328,7 @@ public class CartAdapter extends BaseAdapter {
                         //Adding the parameters to the request
                         params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
                         params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
-                        params.put(Config.KEY_CART_ProdQty, String.valueOf(cartitems.get(position).getQUANTITY()-1));
+                        params.put(Config.KEY_CART_ProdQty, String.valueOf(-1));
                         return params;
                     }
                 };
@@ -374,7 +369,7 @@ public class CartAdapter extends BaseAdapter {
                         t.setText("Removing item from your Cart");
                         loading.show();
                         //   final ProgressDialog loading = ProgressDialog.show(activity, "Removing item", "Please wait...", false, false);
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_DEL_URL,
                                 new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
@@ -448,14 +443,14 @@ public class CartAdapter extends BaseAdapter {
                                                         public void onClick(View v) {
                                                             //Hiding the alert dialog
                                                             alertDialog.dismiss();
-                                                            Toast.makeText(activity, "ctch", Toast.LENGTH_SHORT).show();
+                                                     //       Toast.makeText(activity, "ctch", Toast.LENGTH_SHORT).show();
 
                                                             try {
                                                                 HomeActivity.fa.finish();
                                                             }
                                                             catch (Exception e)
                                                             {
-                                                                Toast.makeText(activity, "ctch", Toast.LENGTH_SHORT).show();
+                                                         //       Toast.makeText(activity, "ctch", Toast.LENGTH_SHORT).show();
                                                             }
                                                            Intent intent=new Intent(activity,HomeActivity.class);
                                                            activity.startActivity(intent);
@@ -518,7 +513,7 @@ public class CartAdapter extends BaseAdapter {
                                 //Adding the parameters to the request
                                 params.put(Config.KEY_PHONE,pref.getString(SessionManagement.KEY_PHONE,""));
                                 params.put(Config.KEY_CART_ProdId,cartitems.get(position).getPRODUCT_ID());
-                                params.put(Config.KEY_CART_ProdQty, String.valueOf(0));
+                            //    params.put(Config.KEY_CART_ProdQty, String.valueOf(0));
                                 return params;
                             }
                         };
@@ -618,7 +613,7 @@ public class CartAdapter extends BaseAdapter {
 
 
                             //  final ProgressDialog loading = ProgressDialog.show(activity, "Adding to cart", "Please wait...", false, false);
-                            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_ADD_URL,
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.CART_UPDATE_URL,
                                     new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
@@ -645,15 +640,6 @@ public class CartAdapter extends BaseAdapter {
                                                             .setFrame(Style.FRAME_STANDARD)
                                                             .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_GREEN))
                                                             .setAnimations(Style.ANIMATIONS_POP).show();
-
-
-
-
-
-
-
-
-
 
 
                                                 }
@@ -710,15 +696,12 @@ public class CartAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
 
-
                         alertDialog.dismiss();
+
                     }
                 });
 
-
-
-
-
+                
             }
         });
 

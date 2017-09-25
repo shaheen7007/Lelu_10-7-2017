@@ -12,14 +12,22 @@
         android:background="@drawable/cartitem_shape2"
         android:layout_height="wrap_content">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height=".5dp"
+            android:background="@color/colorgrey"
+            >
+        </View>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_height="80dp">
 
             <LinearLayout
-                android:layout_weight="1.45"
+
+                android:layout_weight="1.4"
                 android:layout_width="0dp"
                 android:layout_marginLeft="5dp"
                 android:layout_height="match_parent">
@@ -50,67 +58,58 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_weight="1"
-                        android:layout_height="0dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:text="PRODUCT NAME"
-
-                        android:textColor="#000"
-                        android:gravity="top"
-                        android:id="@+id/OrderitemName_id"
-                        style="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:layout_height="match_parent" />
-
-                        <TextView
-                            android:layout_marginLeft="25dp"
-                            android:layout_width="match_parent"
-                            android:text="(View details)"
-
-
-                            android:textColor="@color/colorlinkblue"
-                            android:gravity="top"
-                            android:id="@+id/vewdtTXT_id"
-
-                            style="@android:style/TextAppearance.DeviceDefault.Small"
-                            android:layout_height="match_parent" />
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
                         android:orientation="vertical"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center"
+                        android:weightSum="3"
                         android:layout_weight="1"
-                        android:layout_height="0dp">
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_weight="1.2"
+                            android:layout_height="0dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:text="PRODUCT NAME"
+                            android:maxLines="1"
+                            android:textColor="#000"
+                            android:gravity="top"
+                            android:id="@+id/OrderitemName_id"
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_height="0dp">
                         <TextView
                             android:layout_width="match_parent"
                             android:text="#Order Id"
-
                             android:id="@+id/OrderitemIDTxt_id"
                             style="@android:style/TextAppearance.DeviceDefault.Small"
                             android:layout_height="wrap_content" />
-                    </LinearLayout>
+                            </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal"
-                        android:layout_weight="1"
-                        android:layout_height="0dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_height="0dp">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:text="status on 27-07-2017"
                             android:textColor="@color/colorgreen"
                             android:id="@+id/statuswithdate_id"
                             style="@android:style/TextAppearance.DeviceDefault.Small"
                             android:layout_height="wrap_content" />
+                            </LinearLayout>
 
 
                     </LinearLayout>
+
+
                 </LinearLayout>
+
 
             </LinearLayout>
 
@@ -144,6 +143,27 @@
                 </LinearLayout>
             </LinearLayout>
             -->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="match_parent">
+
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="30dp"
+                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:text="(View details)"
+                android:textColor="@color/colorlinkblue"
+                android:gravity="end"
+                android:maxLines="1"
+                android:id="@+id/vewdtTXT_id"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_height="match_parent" />
+            </LinearLayout>
+
 
 
         </LinearLayout>

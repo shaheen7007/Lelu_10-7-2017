@@ -446,7 +446,7 @@ public class OrderDetFragment2 extends Fragment {
             }
 
                 ordrID.setText("Order id #"+tt.getString("order_place_id"));
-                ordrPlaceDate.setText("Order placed successfully on "+tt.getString("op_date"));
+                ordrPlaceDate.setText("Order placed on "+tt.getString("op_date"));
 
 
             //  ODRItem C_item5 = new ODRItem();

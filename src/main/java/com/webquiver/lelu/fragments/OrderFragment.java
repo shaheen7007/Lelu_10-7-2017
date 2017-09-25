@@ -95,9 +95,6 @@ public class OrderFragment extends Fragment {
         });
 
 
-
-
-
     /* DUMMY DATAS
 
         CartItem C_item = new CartItem();

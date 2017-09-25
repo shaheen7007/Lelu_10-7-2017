@@ -601,7 +601,7 @@ public class ShowSelectedADDR extends android.app.Fragment {
                     @Override
                     public void onResponse(String response) {
                         loading.dismiss();
-                        Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                         try {
 
@@ -925,7 +925,7 @@ public class ShowSelectedADDR extends android.app.Fragment {
 
 
 
-                    Toast.makeText(getActivity(),selectedID,Toast.LENGTH_LONG).show();
+                 //   Toast.makeText(getActivity(),selectedID,Toast.LENGTH_LONG).show();
 
 
 
@@ -1033,7 +1033,7 @@ public class ShowSelectedADDR extends android.app.Fragment {
                                             @Override
                                             public void onResponse(String response) {
                                                 loading.dismiss();
-                                                Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
+                                         //       Toast.makeText(getActivity(), "response", Toast.LENGTH_LONG).show();
 
                                                 try {
 

@@ -126,7 +126,6 @@ public class WishListAdapter extends BaseAdapter {
 
         }
 
-
             // getting ccart data for the row
             CartItem m = cartitems.get(position);
 
@@ -134,8 +133,8 @@ public class WishListAdapter extends BaseAdapter {
             thumbNail.setImageUrl(Config.BASE_URLwithoutslash+m.getIMAGE_URL(), imageLoader);
 
             item_name.setText(m.getNAME());
-            item_price.setText("\u20B9" + " " + m.getPRICE());
-            item_realprice.setText("\u20B9" + " " + m.getREALPRICE());
+            item_price.setText("\u20B9" + " " + m.getREALPRICE());
+            item_realprice.setText("\u20B9" + " " + m.getPRICE());
 
 
         final View finalConvertView = convertView;

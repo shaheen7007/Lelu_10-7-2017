@@ -221,10 +221,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences pref;
     private SharedPreferences.Editor editor_pref;
     RequestQueue requestQueue_cart;
-   public TextView cartnum;
+    public TextView cartnum;
     public static final String BANNER_PREFERENCE = "BANNER_DATA";
-
-
 
 
 
@@ -252,7 +250,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
         fa=this;
-
 
 
 
@@ -372,8 +369,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 */
 
-        ImageView menu = (ImageView) customView.findViewById(R.id.menuitem);
+        LinearLayout menu = (LinearLayout) customView.findViewById(R.id.menuitem);
         menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+
+            }
+        });
+
+        ImageView menu_img = (ImageView) customView.findViewById(R.id.menuitem_img_id);
+        menu_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -657,7 +664,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        } else if (view == findViewById(R.id.indoorIMG_iid)) {
+        }
+
+        if (view == findViewById(R.id.notificationitem)) {
+
+            Intent intent=new Intent(HomeActivity.this,NotificationActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent);
+
+        }
+
+
+
+
+
+
+
+        else if (view == findViewById(R.id.indoorIMG_iid)) {
          //   Toast.makeText(HomeActivity.this,"INDOOR",Toast.LENGTH_SHORT).show();
 
             String itemname="Indoor";
@@ -839,7 +862,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 */
 
                     Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
-                    intent.putExtra("searchterm",string);
+                    //intent.putExtra("searchterm",string);
+                    search_historyEditor.putString("searchterm",string);
+                    search_historyEditor.commit();
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     startActivity(intent);
                  //   finish();

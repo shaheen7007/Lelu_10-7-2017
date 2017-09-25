@@ -3,6 +3,7 @@ package com.webquiver.lelu.fragments;
 import android.app.Dialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
@@ -96,6 +97,9 @@ public class SearchResultFragment extends android.app.Fragment {
     public static final String TAG_ID = "inv_id";
     public static final String TAG_PRICE = "i_salesPrice";
 
+    SharedPreferences searchhistory;
+    SharedPreferences.Editor search_historyEditor;
+
 
 
     @Override
@@ -113,13 +117,17 @@ public class SearchResultFragment extends android.app.Fragment {
 
         gridView.setExpanded(true);
 
+        searchhistory = getActivity().getSharedPreferences(Config.SearchPref, Context.MODE_PRIVATE);
+        search_historyEditor=searchhistory.edit();
 
-        Bundle b=getArguments();
 
-        if (b!=null) {
 
-            term = String.valueOf(b.getString("searchterm", "null"));
-        }
+     //   Bundle b=getArguments();
+
+     //   if (b!=null) {
+
+            term = searchhistory.getString("searchterm","nnull");
+     //   }
 
        // TextView search_result_for=(TextView)rootView.findViewById(R.id.searchresultfortxt);
       //  Bundle b=getArguments();

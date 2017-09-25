@@ -47,6 +47,8 @@ import de.greenrobot.event.EventBus;
 public class SearchActivity extends AppCompatActivity {
 
 
+
+
     public static Activity fa;
     @Override
     public void onBackPressed()
@@ -110,7 +112,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onSheetItemSelected(@NonNull BottomSheet bottomSheet, MenuItem menuItem) {
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("searchterm",String.valueOf(b.getString("searchterm")));
+               //     bundle.putString("searchterm",String.valueOf(b.getString("searchterm")));
                 if (menuItem.getNumericShortcut()=='1') {
                     bundle.putString("rate1", "100");
                     bundle.putString("rate2", "200");
@@ -212,7 +214,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
         Bundle bundle = new Bundle();
-        bundle.putString("searchterm",String.valueOf(b.getString("searchterm")));
+//        bundle.putString("searchterm",String.valueOf(b.getString("searchterm")));
         SearchResultFragment showSelectedADDR = new SearchResultFragment();
         showSelectedADDR.setArguments(bundle);
         FragmentManager fm = null;
@@ -233,7 +235,7 @@ public class SearchActivity extends AppCompatActivity {
         searchnames = new ArrayList<>();
         getSearchData();
 
-        mSearchView.populateEditText(String.valueOf(b.getString("searchterm")));
+        mSearchView.populateEditText(String.valueOf(searchhistory.getString("searchterm","null")));
 
         // mSearchView.openSearch();
         mSearchView.clearSuggestions();
@@ -350,7 +352,9 @@ public class SearchActivity extends AppCompatActivity {
 
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("searchterm",string);
+                  //  bundle.putString("searchterm",string);
+                    search_historyEditor.putString("searchterm",string);
+                    search_historyEditor.commit();
                     SearchResultFragment showSelectedADDR = new SearchResultFragment();
                     showSelectedADDR.setArguments(bundle);
                     FragmentManager fm = null;
@@ -360,11 +364,6 @@ public class SearchActivity extends AppCompatActivity {
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     //  fragmentTransaction.addToBackStack("cart");
                     fragmentTransaction.commit();
-
-
-
-
-
 
 
                 }
